@@ -1,0 +1,6 @@
+cluster  · pgpool  · collected 02:00:00 (0s)
+
+TIME      SEV      SOURCE  HOST  CODE         MESSAGE
+08:34:00  FATAL    conn    db2   AUTH_FAIL    password authentication failed for user "bob"
+08:33:00  ERROR    pgpool  db1   FAILOVER     failover_command started for node 1
+08:32:00  WARNING  pgpool  db1   HEALTHCHECK  health check timed out on node 1

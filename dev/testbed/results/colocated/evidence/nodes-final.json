@@ -1,0 +1,144 @@
+{
+  "header": {
+    "cluster": "testbed-colocated",
+    "pgpool_version": "4.5.13 (hotooriboshi)",
+    "local_host": "db1",
+    "local_wd_role": "STANDBY",
+    "vip_host": "db2",
+    "collected": "2026-11-05T09:09:12.356Z",
+    "duration_ms": 180,
+    "degraded": false
+  },
+  "nodes": [
+    {
+      "id": 0,
+      "host_port": "db1:5432",
+      "status": "up",
+      "pgpool_role": "standby",
+      "real_role": "standby",
+      "lb_weight": 0.5,
+      "selects": 0,
+      "delay_sec": -1,
+      "repl_state": "streaming",
+      "sync": "async",
+      "last_change": "2026-11-05T05:28:37.000Z",
+      "score": 100,
+      "note": "",
+      "timeline": 4,
+      "current_lsn": "0/5002228",
+      "receive_lsn": "0/5002228",
+      "conns": 8,
+      "max_conns": 100,
+      "oldest_xact_sec": -1,
+      "conflicts": 0
+    },
+    {
+      "id": 1,
+      "host_port": "db2:5432",
+      "status": "up",
+      "pgpool_role": "primary",
+      "real_role": "primary",
+      "lb_weight": 0.5,
+      "selects": 0,
+      "delay_sec": -1,
+      "repl_state": "-",
+      "sync": "-",
+      "last_change": "2026-11-05T05:28:37.000Z",
+      "score": 90,
+      "note": "",
+      "timeline": 4,
+      "current_lsn": "0/5002228",
+      "conns": 10,
+      "max_conns": 100,
+      "oldest_xact_sec": -1,
+      "conflicts": 0
+    }
+  ],
+  "findings": [
+    {
+      "ID": "COLOCATED_HOST:db2",
+      "Rule": "COLOCATED_HOST",
+      "Severity": "WARN",
+      "Subject": "db2",
+      "Evidence": [
+        "roles: pgpool,pg (config)",
+        "watchdog: LEADER",
+        "backend: primary",
+        "pgpool budget num_init_children×max_pool = 80",
+        "pg max_connections = 100"
+      ],
+      "Cause": "db2 hosts both pgpool and PostgreSQL",
+      "Causes": [
+        "this host is the watchdog leader and the primary: one failure moves the VIP and triggers failover at the same time",
+        "pgpool and PostgreSQL share one host: a host failure removes a watchdog vote and a backend together"
+      ],
+      "NextCommands": [
+        "poolwarden topology show",
+        "poolwarden watchdog",
+        "poolwarden explain COLOCATED_HOST:db2"
+      ],
+      "DocRef": "pgpool: watchdog / D6 topology",
+      "FirstSeen": "2026-11-05T09:09:12.543078066Z"
+    },
+    {
+      "ID": "WD_ESCALATION_UNSET:cluster",
+      "Rule": "WD_ESCALATION_UNSET",
+      "Severity": "WARN",
+      "Subject": "cluster",
+      "Evidence": [
+        "delegate_ip=172.31.10.100 but wd_escalation_command/wd_de_escalation_command empty in live settings"
+      ],
+      "Cause": "VIP escalation commands unset: wd_escalation_command, wd_de_escalation_command",
+      "Causes": [
+        "the VIP will never move on failover"
+      ],
+      "NextCommands": [
+        "poolwarden config get wd_escalation_command"
+      ],
+      "DocRef": "pgpool: wd_escalation_command",
+      "FirstSeen": "2026-11-05T09:09:12.543078066Z"
+    },
+    {
+      "ID": "WD_HALF_VOTES_2NODE:cluster",
+      "Rule": "WD_HALF_VOTES_2NODE",
+      "Severity": "WARN",
+      "Subject": "cluster",
+      "Evidence": [
+        "enable_consensus_with_half_votes=on, 2 watchdog nodes (D14/V4: accepted split risk for auto-failover)"
+      ],
+      "Cause": "2-node watchdog with half-votes on: network split can give both sides quorum",
+      "Causes": [
+        "deliberate trade-off: without half-votes a lost peer blocks failover entirely",
+        "add a third pgpool node to remove the risk"
+      ],
+      "NextCommands": [
+        "poolwarden watchdog",
+        "poolwarden explain WD_HALF_VOTES_2NODE:cluster"
+      ],
+      "DocRef": "pgpool: enable_consensus_with_half_votes",
+      "FirstSeen": "2026-11-05T09:09:12.543078066Z"
+    },
+    {
+      "ID": "COLOCATED_HOST:db1",
+      "Rule": "COLOCATED_HOST",
+      "Severity": "INFO",
+      "Subject": "db1",
+      "Evidence": [
+        "roles: pgpool,pg (config)",
+        "pgpool budget num_init_children×max_pool = 80",
+        "pg max_connections = 100"
+      ],
+      "Cause": "db1 hosts both pgpool and PostgreSQL",
+      "Causes": [
+        "pgpool and PostgreSQL share one host: a host failure removes a watchdog vote and a backend together"
+      ],
+      "NextCommands": [
+        "poolwarden topology show",
+        "poolwarden watchdog",
+        "poolwarden explain COLOCATED_HOST:db1"
+      ],
+      "DocRef": "pgpool: watchdog / D6 topology",
+      "FirstSeen": "2026-11-05T09:09:12.543078066Z"
+    }
+  ]
+}

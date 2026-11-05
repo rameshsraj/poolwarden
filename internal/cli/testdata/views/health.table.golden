@@ -1,0 +1,5 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+NODE  HOST  STATUS  TOTAL  SUCCESS  FAIL  SKIP  RETRY  AVG   MAX  LAST-FAIL            DELTA
+0     db1   up      100    100      0     0     0      20.5  45   -                    -
+1     db2   up      100    98       2     0     3      25.1  900  2026-11-05 10:22:00  -

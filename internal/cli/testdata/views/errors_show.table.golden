@@ -1,0 +1,7 @@
+cluster  · pgpool  · collected 02:00:00 (0s)
+
+08:34:00  FATAL conn db2 AUTH_FAIL
+  password authentication failed for user "bob"
+
+Ref: /var/log/pg/pg.log:7
+

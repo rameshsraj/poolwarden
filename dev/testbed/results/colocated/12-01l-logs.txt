@@ -1,0 +1,241 @@
+== $ bash -c docker exec db1 poolwarden --operator tester logs --classify --since 10m
+cluster  · pgpool  · collected 00:00:00 (0s)
+
+TIME      HOST  COMP    SEV      TAG          MESSAGE
+05:25:12  db1   pgpool  LOG      HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:12  db1   pgpool  LOG      OTHER        memory cache initialized
+05:25:12  db1   pgpool  LOG      OTHER        DETAIL:  memcache blocks :64
+05:25:12  db1   pgpool  LOG      OTHER        allocating (135998248) bytes of shared memory segment
+05:25:12  db1   pgpool  LOG      OTHER        allocating shared memory segment of size: 135998248 
+05:25:12  db1   pgpool  LOG      HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:12  db1   pgpool  LOG      HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:12  db1   pgpool  LOG      OTHER        memory cache initialized
+05:25:12  db1   pgpool  LOG      OTHER        DETAIL:  memcache blocks :64
+05:25:12  db1   pgpool  LOG      OTHER        pool_discard_oid_maps: discarded memqcache oid maps
+05:25:12  db1   pgpool  LOG      OTHER        waiting for watchdog to initialize
+05:25:12  db1   pgpool  LOG      OTHER        setting the local watchdog node name to "db1:9999 Linux db1"
+05:25:12  db1   pgpool  LOG      OTHER        watchdog cluster is configured with 1 remote nodes
+05:25:12  db1   pgpool  LOG      OTHER        watchdog remote node:0 on db2:9000
+05:25:12  db1   pgpool  LOG      OTHER        interface monitoring is disabled in watchdog
+05:25:12  db1   pgpool  LOG      OTHER        watchdog node state changed from [DEAD] to [LOADING]
+05:25:12  db1   pgpool  LOG      OTHER        new outbound connection to db2:9000 
+05:25:17  db1   pgpool  LOG      OTHER        watchdog node state changed from [LOADING] to [JOINING]
+05:25:17  db1   pgpool  LOG      WD_ELECTION  watchdog node state changed from [JOINING] to [PARTICIPATING IN ELECTION]
+05:25:17  db1   pgpool  LOG      WD_ELECTION  watchdog node state changed from [PARTICIPATING IN ELECTION] to [INITIALIZING]
+05:25:17  db1   pgpool  LOG      WD_ELECTION  setting the remote node "db2:9999 Linux db2" as watchdog cluster leader
+05:25:18  db1   pgpool  LOG      WD_ELECTION  watchdog node state changed from [INITIALIZING] to [STANDBY]
+05:25:18  db1   pgpool  LOG      OTHER        signal_user1_to_parent_with_reason(1)
+05:25:18  db1   pgpool  LOG      WD_ELECTION  successfully joined the watchdog cluster as standby node
+05:25:18  db1   pgpool  LOG      OTHER        DETAIL:  our join coordinator request is accepted by cluster leader node "db2:9999 Linu...
+05:25:18  db1   pgpool  LOG      OTHER        signal_user1_to_parent_with_reason(3)
+05:25:18  db1   pgpool  LOG      OTHER        watchdog process is initialized
+05:25:18  db1   pgpool  LOG      OTHER        DETAIL:  watchdog messaging data version: 1.2
+05:25:18  db1   pgpool  LOG      OTHER        Pgpool-II parent process received SIGUSR1
+05:25:18  db1   pgpool  LOG      WD_ELECTION  Pgpool-II parent process received watchdog quorum change signal from watchdog
+05:25:18  db1   pgpool  LOG      WD_ELECTION  watchdog cluster now holds the quorum
+05:25:18  db1   pgpool  LOG      OTHER        DETAIL:  updating the state of quarantine backend nodes
+05:25:18  db1   pgpool  LOG      OTHER        Pgpool-II parent process received watchdog state change signal from watchdog
+05:25:18  db1   pgpool  LOG      WD_ELECTION  we have joined the watchdog cluster as STANDBY node
+05:25:18  db1   pgpool  LOG      OTHER        DETAIL:  syncing the backend states from the LEADER watchdog node
+05:25:18  db1   pgpool  LOG      OTHER        received the get data request from local pgpool-II on IPC interface
+05:25:18  db1   pgpool  LOG      OTHER        2 watchdog nodes are configured for lifecheck
+05:25:18  db1   pgpool  LOG      OTHER        watchdog nodes ID:0 Name:"db1:9999 Linux db1"
+05:25:18  db1   pgpool  LOG      OTHER        DETAIL:  Host:"db1" WD Port:9000 pgpool-II port:9999
+05:25:18  db1   pgpool  LOG      OTHER        watchdog nodes ID:1 Name:"db2:9999 Linux db2"
+05:25:18  db1   pgpool  LOG      OTHER        DETAIL:  Host:"db2" WD Port:9000 pgpool-II port:9999
+05:25:18  db1   pgpool  LOG      OTHER        get data request from local pgpool-II node received on IPC interface is forwarded to le...
+05:25:18  db1   pgpool  LOG      OTHER        DETAIL:  waiting for the reply...
+05:25:18  db1   pgpool  LOG      OTHER        leader watchdog node "db2:9999 Linux db2" returned status for 2 backend nodes
+05:25:18  db1   pgpool  LOG      OTHER        create socket files[0]: /tmp/.s.PGSQL.9999
+05:25:18  db1   pgpool  LOG      OTHER        listen address[0]: *
+05:25:18  db1   pgpool  LOG      OTHER        Setting up socket for 0.0.0.0:9999
+05:25:18  db1   pgpool  LOG      OTHER        Setting up socket for :::9999
+05:25:18  db1   pgpool  LOG      OTHER        create socket files[0]: /tmp/.s.PGSQL.9898
+05:25:18  db1   pgpool  LOG      OTHER        listen address[0]: *
+05:25:18  db1   pgpool  LOG      OTHER        Setting up socket for 0.0.0.0:9898
+05:25:18  db1   pgpool  LOG      OTHER        Setting up socket for :::9898
+05:25:18  db1   pgpool  LOG      OTHER        PCP process: 190 started
+05:25:18  db1   pgpool  LOG      OTHER        process started
+05:25:18  db1   pgpool  LOG      OTHER        process started
+05:25:18  db1   pgpool  LOG      OTHER        process started
+05:25:18  db1   pgpool  LOG      OTHER        pgpool-II successfully started. version 4.5.13 (hotooriboshi)
+05:25:18  db1   pgpool  LOG      OTHER        node status[0]: 0
+05:25:18  db1   pgpool  LOG      OTHER        node status[1]: 0
+05:25:19  db1   pgpool  LOG      OTHER        set SO_REUSEPORT option to the socket
+05:25:19  db1   pgpool  LOG      OTHER        creating watchdog heartbeat receive socket.
+05:25:19  db1   pgpool  LOG      OTHER        DETAIL:  set SO_REUSEPORT
+05:25:19  db1   pgpool  LOG      OTHER        set SO_REUSEPORT option to the socket
+05:25:19  db1   pgpool  LOG      OTHER        creating socket for sending heartbeat
+05:25:19  db1   pgpool  LOG      OTHER        DETAIL:  set SO_REUSEPORT
+05:25:23  db1   pgpool  LOG      OTHER        new watchdog node connection is received from "172.31.10.12:35479"
+05:25:23  db1   pgpool  LOG      OTHER        new node joined the cluster hostname:"db2" port:9000 pgpool_port:9999
+05:25:23  db1   pgpool  LOG      OTHER        DETAIL:  Pgpool-II version:"4.5.13" watchdog messaging version: 1.2
+05:26:08  db1   pgpool  LOG      OTHER        watchdog: lifecheck started
+05:28:04  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=314 socket=4
+05:28:04  db1   pgpool  FATAL    AUTH_FAIL    authentication failed for user "root"
+05:28:04  db1   pgpool  LOG      OTHER        DETAIL:  username and/or password does not match
+05:28:04  db1   pgpool  LOG      OTHER        PCP process with pid: 314 exit with SUCCESS.
+05:28:04  db1   pgpool  LOG      OTHER        PCP process with pid: 314 exits with status 256
+05:28:04  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=330 socket=4
+05:28:04  db1   pgpool  LOG      OTHER        PCP process with pid: 330 exit with SUCCESS.
+05:28:04  db1   pgpool  LOG      OTHER        PCP process with pid: 330 exits with status 0
+05:28:04  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=340 socket=4
+05:28:04  db1   pgpool  LOG      OTHER        PCP process with pid: 340 exit with SUCCESS.
+05:28:04  db1   pgpool  LOG      OTHER        PCP process with pid: 340 exits with status 0
+05:28:04  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=360 socket=4
+05:28:04  db1   pgpool  LOG      OTHER        PCP process with pid: 360 exit with SUCCESS.
+05:28:04  db1   pgpool  LOG      OTHER        PCP process with pid: 360 exits with status 0
+05:28:05  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=380 socket=4
+05:28:05  db1   pgpool  LOG      OTHER        PCP process with pid: 380 exit with SUCCESS.
+05:28:05  db1   pgpool  LOG      OTHER        PCP process with pid: 380 exits with status 0
+05:28:05  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=400 socket=4
+05:28:05  db1   pgpool  LOG      OTHER        PCP process with pid: 400 exit with SUCCESS.
+05:28:05  db1   pgpool  LOG      OTHER        PCP process with pid: 400 exits with status 0
+05:28:05  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=422 socket=4
+05:28:05  db1   pgpool  LOG      OTHER        PCP process with pid: 422 exit with SUCCESS.
+05:28:05  db1   pgpool  LOG      OTHER        PCP process with pid: 422 exits with status 0
+05:28:06  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=444 socket=4
+05:28:06  db1   pgpool  LOG      OTHER        PCP process with pid: 444 exit with SUCCESS.
+05:28:06  db1   pgpool  LOG      OTHER        PCP process with pid: 444 exits with status 0
+05:28:06  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=465 socket=4
+05:28:06  db1   pgpool  LOG      OTHER        PCP process with pid: 465 exit with SUCCESS.
+05:28:06  db1   pgpool  LOG      OTHER        PCP process with pid: 465 exits with status 0
+05:28:06  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=488 socket=4
+05:28:06  db1   pgpool  LOG      OTHER        PCP process with pid: 488 exit with SUCCESS.
+05:28:06  db1   pgpool  LOG      OTHER        PCP process with pid: 488 exits with status 0
+05:28:07  db1   pgpool  LOG      OTHER        forked new pcp worker, pid=508 socket=4
+05:28:07  db1   pgpool  LOG      OTHER        PCP process with pid: 508 exit with SUCCESS.
+05:28:07  db1   pgpool  LOG      OTHER        PCP process with pid: 508 exits with status 0
+05:25:10  db1   pg      LOG      OTHER        starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by g...
+05:25:10  db1   pg      LOG      OTHER        listening on IPv4 address "0.0.0.0", port 5432
+05:25:10  db1   pg      LOG      OTHER        listening on IPv6 address "::", port 5432
+05:25:10  db1   pg      LOG      OTHER        listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+05:25:10  db1   pg      LOG      OTHER        database system was shut down at 2026-11-05 05:25:09 UTC
+05:25:10  db1   pg      LOG      OTHER        database system is ready to accept connections
+05:25:10  db1   pg      WARNING  OTHER        setting an MD5-encrypted password
+05:25:10  db1   pg      LOG      OTHER        DETAIL:  MD5 password support is deprecated and will be removed in a future release of ...
+05:25:10  db1   pg      LOG      OTHER        HINT:  Refer to the PostgreSQL documentation for details about migrating to another pas...
+05:25:10  db1   pg      WARNING  OTHER        setting an MD5-encrypted password
+05:25:10  db1   pg      LOG      OTHER        DETAIL:  MD5 password support is deprecated and will be removed in a future release of ...
+05:25:10  db1   pg      LOG      OTHER        HINT:  Refer to the PostgreSQL documentation for details about migrating to another pas...
+05:25:10  db1   pg      WARNING  OTHER        setting an MD5-encrypted password
+05:25:10  db1   pg      LOG      OTHER        DETAIL:  MD5 password support is deprecated and will be removed in a future release of ...
+05:25:10  db1   pg      LOG      OTHER        HINT:  Refer to the PostgreSQL documentation for details about migrating to another pas...
+05:25:10  db1   pg      FATAL    AUTH_FAIL    password authentication failed for user "root"
+05:25:10  db1   pg      LOG      OTHER        DETAIL:  Role "root" does not exist.
+05:25:11  db1   pg      LOG      OTHER        checkpoint starting: immediate force wait
+05:25:11  db1   pg      LOG      OTHER        checkpoint complete: wrote 52 buffers (0.3%), wrote 3 SLRU buffers; 0 WAL file(s) added...
+05:25:12  db1   pg      FATAL    AUTH_FAIL    password authentication failed for user "root"
+05:25:12  db1   pg      LOG      OTHER        DETAIL:  Role "root" does not exist.
+05:25:12  db2   pgpool  LOG      HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:12  db2   pgpool  LOG      OTHER        memory cache initialized
+05:25:12  db2   pgpool  LOG      OTHER        DETAIL:  memcache blocks :64
+05:25:12  db2   pgpool  LOG      OTHER        allocating (135998248) bytes of shared memory segment
+05:25:12  db2   pgpool  LOG      OTHER        allocating shared memory segment of size: 135998248 
+05:25:12  db2   pgpool  LOG      HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:12  db2   pgpool  LOG      HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:12  db2   pgpool  LOG      OTHER        memory cache initialized
+05:25:12  db2   pgpool  LOG      OTHER        DETAIL:  memcache blocks :64
+05:25:12  db2   pgpool  LOG      OTHER        pool_discard_oid_maps: discarded memqcache oid maps
+05:25:12  db2   pgpool  LOG      OTHER        waiting for watchdog to initialize
+05:25:12  db2   pgpool  LOG      OTHER        setting the local watchdog node name to "db2:9999 Linux db2"
+05:25:12  db2   pgpool  LOG      OTHER        watchdog cluster is configured with 1 remote nodes
+05:25:12  db2   pgpool  LOG      OTHER        watchdog remote node:0 on db1:9000
+05:25:12  db2   pgpool  LOG      OTHER        interface monitoring is disabled in watchdog
+05:25:12  db2   pgpool  LOG      OTHER        watchdog node state changed from [DEAD] to [LOADING]
+05:25:12  db2   pgpool  LOG      OTHER        new watchdog node connection is received from "172.31.10.11:2210"
+05:25:12  db2   pgpool  LOG      OTHER        new node joined the cluster hostname:"db1" port:9000 pgpool_port:9999
+05:25:12  db2   pgpool  LOG      OTHER        DETAIL:  Pgpool-II version:"4.5.13" watchdog messaging version: 1.2
+05:25:17  db2   pgpool  LOG      OTHER        watchdog node state changed from [LOADING] to [INITIALIZING]
+05:25:17  db2   pgpool  LOG      WD_ELECTION  watchdog node state changed from [INITIALIZING] to [STANDING FOR LEADER]
+05:25:17  db2   pgpool  LOG      WD_ELECTION  watchdog node state changed from [STANDING FOR LEADER] to [LEADER]
+05:25:17  db2   pgpool  LOG      FAILOVER     Setting failover command timeout to 16
+05:25:17  db2   pgpool  LOG      OTHER        I am announcing my self as leader/coordinator watchdog node
+05:25:17  db2   pgpool  LOG      OTHER        I am the cluster leader node
+05:25:17  db2   pgpool  LOG      OTHER        DETAIL:  our declare coordinator message is accepted by all nodes
+05:25:17  db2   pgpool  LOG      WD_ELECTION  setting the local node "db2:9999 Linux db2" as watchdog cluster leader
+05:25:17  db2   pgpool  LOG      OTHER        signal_user1_to_parent_with_reason(1)
+05:25:17  db2   pgpool  LOG      OTHER        I am the cluster leader node. Starting escalation process
+05:25:17  db2   pgpool  LOG      OTHER        watchdog process is initialized
+05:25:17  db2   pgpool  LOG      OTHER        DETAIL:  watchdog messaging data version: 1.2
+05:25:17  db2   pgpool  LOG      OTHER        escalation process started with PID:139
+05:25:17  db2   pgpool  LOG      OTHER        Pgpool-II parent process received SIGUSR1
+05:25:17  db2   pgpool  LOG      OTHER        Pgpool-II parent process received watchdog state change signal from watchdog
+05:25:17  db2   pgpool  LOG      WD_ELECTION  watchdog: escalation started
+05:25:17  db2   pgpool  LOG      OTHER        2 watchdog nodes are configured for lifecheck
+05:25:17  db2   pgpool  LOG      OTHER        create socket files[0]: /tmp/.s.PGSQL.9999
+05:25:17  db2   pgpool  LOG      OTHER        watchdog nodes ID:1 Name:"db2:9999 Linux db2"
+05:25:17  db2   pgpool  LOG      OTHER        DETAIL:  Host:"db2" WD Port:9000 pgpool-II port:9999
+05:25:17  db2   pgpool  LOG      OTHER        watchdog nodes ID:0 Name:"db1:9999 Linux db1"
+05:25:17  db2   pgpool  LOG      OTHER        DETAIL:  Host:"db1" WD Port:9000 pgpool-II port:9999
+05:25:17  db2   pgpool  LOG      OTHER        listen address[0]: *
+05:25:17  db2   pgpool  LOG      OTHER        Setting up socket for 0.0.0.0:9999
+05:25:17  db2   pgpool  LOG      OTHER        Setting up socket for :::9999
+05:25:17  db2   pgpool  LOG      OTHER        find_primary_node_repeatedly: waiting for finding a primary node
+05:25:17  db2   pgpool  LOG      OTHER        find_primary_node: primary node is 0
+05:25:17  db2   pgpool  LOG      OTHER        find_primary_node: standby node is 1
+05:25:17  db2   pgpool  LOG      OTHER        create socket files[0]: /tmp/.s.PGSQL.9898
+05:25:17  db2   pgpool  LOG      OTHER        listen address[0]: *
+05:25:17  db2   pgpool  LOG      OTHER        Setting up socket for 0.0.0.0:9898
+05:25:17  db2   pgpool  LOG      OTHER        Setting up socket for :::9898
+05:25:17  db2   pgpool  LOG      OTHER        PCP process: 166 started
+05:25:17  db2   pgpool  LOG      OTHER        process started
+05:25:17  db2   pgpool  LOG      OTHER        process started
+05:25:17  db2   pgpool  LOG      OTHER        process started
+05:25:17  db2   pgpool  LOG      OTHER        pgpool-II successfully started. version 4.5.13 (hotooriboshi)
+05:25:17  db2   pgpool  LOG      OTHER        node status[0]: 1
+05:25:17  db2   pgpool  LOG      OTHER        node status[1]: 2
+05:25:18  db2   pgpool  LOG      WD_ELECTION  adding watchdog node "db1:9999 Linux db1" to the standby list
+05:25:18  db2   pgpool  LOG      OTHER        signal_user1_to_parent_with_reason(3)
+05:25:18  db2   pgpool  LOG      OTHER        Pgpool-II parent process received SIGUSR1
+05:25:18  db2   pgpool  LOG      WD_ELECTION  Pgpool-II parent process received watchdog quorum change signal from watchdog
+05:25:18  db2   pgpool  LOG      FAILOVER     Setting failover command timeout to 16
+05:25:18  db2   pgpool  LOG      WD_ELECTION  watchdog cluster now holds the quorum
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  updating the state of quarantine backend nodes
+05:25:18  db2   pgpool  LOG      OTHER        set SO_REUSEPORT option to the socket
+05:25:18  db2   pgpool  LOG      OTHER        creating watchdog heartbeat receive socket.
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  set SO_REUSEPORT
+05:25:18  db2   pgpool  LOG      OTHER        set SO_REUSEPORT option to the socket
+05:25:18  db2   pgpool  LOG      OTHER        creating socket for sending heartbeat
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  set SO_REUSEPORT
+05:25:18  db2   pgpool  FATAL    OTHER        watchdog failed to ping host"172.31.10.100"
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  execv(/bin/ping) failed. reason: No such file or directory
+05:25:18  db2   pgpool  WARNING  OTHER        watchdog failed to ping host"172.31.10.100"
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  ping process exits with code: 1
+05:25:18  db2   pgpool  LOG      OTHER        waiting for the delegate IP address to become active
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  waiting... count: 1
+05:25:18  db2   pgpool  FATAL    OTHER        watchdog failed to ping host"172.31.10.100"
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  execv(/bin/ping) failed. reason: No such file or directory
+05:25:18  db2   pgpool  WARNING  OTHER        watchdog failed to ping host"172.31.10.100"
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  ping process exits with code: 1
+05:25:18  db2   pgpool  LOG      OTHER        waiting for the delegate IP address to become active
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  waiting... count: 2
+05:25:18  db2   pgpool  FATAL    OTHER        watchdog failed to ping host"172.31.10.100"
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  execv(/bin/ping) failed. reason: No such file or directory
+05:25:18  db2   pgpool  WARNING  OTHER        watchdog failed to ping host"172.31.10.100"
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  ping process exits with code: 1
+05:25:18  db2   pgpool  LOG      OTHER        waiting for the delegate IP address to become active
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  waiting... count: 3
+05:25:18  db2   pgpool  LOG      OTHER        failed to acquire the delegate IP address
+05:25:18  db2   pgpool  LOG      OTHER        DETAIL:  'if_up_cmd' failed
+05:25:18  db2   pgpool  WARNING  WD_ELECTION  watchdog escalation failed to acquire delegate IP
+05:25:18  db2   pgpool  LOG      WD_ELECTION  watchdog escalation process with pid: 139 exit with SUCCESS.
+05:25:23  db2   pgpool  LOG      OTHER        new outbound connection to db1:9000 
+05:26:07  db2   pgpool  LOG      OTHER        watchdog: lifecheck started
+05:25:12  db2   pg      LOG      OTHER        starting PostgreSQL 18.6 (Debian 18.6-1.pgdg13+2) on x86_64-pc-linux-gnu, compiled by g...
+05:25:12  db2   pg      LOG      OTHER        listening on IPv4 address "0.0.0.0", port 5432
+05:25:12  db2   pg      LOG      OTHER        listening on IPv6 address "::", port 5432
+05:25:12  db2   pg      LOG      OTHER        listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+05:25:12  db2   pg      LOG      OTHER        database system was interrupted; last known up at 2026-11-05 05:25:11 UTC
+05:25:12  db2   pg      LOG      OTHER        starting backup recovery with redo LSN 0/2000028, checkpoint LSN 0/2000080, on timeline...
+05:25:12  db2   pg      LOG      OTHER        entering standby mode
+05:25:12  db2   pg      LOG      OTHER        redo starts at 0/2000028
+05:25:12  db2   pg      LOG      OTHER        completed backup recovery with redo LSN 0/2000028 and end LSN 0/2000120
+05:25:12  db2   pg      LOG      OTHER        consistent recovery state reached at 0/2000120
+05:25:12  db2   pg      LOG      OTHER        database system is ready to accept read-only connections
+05:25:12  db2   pg      LOG      OTHER        started streaming WAL from primary at 0/3000000 on timeline 1
+05:25:12  db2   pg      FATAL    AUTH_FAIL    password authentication failed for user "root"
+05:25:12  db2   pg      LOG      OTHER        DETAIL:  Role "root" does not exist.
+05:25:12  db2   pg      FATAL    AUTH_FAIL    password authentication failed for user "root"
+05:25:12  db2   pg      LOG      OTHER        DETAIL:  Role "root" does not exist.
+== exit: 0

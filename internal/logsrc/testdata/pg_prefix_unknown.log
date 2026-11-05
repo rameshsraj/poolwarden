@@ -1,0 +1,2 @@
+# SYNTHETIC — %Q is not a real escape
+%Q 2026-11-05 12:01:00 CET [501]: LOG:  hello

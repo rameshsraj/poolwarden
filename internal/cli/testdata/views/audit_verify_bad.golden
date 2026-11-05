@@ -1,0 +1,4 @@
+cluster  · pgpool  · collected 02:00:00 (0s)
+
+FILE                             LINE  KIND           DETAIL
+/var/lib/poolwarden/audit.jsonl  2     hash_mismatch  entry <id>

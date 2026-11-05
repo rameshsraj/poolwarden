@@ -1,0 +1,9 @@
+== $ bash -c docker exec pgpool1 poolwarden --operator tester status
+cluster testbed-split · pgpool 4.5.13 (hotooriboshi) · local pgpool1 (LEADER) · VIP on pgpool1 · collected 05:28:57 (171ms)
+
+NODES   0 pg1:5432 primary  up   score 100
+        1 pg2:5432 standby  up   delay 2m15s   score 100
+WATCHDOG quorum: QUORUM EXIST · leader pgpool1 · 2/2 alive · half-votes ON (2-node split risk: see WD_HALF_VOTES_2NODE)
+POOLS   children 1/20 busy · clients 4
+FINDINGS 0 CRIT · 2 WARN · 0 INFO        → poolwarden diagnose
+== exit: 10

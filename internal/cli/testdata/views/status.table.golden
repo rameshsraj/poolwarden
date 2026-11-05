@@ -1,0 +1,7 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+NODES   0 db1:5432 primary  up   score 100
+        1 db2:5432 standby  up   delay 2s   score 100
+WATCHDOG quorum: QUORUM EXIST · leader db1 · 2/2 alive · half-votes ON (2-node split risk: see WD_HALF_VOTES_2NODE)
+POOLS   children 0/100 busy · clients 1
+FINDINGS 0 CRIT · 0 WARN · 0 INFO        → poolwarden diagnose

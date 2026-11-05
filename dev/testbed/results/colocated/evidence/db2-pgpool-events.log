@@ -1,0 +1,217 @@
+2026-11-05 05:25:17.826: watchdog pid 137: LOG:  watchdog node state changed from [INITIALIZING] to [STANDING FOR LEADER]
+2026-11-05 05:25:17.827: watchdog pid 137: LOG:  watchdog node state changed from [STANDING FOR LEADER] to [LEADER]
+2026-11-05 05:25:17.827: watchdog pid 137: LOG:  Setting failover command timeout to 16
+2026-11-05 05:25:17.827: watchdog pid 137: LOG:  I am announcing my self as leader/coordinator watchdog node
+2026-11-05 05:25:17.827: watchdog pid 137: LOG:  I am the cluster leader node
+2026-11-05 05:25:17.827: watchdog pid 137: LOG:  setting the local node "db2:9999 Linux db2" as watchdog cluster leader
+2026-11-05 05:25:17.827: watchdog pid 137: LOG:  I am the cluster leader node. Starting escalation process
+2026-11-05 05:25:17.828: watchdog pid 137: LOG:  escalation process started with PID:139
+2026-11-05 05:25:17.828: watchdog_utility pid 139: LOG:  watchdog: escalation started
+2026-11-05 05:25:18.829: main pid 124: LOG:  Pgpool-II parent process received watchdog quorum change signal from watchdog
+2026-11-05 05:25:18.830: watchdog pid 137: LOG:  Setting failover command timeout to 16
+2026-11-05 05:25:18.830: main pid 124: LOG:  watchdog cluster now holds the quorum
+2026-11-05 05:25:18.862: watchdog_utility pid 139: WARNING:  watchdog escalation failed to acquire delegate IP
+2026-11-05 05:25:18.865: watchdog pid 137: LOG:  watchdog escalation process with pid: 139 exit with SUCCESS.
+2026-11-05 05:28:08.954: watchdog pid 137: LOG:  watchdog received the failover command from remote pgpool-II node "db1:9999 Linux db1"
+2026-11-05 05:28:08.954: watchdog pid 137: LOG:  watchdog is processing the failover command [DEGENERATE_BACKEND_REQUEST] received from db1:9999 Linux db1
+2026-11-05 05:28:08.954: watchdog pid 137: LOG:  we have got the consensus to perform the failover
+2026-11-05 05:28:08.954: watchdog pid 137: LOG:  received degenerate backend request for node_id: 0 from pid [137]
+2026-11-05 05:28:08.954: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:08.954: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:08.954: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:08.956: main pid 124: LOG:  === Starting degeneration. shutdown host db1(5432) ===
+2026-11-05 05:28:08.958: main pid 124: LOG:  execute command: /etc/pgpool-II/failover.sh  0 db1  5432 /var/lib/postgresql/18/main  1 db2 0 0 5432 /var/lib/postgresql/18/main
+2026-11-05 05:28:09.265: main pid 124: LOG:  starting follow degeneration. shutdown host db1(5432)
+2026-11-05 05:28:09.267: main pid 124: LOG:  failover: 1 follow backends have been degenerated
+2026-11-05 05:28:09.268: main pid 124: LOG:  failover: set new primary node: 1
+2026-11-05 05:28:09.268: main pid 124: LOG:  failover: set new main node: 1
+2026-11-05 05:28:09.269: follow_child pid 476: LOG:  === Starting follow primary command for node 0 ===
+2026-11-05 05:28:09.269: follow_child pid 476: LOG:  execute command: /etc/pgpool-II/follow_primary.sh  0 db1  5432 /var/lib/postgresql/18/main  1 db2 0 0 5432 /var/lib/postgresql/18/main
+2026-11-05 05:28:09.278: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:09.278: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:09.278: main pid 124: LOG:  === Failover done. shutdown host db1(5432) ===
+2026-11-05 05:28:10.282: main pid 124: LOG:  PCP child 166 exits with status 0 in failover()
+2026-11-05 05:28:10.283: main pid 124: LOG:  fork a new PCP child pid 502 in failover()
+2026-11-05 05:28:10.648: watchdog pid 137: LOG:  watchdog received the failover command from local pgpool-II on IPC interface
+2026-11-05 05:28:10.648: watchdog pid 137: LOG:  watchdog is processing the failover command [FAILBACK_REQUEST] received from local pgpool-II on IPC interface
+2026-11-05 05:28:10.648: watchdog pid 137: LOG:  The failover request does not need quorum to hold
+2026-11-05 05:28:10.648: watchdog pid 137: DETAIL:  proceeding with the failover
+2026-11-05 05:28:10.648: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:10.648: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:10.648: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:10.649: follow_child pid 476: LOG:  === Follow primary command for node 0 ended ===
+2026-11-05 05:28:10.678: main pid 124: LOG:  failover: set new primary node: 1
+2026-11-05 05:28:10.678: main pid 124: LOG:  failover: set new main node: 0
+2026-11-05 05:28:10.679: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:10.679: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:11.683: main pid 124: LOG:  PCP child 502 exits with status 0 in failover()
+2026-11-05 05:28:11.683: main pid 124: LOG:  fork a new PCP child pid 510 in failover()
+2026-11-05 05:28:14.584: watchdog pid 137: LOG:  watchdog received the failover command from remote pgpool-II node "db1:9999 Linux db1"
+2026-11-05 05:28:14.584: watchdog pid 137: LOG:  watchdog is processing the failover command [DEGENERATE_BACKEND_REQUEST] received from db1:9999 Linux db1
+2026-11-05 05:28:14.584: watchdog pid 137: LOG:  we have got the consensus to perform the failover
+2026-11-05 05:28:14.584: watchdog pid 137: LOG:  received degenerate backend request for node_id: 0 from pid [137]
+2026-11-05 05:28:14.584: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:14.584: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:14.584: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:14.585: main pid 124: LOG:  === Starting degeneration. shutdown host db1(5432) ===
+2026-11-05 05:28:14.586: main pid 124: LOG:  execute command: /etc/pgpool-II/failover.sh  0 db1  5432 /var/lib/postgresql/18/main  1 db2 0 1 5432 /var/lib/postgresql/18/main
+2026-11-05 05:28:14.787: main pid 124: LOG:  failover: set new primary node: 1
+2026-11-05 05:28:14.787: main pid 124: LOG:  failover: set new main node: 1
+2026-11-05 05:28:14.787: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:14.787: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:14.788: main pid 124: LOG:  === Failover done. shutdown host db1(5432) ===
+2026-11-05 05:28:15.791: main pid 124: LOG:  PCP child 510 exits with status 0 in failover()
+2026-11-05 05:28:15.792: main pid 124: LOG:  fork a new PCP child pid 596 in failover()
+2026-11-05 05:28:19.504: watchdog pid 137: LOG:  watchdog received the failover command from remote pgpool-II node "db1:9999 Linux db1"
+2026-11-05 05:28:19.505: watchdog pid 137: LOG:  watchdog is processing the failover command [FAILBACK_REQUEST] received from db1:9999 Linux db1
+2026-11-05 05:28:19.505: watchdog pid 137: LOG:  The failover request does not need quorum to hold
+2026-11-05 05:28:19.505: watchdog pid 137: DETAIL:  proceeding with the failover
+2026-11-05 05:28:19.505: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:19.505: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:19.505: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:19.524: main pid 124: LOG:  failover: set new primary node: 1
+2026-11-05 05:28:19.524: main pid 124: LOG:  failover: set new main node: 0
+2026-11-05 05:28:19.525: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:19.525: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:20.530: main pid 124: LOG:  PCP child 596 exits with status 0 in failover()
+2026-11-05 05:28:20.530: main pid 124: LOG:  fork a new PCP child pid 642 in failover()
+2026-11-05 05:28:25.764: watchdog pid 137: LOG:  watchdog received the failover command from remote pgpool-II node "db1:9999 Linux db1"
+2026-11-05 05:28:25.764: watchdog pid 137: LOG:  watchdog is processing the failover command [DEGENERATE_BACKEND_REQUEST] received from db1:9999 Linux db1
+2026-11-05 05:28:25.764: watchdog pid 137: LOG:  The failover request does not need quorum to hold
+2026-11-05 05:28:25.764: watchdog pid 137: DETAIL:  proceeding with the failover
+2026-11-05 05:28:25.764: watchdog pid 137: LOG:  received degenerate backend request for node_id: 0 from pid [137]
+2026-11-05 05:28:25.765: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:25.765: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:25.765: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:25.765: main pid 124: LOG:  === Starting degeneration. shutdown host db2(5432) ===
+2026-11-05 05:28:25.768: main pid 124: LOG:  execute command: /etc/pgpool-II/failover.sh  1 db2  5432 /var/lib/postgresql/18/main  0 db1 0 1 5432 /var/lib/postgresql/18/main
+2026-11-05 05:28:26.072: main pid 124: LOG:  starting follow degeneration. shutdown host db2(5432)
+2026-11-05 05:28:26.073: main pid 124: LOG:  failover: 1 follow backends have been degenerated
+2026-11-05 05:28:26.074: main pid 124: LOG:  failover: set new primary node: 0
+2026-11-05 05:28:26.074: main pid 124: LOG:  failover: set new main node: 0
+2026-11-05 05:28:26.074: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:26.074: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:26.074: main pid 124: LOG:  === Failover done. shutdown host db2(5432) ===
+2026-11-05 05:28:26.075: follow_child pid 711: LOG:  === Starting follow primary command for node 1 ===
+2026-11-05 05:28:26.075: follow_child pid 711: LOG:  execute command: /etc/pgpool-II/follow_primary.sh  1 db2  5432 /var/lib/postgresql/18/main  0 db1 1 1 5432 /var/lib/postgresql/18/main
+2026-11-05 05:28:27.078: main pid 124: LOG:  PCP child 642 exits with status 0 in failover()
+2026-11-05 05:28:27.079: main pid 124: LOG:  fork a new PCP child pid 727 in failover()
+2026-11-05 05:28:27.251: watchdog pid 137: LOG:  watchdog received the failover command from local pgpool-II on IPC interface
+2026-11-05 05:28:27.251: watchdog pid 137: LOG:  watchdog is processing the failover command [FAILBACK_REQUEST] received from local pgpool-II on IPC interface
+2026-11-05 05:28:27.251: watchdog pid 137: LOG:  The failover request does not need quorum to hold
+2026-11-05 05:28:27.251: watchdog pid 137: DETAIL:  proceeding with the failover
+2026-11-05 05:28:27.252: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:27.252: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:27.252: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:27.253: follow_child pid 711: LOG:  === Follow primary command for node 1 ended ===
+2026-11-05 05:28:27.283: main pid 124: LOG:  failover: set new primary node: 0
+2026-11-05 05:28:27.283: main pid 124: LOG:  failover: set new main node: 0
+2026-11-05 05:28:27.283: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:27.283: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:28.289: main pid 124: LOG:  PCP child 727 exits with status 0 in failover()
+2026-11-05 05:28:28.290: main pid 124: LOG:  fork a new PCP child pid 766 in failover()
+2026-11-05 05:28:29.685: watchdog pid 137: LOG:  watchdog received the failover command from remote pgpool-II node "db1:9999 Linux db1"
+2026-11-05 05:28:29.685: watchdog pid 137: LOG:  watchdog is processing the failover command [DEGENERATE_BACKEND_REQUEST] received from db1:9999 Linux db1
+2026-11-05 05:28:29.685: watchdog pid 137: LOG:  The failover request does not need quorum to hold
+2026-11-05 05:28:29.685: watchdog pid 137: DETAIL:  proceeding with the failover
+2026-11-05 05:28:29.685: watchdog pid 137: LOG:  received degenerate backend request for node_id: 1 from pid [137]
+2026-11-05 05:28:29.685: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:29.685: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:29.685: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:29.686: main pid 124: LOG:  === Starting degeneration. shutdown host db1(5432) ===
+2026-11-05 05:28:29.688: main pid 124: LOG:  execute command: /etc/pgpool-II/failover.sh  0 db1  5432 /var/lib/postgresql/18/main  1 db2 0 0 5432 /var/lib/postgresql/18/main
+2026-11-05 05:28:29.991: main pid 124: LOG:  starting follow degeneration. shutdown host db1(5432)
+2026-11-05 05:28:29.992: main pid 124: LOG:  failover: 1 follow backends have been degenerated
+2026-11-05 05:28:29.993: main pid 124: LOG:  failover: set new primary node: 1
+2026-11-05 05:28:29.993: main pid 124: LOG:  failover: set new main node: 1
+2026-11-05 05:28:29.994: follow_child pid 849: LOG:  === Starting follow primary command for node 0 ===
+2026-11-05 05:28:29.994: follow_child pid 849: LOG:  execute command: /etc/pgpool-II/follow_primary.sh  0 db1  5432 /var/lib/postgresql/18/main  1 db2 0 0 5432 /var/lib/postgresql/18/main
+2026-11-05 05:28:29.994: child pid 850: LOG:  failover or failback event detected
+2026-11-05 05:28:29.995: child pid 851: LOG:  failover or failback event detected
+2026-11-05 05:28:29.996: child pid 853: LOG:  failover or failback event detected
+2026-11-05 05:28:29.996: child pid 854: LOG:  failover or failback event detected
+2026-11-05 05:28:29.997: child pid 855: LOG:  failover or failback event detected
+2026-11-05 05:28:29.998: child pid 858: LOG:  failover or failback event detected
+2026-11-05 05:28:30.000: child pid 860: LOG:  failover or failback event detected
+2026-11-05 05:28:30.001: child pid 862: LOG:  failover or failback event detected
+2026-11-05 05:28:30.001: child pid 865: LOG:  failover or failback event detected
+2026-11-05 05:28:30.001: child pid 859: LOG:  failover or failback event detected
+2026-11-05 05:28:30.001: child pid 861: LOG:  failover or failback event detected
+2026-11-05 05:28:30.002: child pid 866: LOG:  failover or failback event detected
+2026-11-05 05:28:30.002: child pid 857: LOG:  failover or failback event detected
+2026-11-05 05:28:30.004: child pid 863: LOG:  failover or failback event detected
+2026-11-05 05:28:30.004: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:30.004: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:30.005: child pid 870: LOG:  failover or failback event detected
+2026-11-05 05:28:30.005: child pid 868: LOG:  failover or failback event detected
+2026-11-05 05:28:30.006: child pid 869: LOG:  failover or failback event detected
+2026-11-05 05:28:30.006: main pid 124: LOG:  === Failover done. shutdown host db1(5432) ===
+2026-11-05 05:28:30.007: child pid 872: LOG:  failover or failback event detected
+2026-11-05 05:28:30.007: child pid 871: LOG:  failover or failback event detected
+2026-11-05 05:28:30.008: child pid 867: LOG:  failover or failback event detected
+2026-11-05 05:28:31.012: main pid 124: LOG:  PCP child 766 exits with status 0 in failover()
+2026-11-05 05:28:31.012: main pid 124: LOG:  fork a new PCP child pid 875 in failover()
+2026-11-05 05:28:31.439: watchdog pid 137: LOG:  watchdog received the failover command from local pgpool-II on IPC interface
+2026-11-05 05:28:31.440: watchdog pid 137: LOG:  watchdog is processing the failover command [FAILBACK_REQUEST] received from local pgpool-II on IPC interface
+2026-11-05 05:28:31.440: watchdog pid 137: LOG:  The failover request does not need quorum to hold
+2026-11-05 05:28:31.440: watchdog pid 137: DETAIL:  proceeding with the failover
+2026-11-05 05:28:31.440: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:31.440: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:31.440: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:31.441: follow_child pid 849: LOG:  === Follow primary command for node 0 ended ===
+2026-11-05 05:28:31.476: main pid 124: LOG:  failover: set new primary node: 1
+2026-11-05 05:28:31.476: main pid 124: LOG:  failover: set new main node: 0
+2026-11-05 05:28:31.477: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:31.477: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:32.481: main pid 124: LOG:  PCP child 875 exits with status 0 in failover()
+2026-11-05 05:28:32.481: main pid 124: LOG:  fork a new PCP child pid 929 in failover()
+2026-11-05 05:28:32.808: watchdog pid 137: LOG:  watchdog received the failover command from remote pgpool-II node "db1:9999 Linux db1"
+2026-11-05 05:28:32.808: watchdog pid 137: LOG:  watchdog is processing the failover command [DEGENERATE_BACKEND_REQUEST] received from db1:9999 Linux db1
+2026-11-05 05:28:32.808: watchdog pid 137: LOG:  The failover request does not need quorum to hold
+2026-11-05 05:28:32.808: watchdog pid 137: DETAIL:  proceeding with the failover
+2026-11-05 05:28:32.808: watchdog pid 137: LOG:  received degenerate backend request for node_id: 0 from pid [137]
+2026-11-05 05:28:32.808: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:32.809: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:32.809: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:32.809: main pid 124: LOG:  === Starting degeneration. shutdown host db1(5432) ===
+2026-11-05 05:28:32.811: main pid 124: LOG:  execute command: /etc/pgpool-II/failover.sh  0 db1  5432 /var/lib/postgresql/18/main  1 db2 0 1 5432 /var/lib/postgresql/18/main
+2026-11-05 05:28:33.003: main pid 124: LOG:  failover: set new primary node: 1
+2026-11-05 05:28:33.003: main pid 124: LOG:  failover: set new main node: 1
+2026-11-05 05:28:33.004: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:33.004: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:33.004: main pid 124: LOG:  === Failover done. shutdown host db1(5432) ===
+2026-11-05 05:28:34.007: main pid 124: LOG:  PCP child 929 exits with status 0 in failover()
+2026-11-05 05:28:34.008: main pid 124: LOG:  fork a new PCP child pid 972 in failover()
+2026-11-05 05:28:35.646: watchdog pid 137: LOG:  watchdog received the failover command from remote pgpool-II node "db1:9999 Linux db1"
+2026-11-05 05:28:35.646: watchdog pid 137: LOG:  watchdog is processing the failover command [FAILBACK_REQUEST] received from db1:9999 Linux db1
+2026-11-05 05:28:35.646: watchdog pid 137: LOG:  The failover request does not need quorum to hold
+2026-11-05 05:28:35.646: watchdog pid 137: DETAIL:  proceeding with the failover
+2026-11-05 05:28:35.647: main pid 124: LOG:  Pgpool-II parent process has received failover request
+2026-11-05 05:28:35.647: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:35.647: watchdog pid 137: LOG:  watchdog is informed of failover start by the main process
+2026-11-05 05:28:35.665: main pid 124: LOG:  failover: set new primary node: 1
+2026-11-05 05:28:35.665: main pid 124: LOG:  failover: set new main node: 0
+2026-11-05 05:28:35.666: watchdog pid 137: LOG:  received the failover indication from Pgpool-II on IPC interface
+2026-11-05 05:28:35.666: watchdog pid 137: LOG:  watchdog is informed of failover end by the main process
+2026-11-05 05:28:36.669: main pid 124: LOG:  PCP child 972 exits with status 0 in failover()
+2026-11-05 05:28:36.670: main pid 124: LOG:  fork a new PCP child pid 1017 in failover()
+2026-11-05 05:28:46.692: child pid 879: LOG:  failover or failback event detected
+2026-11-05 05:28:46.692: child pid 878: LOG:  failover or failback event detected
+2026-11-05 05:28:46.692: child pid 894: LOG:  failover or failback event detected
+2026-11-05 05:28:46.692: child pid 892: LOG:  failover or failback event detected
+2026-11-05 05:28:46.697: child pid 889: LOG:  failover or failback event detected
+2026-11-05 05:28:46.697: child pid 886: LOG:  failover or failback event detected
+2026-11-05 05:28:52.201: child pid 893: LOG:  failover or failback event detected
+2026-11-05 05:28:52.201: child pid 896: LOG:  failover or failback event detected
+2026-11-05 05:28:53.917: child pid 880: LOG:  failover or failback event detected
+2026-11-05 05:28:53.917: child pid 888: LOG:  failover or failback event detected
+2026-11-05 05:28:53.917: child pid 881: LOG:  failover or failback event detected
+2026-11-05 05:28:53.917: child pid 887: LOG:  failover or failback event detected
+2026-11-05 05:28:53.917: child pid 882: LOG:  failover or failback event detected
+2026-11-05 05:28:53.917: child pid 884: LOG:  failover or failback event detected
+2026-11-05 05:28:53.920: child pid 883: LOG:  failover or failback event detected
+2026-11-05 05:28:53.920: child pid 877: LOG:  failover or failback event detected
+2026-11-05 05:28:53.920: child pid 895: LOG:  failover or failback event detected
+2026-11-05 05:28:53.921: child pid 885: LOG:  failover or failback event detected
+2026-11-05 05:28:53.923: child pid 891: LOG:  failover or failback event detected
+2026-11-05 05:28:53.926: child pid 890: LOG:  failover or failback event detected

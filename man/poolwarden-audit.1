@@ -1,0 +1,75 @@
+.nh
+.TH "POOLWARDEN-AUDIT" "1" "Nov 2026" "" ""
+
+.SH NAME
+poolwarden-audit - view the audit log
+
+
+.SH SYNOPSIS
+\fBpoolwarden audit [flags]\fP
+
+
+.SH DESCRIPTION
+view the audit log
+
+
+.SH OPTIONS
+\fB--action\fP=""
+
+.PP
+\fB-h\fP, \fB--help\fP[=false]
+	help for audit
+
+.PP
+\fB--operator\fP=""
+
+.PP
+\fB--outcome\fP=""
+
+.PP
+\fB--since\fP=""
+	look back this far (default 24h)
+
+.PP
+\fB--ticket\fP=""
+
+
+.SH OPTIONS INHERITED FROM PARENT COMMANDS
+\fB-c\fP, \fB--config\fP="/etc/poolwarden.yaml"
+	poolwarden config file
+
+.PP
+\fB--confirm\fP=""
+	typed confirmation token for non-TTY use
+
+.PP
+\fB--force\fP[=false]
+	override pre-flight WARN/NO-GO blocks
+
+.PP
+\fB--nagios\fP[=false]
+	Nagios-style single-line output and exit codes
+
+.PP
+\fB--no-color\fP[=false]
+	disable coloured output
+
+.PP
+\fB-o\fP, \fB--output\fP="table"
+	output format: table|wide|json
+
+.PP
+\fB-q\fP, \fB--quiet\fP[=false]
+	suppress non-essential output
+
+.PP
+\fB--read-only\fP[=false]
+	disable all control commands
+
+.PP
+\fB--yes\fP[=false]
+	skip the plain yes/no prompt (never a typed confirmation)
+
+
+.SH SEE ALSO
+\fBpoolwarden(1)\fP, \fBpoolwarden-audit-list(1)\fP, \fBpoolwarden-audit-sessions(1)\fP, \fBpoolwarden-audit-show(1)\fP, \fBpoolwarden-audit-verify(1)\fP

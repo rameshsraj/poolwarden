@@ -1,0 +1,3 @@
+FILE         HOST  VALUE  LIVE  DEFAULT  DRIFT
+pgpool.conf  db1   32     100   32       file≠live
+pgpool.conf  db2   32     100   32       file≠live

@@ -1,0 +1,5 @@
+== $ bash -c docker exec pgpool1 poolwarden --operator tester config get health_check_period
+FILE         HOST     VALUE  LIVE  DEFAULT  DRIFT
+pgpool.conf  pgpool1  7      7     0        
+pgpool.conf  pgpool2  7      7     0        
+== exit: 0

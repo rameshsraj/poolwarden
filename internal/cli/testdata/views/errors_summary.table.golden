@@ -1,0 +1,6 @@
+cluster  · pgpool  · collected 02:00:00 (0s)
+
+SOURCE  CODE         COUNT  FIRST     LAST
+conn    AUTH_FAIL    1      08:34:00  08:34:00
+pgpool  FAILOVER     1      08:33:00  08:33:00
+pgpool  HEALTHCHECK  1      08:32:00  08:32:00

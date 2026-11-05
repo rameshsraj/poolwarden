@@ -1,0 +1,53 @@
+cluster: prod-a
+state_dir: /var/lib/poolwarden
+operators:
+  "SHA256:abc": Jane DBA
+allowed_operators: [Jane DBA]
+pgpool: {host: 10.0.0.100, port: 9999, user: postgres, dbname: postgres}
+pcp: {host: 127.0.0.1, port: 9898, user: postgres, bin_dir: /usr/bin}
+bins: {systemctl: /usr/bin/systemctl, ip: /usr/sbin/ip}
+ssh: {key: /root/.ssh/id_ed25519, known_hosts: /root/.ssh/known_hosts, timeout: 5s}
+interval: 2s
+timeout: 3s
+lag: {warn_seconds: 1800, crit_seconds: 3600}
+wal_volume_bytes: 100GB
+audit: {file: /var/lib/poolwarden/audit.jsonl, syslog: true, read_commands: false, retention_days: 31}
+hosts:
+  - name: db1
+    address: 10.0.0.11
+    roles: [pgpool, pg]
+    ssh_user: root
+    pgpool:
+      conf: /etc/pgpool-II/pgpool.conf
+      hba: /etc/pgpool-II/pool_hba.conf
+      pcp_conf: /etc/pgpool-II/pcp.conf
+      pool_passwd: /etc/pgpool-II/pool_passwd
+      log_dir: /var/log/pgpool-II
+      log_line_prefix: '%m: %a pid %p: '
+      service: pgpool-II
+    pg:
+      port: 5432
+      data_dir: /var/lib/pgsql/16/data
+      log_dir: /var/lib/pgsql/16/data/log
+      log_filename: postgresql-%a.log
+      log_destination: stderr
+      log_line_prefix: '%m [%p] '
+  - name: db2
+    address: 10.0.0.12
+    roles: [pgpool, pg]
+    ssh_user: postgres
+    pgpool:
+      conf: /etc/pgpool-II/pgpool.conf
+      hba: /etc/pgpool-II/pool_hba.conf
+      pcp_conf: /etc/pgpool-II/pcp.conf
+      pool_passwd: /etc/pgpool-II/pool_passwd
+      log_dir: /var/log/pgpool-II
+      log_line_prefix: '%m: %a pid %p: '
+      service: pgpool-II
+    pg:
+      port: 5432
+      data_dir: /var/lib/pgsql/16/data
+      log_dir: /var/lib/pgsql/16/data/log
+      log_filename: postgresql-%a.log
+      log_destination: stderr
+      log_line_prefix: '%m [%p] '

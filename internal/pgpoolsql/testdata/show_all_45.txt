@@ -1,0 +1,16 @@
+# SYNTHETIC — PGPOOL SHOW ALL emits item|value rows on 4.4/4.5
+item	value
+delegate_ip	10.0.0.100
+failover_command	/etc/pgpool-II/failover.sh
+follow_primary_command	/etc/pgpool-II/follow.sh
+recovery_1st_stage_command	
+num_init_children	100
+max_pool	4
+enable_consensus_with_half_votes	on
+failover_when_quorum_exists	on
+failover_require_consensus	on
+use_watchdog	on
+wd_escalation_command	
+wd_de_escalation_command	
+health_check_period	30
+log_line_prefix	%m: %a pid %p: 

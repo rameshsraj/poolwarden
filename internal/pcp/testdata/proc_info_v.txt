@@ -1,0 +1,36 @@
+# SYNTHETIC — built from pgpool-II 4.5 docs (pcp-proc-info.html)
+Database : test
+Username : postgres
+Start time : 2026-11-05 09:00:00 (2:52 before process restarting)
+Client connection count : 1
+Major : 3
+Minor : 0
+Backend connection time : 2026-11-05 09:00:16
+Client connection time : 2026-11-05 09:10:16
+Client idle duration : 0
+Client disconnection time : 2026-11-05 09:12:33
+Pool Counter : 4
+Backend PID : 40001
+Connected : 1
+PID : 31001
+Backend ID : 0
+Status : Idle
+Load balance node : 0
+
+Database : test
+Username : postgres
+Start time : 2026-11-05 09:00:00 (2:52 before process restarting)
+Client connection count : 1
+Major : 3
+Minor : 0
+Backend connection time : 2026-11-05 09:00:16
+Client connection time : 2026-11-05 09:10:16
+Client idle duration : 158 (2:22 before client disconnected)
+Client disconnection time :
+Pool Counter : 4
+Backend PID : 40002
+Connected : 1
+PID : 31001
+Backend ID : 1
+Status : Idle
+Load balance node : 1

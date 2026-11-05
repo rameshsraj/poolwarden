@@ -1,0 +1,11 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+SEV   ID                           SUBJECT  SUMMARY
+CRIT  FAILOVER_CMD_UNSET:cluster   cluster  failover_command/follow_primary_command empty in live settings
+CRIT  STANDBY_NOT_STREAMING:db2    db2      pg_stat_replication on db1 has no row for db2
+WARN  COLOCATED_HOST:db1           db1      roles: pgpool,pg (config)
+WARN  WD_ESCALATION_UNSET:cluster  cluster  delegate_ip=10.0.0.100 but wd_escalation_command/wd_de_escalation_command emp...
+WARN  WD_HALF_VOTES_2NODE:cluster  cluster  enable_consensus_with_half_votes=on, 2 watchdog nodes (D14/V4: accepted split...
+INFO  COLOCATED_HOST:db2           db2      roles: pgpool,pg (config)
+INFO  RECOVERY_CMD_UNSET:cluster   cluster  recovery_1st_stage_command empty in live settings
+→ poolwarden explain FAILOVER_CMD_UNSET:cluster

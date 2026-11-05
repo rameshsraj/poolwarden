@@ -1,0 +1,33 @@
+# SYNTHETIC — built from pgpool-II 4.5 docs (pcp-watchdog-info.html); "Leader" wording
+Watchdog Cluster Information 
+Total Nodes : 2
+Remote Nodes : 1
+Member Remote Nodes : 1
+Alive Remote Nodes : 1
+Nodes required for quorum: 2
+Quorum state : QUORUM EXIST
+Local node escalation : YES
+VIP up on local node : YES
+Leader Node Name : db1:9999 Linux db1.localdomain
+Leader Host Name : db1
+
+Watchdog Node Information 
+Node Name : db1:9999 Linux db1.localdomain
+Host Name : db1
+Delegate IP : 10.0.0.100
+Pgpool port : 9999
+Watchdog port : 9000
+Node priority : 1
+Status : 4
+Status Name : LEADER
+Membership Status : MEMBER
+
+Node Name : db2:9999 Linux db2.localdomain
+Host Name : db2
+Delegate IP : 10.0.0.100
+Pgpool port : 9999
+Watchdog port : 9000
+Node priority : 1
+Status : 7
+Status Name : STANDBY
+Membership Status : MEMBER

@@ -1,0 +1,3 @@
+apply failed; rolled back
+pgp1 /etc/pgpool-II/pgpool.conf written=true loaded=false
+pgp2 /etc/pgpool-II/pgpool.conf written=false loaded=false

@@ -1,0 +1,58 @@
+{
+  "header": {
+    "cluster": "prod-a",
+    "pgpool_version": "4.5.1",
+    "local_host": "",
+    "local_wd_role": "",
+    "vip_host": "db1",
+    "collected": "2026-11-05T12:03:01.000Z",
+    "duration_ms": 410,
+    "degraded": false
+  },
+  "nodes": [
+    {
+      "id": 0,
+      "host_port": "db1:5432",
+      "status": "up",
+      "pgpool_role": "primary",
+      "real_role": "primary",
+      "lb_weight": 0.5,
+      "selects": 2048,
+      "delay_sec": -1,
+      "repl_state": "-",
+      "sync": "-",
+      "last_change": "2026-11-05T10:03:01.000Z",
+      "score": 100,
+      "note": "",
+      "timeline": 3,
+      "current_lsn": "3/A1B2C3D4",
+      "conns": 80,
+      "max_conns": 500,
+      "oldest_xact_sec": 0,
+      "conflicts": 0
+    },
+    {
+      "id": 1,
+      "host_port": "db2:5432",
+      "status": "up",
+      "pgpool_role": "standby",
+      "real_role": "standby",
+      "lb_weight": 0.5,
+      "selects": 900,
+      "delay_sec": 2,
+      "repl_state": "streaming",
+      "sync": "async",
+      "last_change": "2026-11-05T10:03:01.000Z",
+      "score": 100,
+      "note": "",
+      "timeline": 3,
+      "current_lsn": "3/A1B2A000",
+      "receive_lsn": "3/A1B2C000",
+      "conns": 40,
+      "max_conns": 500,
+      "oldest_xact_sec": 0,
+      "conflicts": 0
+    }
+  ],
+  "findings": null
+}

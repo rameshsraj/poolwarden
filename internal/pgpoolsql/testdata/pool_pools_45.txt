@@ -1,0 +1,4 @@
+# SYNTHETIC — built from pgpool-II 4.5 docs (sql-show-pool-pools.html)
+pool_pid	start_time	client_connection_count	pool_id	backend_id	database	username	backend_connection_time	client_connection_time	client_disconnection_time	client_idle_duration	majorversion	minorversion	pool_counter	pool_backendpid	pool_connected	status	load_balance_node
+31001	2026-11-05 09:00:00	1	0	0	postgres	app	2026-11-05 09:00:05	2026-11-05 09:10:00		12	3	0	4	40001	1	1	0
+31001	2026-11-05 09:00:00	1	0	1	postgres	app	2026-11-05 09:00:05	2026-11-05 09:10:00		12	3	0	4	40002	1	1	1

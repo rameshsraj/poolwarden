@@ -1,0 +1,12 @@
+== $ bash -c docker exec db1 poolwarden --operator tester audit sessions
+cluster  · pgpool  · collected 00:00:00 (0s)
+
+START     END       OPERATOR  FROM  KEY-FP  COMMANDS
+05:28:18  05:28:24  tester    -     -       1
+05:28:25  05:28:28  tester    -     -       1
+05:28:29  05:28:32  tester    -     -       1
+05:28:32  05:28:34  tester    -     -       1
+05:28:35  05:28:37  tester    -     -       1
+05:28:53  05:28:53  tester    -     -       1
+05:28:54  05:28:55  tester    -     -       1
+== exit: 0

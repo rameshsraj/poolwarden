@@ -1,0 +1,12 @@
+#!/bin/bash
+# svc — systemctl stand-in for the test bed (no systemd in containers).
+# usage: svc <start|stop|restart|status> pgpool-II
+ACT=$1
+case "$2" in pgpool-II|pgpool) ;; *) echo "svc: unknown unit $2" >&2; exit 1;; esac
+case "$ACT" in
+  start)   pgpool ;;
+  stop)    pgpool -m fast stop ;;
+  restart) pgpool -m fast stop; sleep 2; pgpool ;;
+  status)  pgpool -m fast status 2>/dev/null || pg_ctl status -D /nonexistent; exit $? ;;
+  *) echo "svc: bad action" >&2; exit 2;;
+esac

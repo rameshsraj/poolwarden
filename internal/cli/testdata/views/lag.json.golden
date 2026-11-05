@@ -1,0 +1,34 @@
+{
+  "header": {
+    "cluster": "prod-a",
+    "pgpool_version": "4.5.1",
+    "local_host": "",
+    "local_wd_role": "",
+    "vip_host": "db1",
+    "collected": "2026-11-05T12:03:01.000Z",
+    "duration_ms": 410,
+    "degraded": false
+  },
+  "primary": "10.0.0.11:5432",
+  "primary_lsn": "3/A1B2C3D4",
+  "standbys": [
+    {
+      "standby": "db2",
+      "state": "streaming",
+      "sync": "async",
+      "lag_bytes": 13000,
+      "write_lag_sec": 0.1,
+      "flush_lag_sec": 0.1,
+      "replay_lag_sec": 0.3,
+      "delay_sec": 2,
+      "delay_severity": "INFO",
+      "trend": "-",
+      "eta_sec": -1,
+      "sent_lsn": "3/A1B2C3D4",
+      "write_lsn": "3/A1B2C000",
+      "flush_lsn": "3/A1B2B000",
+      "replay_lsn": "3/A1B2A000"
+    }
+  ],
+  "findings": null
+}

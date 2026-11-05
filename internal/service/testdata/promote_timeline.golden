@@ -1,0 +1,4 @@
+preflight ok
+pcp_promote_node ok
+verify ok
+verify (old primary rejoin) ok

@@ -1,0 +1,14 @@
+== $ bash -c 
+  for i in $(seq 1 40); do
+    st=$(docker exec db1 bash -c "PGPASSWORD=pgpool psql -h 127.0.0.1 -p 9999 -U postgres -A -t -c 'SHOW POOL_NODES'" 2>/dev/null)
+    echo "$st"
+    echo "$st" | grep -q ' down ' || echo "$st" | grep -q quarantine || true
+    n1=$(echo "$st" | sed -n '2p')
+    echo "$n1" | grep -qi 'primary' && echo FLIPPED && exit 0
+    sleep 3
+  done; exit 1
+
+0|db1|5432|up|up|0.500000|standby|standby|0|false|0|streaming|async|2026-11-05 05:28:12
+1|db2|5432|up|up|0.500000|primary|primary|0|true|0|||2026-11-05 05:28:12
+FLIPPED
+== exit: 0

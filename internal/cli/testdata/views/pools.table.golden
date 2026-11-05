@@ -1,0 +1,6 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+children 0/100 busy · clients 1
+
+DATABASE  USER  BACKENDS  POOLS  CONNECTED  LOAD-BALANCE-NODES
+postgres  app   2         2      2          1

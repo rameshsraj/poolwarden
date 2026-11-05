@@ -1,0 +1,9 @@
+== $ bash -c 
+  for i in $(seq 1 60); do
+    ups=$(docker exec pgpool1 bash -c "PGPASSWORD=pgpool psql -h 127.0.0.1 -p 9999 -U postgres -A -t -c 'SHOW POOL_NODES'" 2>/dev/null | grep -c '|up|')
+    wd=$(docker exec pgpool1 bash -c 'PCPPASSFILE=/root/.pcppass pcp_watchdog_info -h 127.0.0.1 -w 2>/dev/null | grep -c QUORUM')
+    if [ "$ups" -ge 2 ]; then echo "pool up ($ups), wd=$wd"; exit 0; fi
+    sleep 3
+  done; echo TIMEOUT; exit 1
+pool up (2), wd=0
+== exit: 0

@@ -1,0 +1,5 @@
+# SYNTHETIC — PG %m [%p] prefix
+2026-11-05 12:01:00.111 CET [501] LOG:  database system is ready to accept connections
+2026-11-05 12:02:00.112 CET [501] WARNING:  there is no transaction in progress
+2026-11-05 12:03:00.113 CET [501] ERROR:  remaining connection slots are reserved for non-replication superuser connections
+2026-11-05 12:04:00.114 CET [501] STATEMENT:  select * from big_table;

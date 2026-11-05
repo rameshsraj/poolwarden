@@ -1,0 +1,4 @@
+# SYNTHETIC — `ip -o addr show` output shape (iproute2)
+1: lo    inet 127.0.0.1/8 scope host lo\       valid_lft forever preferred_lft forever
+2: eth0    inet 10.0.0.11/24 brd 10.0.0.255 scope global eth0\       valid_lft forever preferred_lft forever
+2: eth0    inet 10.0.0.100/24 brd 10.0.0.255 scope global secondary eth0:vip\       valid_lft forever preferred_lft forever

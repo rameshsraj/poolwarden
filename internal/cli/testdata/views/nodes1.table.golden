@@ -1,0 +1,17 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+node         1  db2:5432  up  standby
+pgpool role  standby
+real role    standby
+timeline     3
+current lsn  3/A1B2A000
+receive lsn  3/A1B2C000
+delay        2s
+repl         streaming async
+lb weight    0.50
+selects      900
+conns        40/500
+oldest txn   0.0s
+conflicts    0
+score        100
+note         -

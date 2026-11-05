@@ -1,0 +1,14 @@
+detach node 1 from pgpool
+
+  OK   another healthy node remains — 1 healthy node(s) remain
+  OK   LB capacity lost — LB capacity lost 50%
+
+VERDICT: GO
+
+CHECK                         RESULT  DETAIL
+another healthy node remains  OK      1 healthy node(s) remain
+LB capacity lost              OK      LB capacity lost 50%
+STEP             START     END       DURATION  RESULT
+preflight        12:03:01  12:03:01  0.0s      ok
+pcp_detach_node  12:03:01  12:03:01  0.0s      failed
+outcome: failed  event: <id>

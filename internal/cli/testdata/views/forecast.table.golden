@@ -1,0 +1,8 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+METRIC         SUBJECT  NOW       SLOPE         R²    ETA     THRESHOLD
+busy_children  pgpool   30.0      +6.0/min      1.00  11m40s  100
+conns          db1      80.0      -             1.00  -       500
+conns          db2      40.0      -             1.00  -       500
+lag_bytes      db2      30720.0B  +6144.0B/min  1.00  -       -
+replay_delay   db2      60.0s     +12.0s/min    1.00  4h55m   3600s

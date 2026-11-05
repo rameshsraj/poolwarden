@@ -1,0 +1,8 @@
+== $ bash -c docker exec db1 poolwarden --operator tester lag
+cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (STANDBY) · VIP on db2 · collected 05:28:05 (169ms)
+
+primary 172.31.10.11:5432  wal 0/306A1A0
+
+STANDBY  STATE      SYNC   LAG-BYTES  WRITE  FLUSH  REPLAY  DELAY  TREND  ETA→CRIT
+db2      streaming  async  0B         0.0s   0.0s   0.0s    1m24s  -      -
+== exit: 10

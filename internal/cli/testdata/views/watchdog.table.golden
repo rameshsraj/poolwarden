@@ -1,0 +1,13 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+quorum: QUORUM EXIST · leader db1 · 2/2 alive
+
+enable_consensus_with_half_votes  on
+failover_when_quorum_exists       on
+failover_require_consensus        on
+use_watchdog                      on
+delegate_ip                       10.0.0.100
+
+NODE  HOST  STATUS   PRIORITY  VIP-PRESENT
+0     db1   LEADER   1         yes
+1     db2   STANDBY  1         no

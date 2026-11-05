@@ -1,0 +1,3 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+insufficient history (have 2m, need 5m)

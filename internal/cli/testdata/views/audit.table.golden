@@ -1,0 +1,6 @@
+cluster  · pgpool  · collected 02:00:00 (0s)
+
+TIME      OPERATOR  ACTION       TARGET  TICKET  OUTCOME  DURATION
+08:30:00  alice     shell start  -       -       success  0.0s
+08:30:22  alice     detach 1     db2     INC-7   success  15s
+08:30:22  alice     shell end    -       -       success  0.0s

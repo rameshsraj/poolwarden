@@ -1,0 +1,45 @@
+name: pw-colocated
+services:
+  db1:
+    container_name: db1
+    build:
+      context: ../..
+      dockerfile: dev/testbed/Dockerfile
+    hostname: db1
+    cap_add: [NET_ADMIN]
+    environment:
+      ROLE: "pg,pgpool"
+      NODE_ID: "0"
+      PRIMARY_HOST: db1
+      PEERS: "db1 db2"
+      PG_HOSTS: "db1 db2"
+      VIP: 172.31.10.100
+      CLUSTER: testbed-colocated
+      SUBNET: 172.31.10.0/24
+      INVENTORY: "db1:172.31.10.11:pgpool,pg;db2:172.31.10.12:pgpool,pg"
+    networks:
+      pw: {ipv4_address: 172.31.10.11}
+  db2:
+    container_name: db2
+    build:
+      context: ../..
+      dockerfile: dev/testbed/Dockerfile
+    hostname: db2
+    cap_add: [NET_ADMIN]
+    environment:
+      ROLE: "pg,pgpool"
+      NODE_ID: "1"
+      PRIMARY_HOST: db1
+      PEERS: "db1 db2"
+      PG_HOSTS: "db1 db2"
+      VIP: 172.31.10.100
+      CLUSTER: testbed-colocated
+      SUBNET: 172.31.10.0/24
+      INVENTORY: "db1:172.31.10.11:pgpool,pg;db2:172.31.10.12:pgpool,pg"
+    networks:
+      pw: {ipv4_address: 172.31.10.12}
+networks:
+  pw:
+    ipam:
+      config:
+        - subnet: 172.31.10.0/24

@@ -1,0 +1,9 @@
+STEP       START     END       DURATION  RESULT
+preflight  12:03:01  12:03:01  0.0s      ok
+lock       12:03:01  12:03:01  0.0s      acquired
+read       12:03:01  12:03:01  0.0s      read
+backup     12:03:01  12:03:01  0.0s      backed up
+write      12:03:01  12:03:01  0.0s      written
+reload     12:03:01  12:03:01  0.0s      reloaded
+verify     12:03:01  12:03:01  0.0s      verified
+outcome: success  event: <id>

@@ -1,0 +1,11 @@
+1	0/306A1A0	no recovery target specified
+1	0/306A1A0	no recovery target specified
+
+2	0/5001FC8	no recovery target specified
+1	0/306A1A0	no recovery target specified
+
+2	0/5001FC8	no recovery target specified
+
+3	0/50020E8	no recovery target specified
+
+primary_conninfo = 'host=db2 port=5432 user=repl password=*** application_name=db1'

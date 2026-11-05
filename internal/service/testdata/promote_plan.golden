@@ -1,0 +1,11 @@
+switchover: promote node 1 to primary; follow_primary_command runs on the old primary
+
+  OK   target up & standby — target up & standby
+  OK   replay delay — replay delay 2s < 30m
+  OK   most advanced LSN among standbys — target replay 3/A1B2A000
+  OK   watchdog quorum — QUORUM EXIST
+  OK   failover_command / follow_primary_command set — both set
+  OK   no split-brain — one primary
+  OK   no other failover in progress — none
+
+VERDICT: GO

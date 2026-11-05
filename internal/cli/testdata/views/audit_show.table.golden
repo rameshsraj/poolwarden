@@ -1,0 +1,3 @@
+command shell start  operator alice  cluster prod-a
+requested 08:30:00
+finished 08:30:00  duration 0.0s  outcome success

@@ -1,0 +1,7 @@
+== $ bash -c docker exec pgpool1 poolwarden --operator tester nodes
+cluster testbed-split · pgpool 4.5.13 (hotooriboshi) · local pgpool1 (LEADER) · VIP on pgpool1 · collected 05:29:18 (188ms)
+
+ID  HOST:PORT  STATUS  PGPOOL-ROLE  REAL-ROLE  LB-WEIGHT  SELECTS  DELAY  REPL-STATE  SYNC   LAST-CHANGE  SCORE  NOTE
+0   pg1:5432   up      primary      primary    0.50       0        -      -           -      05:29:15     100    
+1   pg2:5432   up      standby      standby    0.50       0        -      streaming   async  05:29:18     100    
+== exit: 10

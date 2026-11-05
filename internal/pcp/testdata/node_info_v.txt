@@ -1,0 +1,13 @@
+# SYNTHETIC — built from pgpool-II 4.5 docs (pcp-node-info.html)
+Hostname : db2
+Port : 5432
+Status : 2
+Weight : 0.500000
+Status Name : up
+Backend Status Name : up
+Role : standby
+Backend Role : standby
+Replication Delay : 128
+Replication State : streaming
+Replication Sync State : async
+Last Status Change : 2026-11-05 10:00:11

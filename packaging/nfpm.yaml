@@ -1,0 +1,36 @@
+name: poolwarden
+arch: ${ARCH}
+platform: linux
+version: v0.1.0
+section: admin
+priority: optional
+maintainer: Smarsh
+description: terminal command center for a pgpool-II cluster
+vendor: Smarsh
+license: proprietary
+recommends:
+  - pgpool-II
+  - pgpool2
+depends:
+  - iproute2
+  - iproute
+contents:
+  - src: dist/poolwarden-linux-${ARCH}
+    dst: /usr/bin/poolwarden
+    file_info:
+      mode: 0755
+  - src: man/
+    dst: /usr/share/man/man1/
+    type: tree
+  - src: packaging/logrotate.conf
+    dst: /etc/logrotate.d/poolwarden
+    file_info:
+      mode: 0644
+  - dst: /var/lib/poolwarden
+    type: dir
+    file_info:
+      mode: 0700
+      owner: root
+      group: root
+scripts:
+  postinstall: packaging/postinstall.sh

@@ -1,0 +1,4 @@
+== $ bash -c docker exec -e PGUSER=postgres -e PGDATABASE=postgres pgpool1 poolwarden --operator tester sql standby 'select 1; select 2'
+error: one statement only
+next:  run them one at a time
+== exit: 1

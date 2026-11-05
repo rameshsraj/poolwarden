@@ -1,0 +1,6 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+primary 10.0.0.11:5432  wal 3/A1B2C3D4
+
+STANDBY  STATE      SYNC   LAG-BYTES  WRITE  FLUSH  REPLAY  DELAY  TREND   ETA→CRIT
+db2      streaming  async  12.7KB     0.1s   0.1s   0.3s    2s     steady  4h55m

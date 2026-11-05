@@ -1,0 +1,4 @@
+# SYNTHETIC — built from pgpool-II 4.5 docs (sql-show-pool-health-check-stats.html)
+node_id	hostname	port	status	role	last_status_change	total_count	success_count	fail_count	skip_count	retry_count	average_retry_count	max_retry_count	max_duration	min_duration	average_duration	last_health_check	last_successful_health_check	last_skip_health_check	last_failed_health_check
+0	db1	5432	up	primary	2026-11-05 10:00:11	100	100	0	0	0	0.0	0	45	10	20.5	2026-11-05 11:30:00	2026-11-05 11:30:00		
+1	db2	5432	up	standby	2026-11-05 10:00:11	100	98	2	0	3	0.03	2	900	10	25.1	2026-11-05 11:30:00	2026-11-05 11:29:58		2026-11-05 10:22:00

@@ -1,0 +1,6 @@
+cluster  · pgpool  · collected 02:00:00 (0s)
+
+TIME      HOST  COMP    SEV      TAG          MESSAGE
+08:32:00  db1   pgpool  WARNING  HEALTHCHECK  health check timed out on node 1
+08:33:00  db1   pgpool  ERROR    FAILOVER     failover_command started for node 1
+08:34:00  db2   pg      FATAL    AUTH_FAIL    password authentication failed for user "bob"

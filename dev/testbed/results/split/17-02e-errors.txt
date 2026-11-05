@@ -1,0 +1,130 @@
+== $ bash -c docker exec pgpool1 poolwarden --operator tester errors --since 10m
+cluster  · pgpool  · collected 00:00:00 (0s)
+
+TIME      SEV      SOURCE  HOST     CODE         MESSAGE
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler: exiting normally
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler: exiting normally
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler: exiting normally
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler: exiting normally
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler: exiting normally
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     DETAIL:  failover or failback event detected, discarding existing connections
+05:29:06  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:06  LOG      pgpool  pgpool1  FAILOVER     failover or failback event detected
+05:29:05  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler: exiting normally
+05:29:05  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler
+05:29:05  LOG      pgpool  pgpool1  FAILOVER     fork a new PCP child pid 425 in failover()
+05:29:05  LOG      pgpool  pgpool1  FAILOVER     PCP child 420 exits with status 0 in failover()
+05:29:04  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:04  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:04  LOG      pgpool  pgpool2  FAILOVER     leader watchdog has performed failover
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     received the failover indication from Pgpool-II on IPC interface
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     watchdog is informed of failover end by the main process
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     failover: set new primary node: 1
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     failover: set new main node: 0
+05:29:04  LOG      pgpool  pgpool1  WD_ELECTION  Watchdog has received 'LOCK ON STANDBY' command from IPC channel
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     watchdog is informed of failover start by the main process
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     received the failover indication from Pgpool-II on IPC interface
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     Pgpool-II parent process has received failover request
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     DETAIL:  proceeding with the failover
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     watchdog received the failover command from local pgpool-II on IPC interface
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     watchdog is processing the failover command [FAILBACK_REQUEST] received from ...
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     The failover request does not need quorum to hold
+05:29:04  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler: exiting normally
+05:29:04  LOG      pgpool  pgpool1  CHILD_EXIT   reaper handler
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     fork a new PCP child pid 420 in failover()
+05:29:04  LOG      pgpool  pgpool1  FAILOVER     PCP child 162 exits with status 0 in failover()
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler: exiting normally
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  CHILD_EXIT   reaper handler
+05:29:03  LOG      pgpool  pgpool2  FAILOVER     leader watchdog has performed failover
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     === Failover done. shutdown host pg1(5432) ===
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     received the failover indication from Pgpool-II on IPC interface
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     watchdog is informed of failover end by the main process
+05:29:03  LOG      pgpool  pgpool1  WD_ELECTION  Watchdog has received 'LOCK ON STANDBY' command from IPC channel
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     execute command: /etc/pgpool-II/follow_primary.sh  0 pg1  5432 /var/lib/postg...
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     failover: set new main node: 1
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     failover: 1 follow backends have been degenerated
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     failover: set new primary node: 1
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     starting follow degeneration. shutdown host pg1(5432)
+05:29:03  LOG      pg      pg2      FAILOVER     received promote request
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     execute command: /etc/pgpool-II/failover.sh  0 pg1  5432 /var/lib/postgresql/...
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     === Starting degeneration. shutdown host pg1(5432) ===
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     DETAIL:  executing failover on backend
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     watchdog is informed of failover start by the main process
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     received the failover indication from Pgpool-II on IPC interface
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     Pgpool-II parent process has received failover request
+05:29:03  FATAL    pgpool  pgpool1  FATAL        failed to create a backend connection
+05:29:03  LOG      conn    pgpool1  CONN_FAIL    failed to connect to PostgreSQL server on "pg1:5432", getsockopt() failed
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     we have got the consensus to perform the failover
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     watchdog is processing the failover command [DEGENERATE_BACKEND_REQUEST] rece...
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     watchdog received the failover command from local pgpool-II on IPC interface
+05:29:03  LOG      pgpool  pgpool1  FAILOVER     received degenerate backend request for node_id: 0 from pid [155]
+05:29:02  FATAL    conn    pg2      CONN_FAIL    streaming replication receiver "walreceiver" could not connect to the primary...
+05:29:02  FATAL    pg      pg2      FATAL        could not receive data from WAL stream: server closed the connection unexpect...
+05:28:57  FATAL    conn    pgpool1  AUTH_FAIL    authentication failed for user "root"
+05:25:20  LOG      pgpool  pgpool1  WD_ELECTION  watchdog escalation process with pid: 136 exit with SUCCESS.
+05:25:20  WARNING  pgpool  pgpool1  WARNING      watchdog failed to ping host"172.31.20.100"
+05:25:20  WARNING  pgpool  pgpool1  WD_ELECTION  watchdog escalation failed to acquire delegate IP
+05:25:20  FATAL    pgpool  pgpool1  FATAL        watchdog failed to ping host"172.31.20.100"
+05:25:20  WARNING  pgpool  pgpool1  WARNING      watchdog failed to ping host"172.31.20.100"
+05:25:20  FATAL    pgpool  pgpool1  FATAL        watchdog failed to ping host"172.31.20.100"
+05:25:20  WARNING  pgpool  pgpool1  WARNING      watchdog failed to ping host"172.31.20.100"
+05:25:20  FATAL    pgpool  pgpool1  FATAL        watchdog failed to ping host"172.31.20.100"
+05:25:20  LOG      pgpool  pgpool2  WD_ELECTION  we have joined the watchdog cluster as STANDBY node
+05:25:20  LOG      pgpool  pgpool2  WD_ELECTION  watchdog cluster now holds the quorum
+05:25:20  LOG      pgpool  pgpool2  WD_ELECTION  Pgpool-II parent process received watchdog quorum change signal from watchdog
+05:25:20  LOG      pgpool  pgpool1  WD_ELECTION  watchdog cluster now holds the quorum
+05:25:20  LOG      pgpool  pgpool1  FAILOVER     Setting failover command timeout to 16
+05:25:20  LOG      pgpool  pgpool1  WD_ELECTION  adding watchdog node "pgpool2:9999 Linux pgpool2" to the standby list
+05:25:20  LOG      pgpool  pgpool2  WD_ELECTION  watchdog node state changed from [INITIALIZING] to [STANDBY]
+05:25:20  LOG      pgpool  pgpool2  WD_ELECTION  successfully joined the watchdog cluster as standby node
+05:25:20  LOG      pgpool  pgpool1  WD_ELECTION  Pgpool-II parent process received watchdog quorum change signal from watchdog
+05:25:19  LOG      pgpool  pgpool1  WD_ELECTION  watchdog: escalation started
+05:25:19  LOG      pgpool  pgpool1  WD_ELECTION  setting the local node "pgpool1:9999 Linux pgpool1" as watchdog cluster leader
+05:25:19  LOG      pgpool  pgpool2  WD_ELECTION  setting the remote node "pgpool1:9999 Linux pgpool1" as watchdog cluster leader
+05:25:19  LOG      pgpool  pgpool2  WD_ELECTION  watchdog node state changed from [PARTICIPATING IN ELECTION] to [INITIALIZING]
+05:25:19  LOG      pgpool  pgpool1  WD_ELECTION  watchdog node state changed from [STANDING FOR LEADER] to [LEADER]
+05:25:19  LOG      pgpool  pgpool1  FAILOVER     Setting failover command timeout to 16
+05:25:19  LOG      pgpool  pgpool2  WD_ELECTION  watchdog node state changed from [JOINING] to [PARTICIPATING IN ELECTION]
+05:25:19  LOG      pgpool  pgpool1  WD_ELECTION  watchdog node state changed from [INITIALIZING] to [STANDING FOR LEADER]
+05:25:14  LOG      pgpool  pgpool2  HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:14  LOG      pgpool  pgpool2  HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:14  LOG      pgpool  pgpool1  HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:14  LOG      pgpool  pgpool1  HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:14  LOG      pgpool  pgpool1  HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:14  FATAL    conn    pg2      AUTH_FAIL    password authentication failed for user "root"
+05:25:14  LOG      pgpool  pgpool2  HEALTHCHECK  health_check_stats_shared_memory_size: requested size: 12288
+05:25:14  FATAL    conn    pg2      AUTH_FAIL    password authentication failed for user "root"
+== exit: 0

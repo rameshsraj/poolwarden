@@ -1,0 +1,20 @@
+switchover: promote node 1 to primary; follow_primary_command runs on the old primary
+
+  OK   target up & standby — target up & standby
+  NO-GO replay delay — replay delay 1900s ≥ 30m
+  OK   most advanced LSN among standbys — target replay 3/A1B2A000
+  OK   watchdog quorum — QUORUM EXIST
+  NO-GO failover_command / follow_primary_command set — missing
+  OK   no split-brain — one primary
+  OK   no other failover in progress — none
+
+VERDICT: NO-GO
+
+CHECK                                          RESULT  DETAIL
+target up & standby                            OK      target up & standby
+replay delay                                   NO-GO   replay delay 1900s ≥ 30m
+most advanced LSN among standbys               OK      target replay 3/A1B2A000
+watchdog quorum                                OK      QUORUM EXIST
+failover_command / follow_primary_command set  NO-GO   missing
+no split-brain                                 OK      one primary
+no other failover in progress                  OK      none

@@ -1,0 +1,4 @@
+# SYNTHETIC — built from pgpool-II 4.5 docs (sql-show-pool-backend-stats.html)
+node_id	hostname	port	status	role	select_cnt	insert_cnt	update_cnt	delete_cnt	ddl_cnt	other_cnt	panic_cnt	fatal_cnt	error_cnt
+0	db1	5432	up	primary	2048	30	12	2	1	50	0	0	1
+1	db2	5432	up	standby	900	0	0	0	0	40	0	0	0

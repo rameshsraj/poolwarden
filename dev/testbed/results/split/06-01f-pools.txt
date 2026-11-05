@@ -1,0 +1,9 @@
+== $ bash -c docker exec pgpool1 poolwarden --operator tester pools
+cluster testbed-split · pgpool 4.5.13 (hotooriboshi) · local pgpool1 (LEADER) · VIP on pgpool1 · collected 05:28:59 (171ms)
+
+children 1/20 busy · clients 14
+
+DATABASE  USER      BACKENDS  POOLS  CONNECTED  LOAD-BALANCE-NODES
+                    158       158    0          0
+postgres  postgres  2         2      2          1
+== exit: 10

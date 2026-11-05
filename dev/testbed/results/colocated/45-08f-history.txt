@@ -1,0 +1,4 @@
+== $ bash -c docker exec db1 poolwarden --operator tester config history
+VERSION          TIME      OPERATOR  TICKET  HOSTS    SUMMARY
+20261105T052853  05:28:53  tester    -       db1,db2  1 change(s)
+== exit: 0

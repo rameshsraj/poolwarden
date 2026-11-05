@@ -1,0 +1,4 @@
+# SYNTHETIC — built from pgpool-II 4.5 runtime-config-logging docs
+2026-11-05 12:01:00.001 CET: poolwatch app pid 1234: LOG:  watchdog heartbeat ok
+2026-11-05 12:01:10.002 CET: app pid 1234: WARNING:  health check timed out on node 1
+2026-11-05 12:02:00.003 CET: app pid 1234: ERROR:  failover_command started for node 1

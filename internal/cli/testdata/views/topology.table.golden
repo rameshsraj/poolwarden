@@ -1,0 +1,5 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+HOST  ADDRESS    ROLES      SSH-USER  WATCHDOG  VIP  BACKEND-ROLE
+db1   10.0.0.11  pgpool,pg  root      LEADER    yes  primary
+db2   10.0.0.12  pgpool,pg  root      STANDBY   no   standby

@@ -1,0 +1,16 @@
+staged changes:
+  pgpool.conf log_connections: off → on
+  ok num_init_children×max_pool = 400 vs min(max_connections) 500 − 3 reserved
+  ok reserved_connections 0 < num_init_children 100
+  ok wd_priority ≥ 1
+  ok if_up_cmd, if_down_cmd, arping_cmd all set
+  ok watchdog node entries present
+  ok health_check_max_retries ≥ 0
+order: non-leaders first, leader last (VIP moves last)
+backup: /var/lib/poolwarden/config/<new-version>
+lock: cluster
+  OK   staging — 1 staged change(s)
+  OK   context — reload
+  OK   validation — all checks pass
+
+VERDICT: GO

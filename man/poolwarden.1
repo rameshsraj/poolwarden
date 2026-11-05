@@ -1,0 +1,67 @@
+.nh
+.TH "POOLWARDEN" "1" "Nov 2026" "" ""
+
+.SH NAME
+poolwarden - pgpool-II command center
+
+
+.SH SYNOPSIS
+\fBpoolwarden [flags]\fP
+
+
+.SH DESCRIPTION
+poolwarden is a terminal command center for one pgpool-II cluster:
+monitoring, diagnosis, node control and configuration management.
+
+
+.SH OPTIONS
+\fB-c\fP, \fB--config\fP="/etc/poolwarden.yaml"
+	poolwarden config file
+
+.PP
+\fB--confirm\fP=""
+	typed confirmation token for non-TTY use
+
+.PP
+\fB--force\fP[=false]
+	override pre-flight WARN/NO-GO blocks
+
+.PP
+\fB-h\fP, \fB--help\fP[=false]
+	help for poolwarden
+
+.PP
+\fB--nagios\fP[=false]
+	Nagios-style single-line output and exit codes
+
+.PP
+\fB--no-color\fP[=false]
+	disable coloured output
+
+.PP
+\fB--operator\fP=""
+	operator name (recorded in the audit log)
+
+.PP
+\fB-o\fP, \fB--output\fP="table"
+	output format: table|wide|json
+
+.PP
+\fB-q\fP, \fB--quiet\fP[=false]
+	suppress non-essential output
+
+.PP
+\fB--read-only\fP[=false]
+	disable all control commands
+
+.PP
+\fB--ticket\fP=""
+	change ticket id (audited when given)
+
+.PP
+\fB--yes\fP[=false]
+	skip the plain yes/no prompt (never a typed confirmation)
+
+
+.SH SEE ALSO
+\fBpoolwarden-attach(1)\fP, \fBpoolwarden-audit(1)\fP, \fBpoolwarden-backend(1)\fP, \fBpoolwarden-config(1)\fP, \fBpoolwarden-conns(1)\fP, \fBpoolwarden-detach(1)\fP, \fBpoolwarden-diagnose(1)\fP, \fBpoolwarden-errors(1)\fP, \fBpoolwarden-explain(1)\fP, \fBpoolwarden-forecast(1)\fP, \fBpoolwarden-hba(1)\fP, \fBpoolwarden-health(1)\fP, \fBpoolwarden-init(1)\fP, \fBpoolwarden-lag(1)\fP, \fBpoolwarden-logs(1)\fP, \fBpoolwarden-nodes(1)\fP, \fBpoolwarden-pcpuser(1)\fP, \fBpoolwarden-pools(1)\fP, \fBpoolwarden-pooluser(1)\fP, \fBpoolwarden-procs(1)\fP, \fBpoolwarden-promote(1)\fP, \fBpoolwarden-recover(1)\fP, \fBpoolwarden-reload(1)\fP, \fBpoolwarden-slots(1)\fP, \fBpoolwarden-sql(1)\fP, \fBpoolwarden-status(1)\fP, \fBpoolwarden-top(1)\fP, \fBpoolwarden-topology(1)\fP, \fBpoolwarden-version(1)\fP, \fBpoolwarden-watch(1)\fP, \fBpoolwarden-watchdog(1)\fP

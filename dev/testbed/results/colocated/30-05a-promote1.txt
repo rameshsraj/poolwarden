@@ -1,0 +1,8 @@
+== $ bash -c docker exec db1 poolwarden --operator tester promote 1 --yes --confirm 1 --ticket TB-1
+STEP                         START     END       DURATION  RESULT
+preflight                    05:28:29  05:28:29  0.1s      ok
+pcp_promote_node             05:28:29  05:28:29  0.0s      ok
+verify                       05:28:29  05:28:31  2s        ok
+verify (old primary rejoin)  05:28:31  05:28:32  0.1s      
+outcome: success  event: 81337ec38c6e15dd
+== exit: 0

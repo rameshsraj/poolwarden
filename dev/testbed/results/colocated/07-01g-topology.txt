@@ -1,0 +1,7 @@
+== $ bash -c docker exec db1 poolwarden --operator tester topology show
+cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (STANDBY) · VIP on db2 · collected 05:28:06 (173ms)
+
+HOST  ADDRESS       ROLES      SSH-USER  WATCHDOG  VIP  BACKEND-ROLE
+db1   172.31.10.11  pgpool,pg  root      STANDBY   no   primary
+db2   172.31.10.12  pgpool,pg  root      LEADER    yes  standby
+== exit: 10

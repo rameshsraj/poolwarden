@@ -1,0 +1,4 @@
+# SYNTHETIC — 4.5 docs example prefix %t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h
+2026-11-05 12:01:00 CET [2001]: [1-1] user=postgres,db=bench,app=psql,client=10.0.0.5 ERROR:  connection to server on socket "/tmp/.s.PGSQL.9999" failed: refused
+2026-11-05 12:02:00 CET [2001]: [2-1] user=postgres,db=bench,app=psql,client=10.0.0.5 LOG:  pool child process 2044 exits with status 0
+2026-11-05 12:03:00 CET [2001]: [3-1] user=postgres,db=bench,app=psql,client=10.0.0.5 FATAL:  password authentication failed for user "bob"

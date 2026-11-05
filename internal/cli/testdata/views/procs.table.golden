@@ -1,0 +1,5 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+PID    START                CLIENT-CONNS  DATABASE  USER  BACKEND-CONN-TIME    POOL-COUNTER  STATUS
+31001  2026-11-05 09:00:00  1             postgres  app   2026-11-05 09:00:05  4             Idle
+31002  2026-11-05 09:00:01  0             -         -     -                    0             Wait for connection

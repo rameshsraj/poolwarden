@@ -1,0 +1,15 @@
+What: a reachable standby is missing from pg_stat_replication on the primary
+
+Evidence:
+  pg_stat_replication on db1 has no row for db2
+
+Likely cause:
+  1. WAL receiver not running (see WAL_RECEIVER_MISSING)
+  2. replication slot removed
+  3. standby re-pointed to another primary
+
+Fix:
+  poolwarden errors --source replication --host db2
+  poolwarden attach 1
+
+Reference: postgresql: pg_stat_replication

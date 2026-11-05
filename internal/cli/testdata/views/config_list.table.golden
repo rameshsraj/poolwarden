@@ -1,0 +1,15 @@
+PARAM                             FILE         LIVE         DEFAULT  CONTEXT  DRIFT
+arping_cmd                        pgpool.conf  arping -U             restart  
+delegate_ip                       pgpool.conf  10.0.0.100            restart  
+enable_consensus_with_half_votes  pgpool.conf  on           off      restart  
+failover_require_consensus        pgpool.conf  on           on       restart  
+failover_when_quorum_exists       pgpool.conf  on           on       restart  
+hostname0                         pgpool.conf  db1                   restart  
+if_down_cmd                       pgpool.conf  ip addr del           restart  
+if_up_cmd                         pgpool.conf  ip addr add           restart  
+log_connections                   pgpool.conf  -            off      reload   
+max_pool                          pgpool.conf  4            4        restart  
+num_init_children                 pgpool.conf  100          32       restart  
+pgpool_port0                      pgpool.conf  9999         9999     restart  
+use_watchdog                      pgpool.conf  on           off      restart  
+wd_port0                          pgpool.conf  9000         9000     restart  

@@ -1,0 +1,4 @@
+== $ docker exec pg1 su postgres -c pg_ctl -D /var/lib/postgresql/18/main stop -m immediate -w
+waiting for server to shut down.... done
+server stopped
+== exit: 0

@@ -1,0 +1,4 @@
+# SYNTHETIC — built from pgpool-II 4.5 docs (sql-show-pool-processes.html)
+pool_pid	start_time	client_connection_count	database	username	backend_connection_time	pool_counter	status
+31001	2026-11-05 09:00:00	1	postgres	app	2026-11-05 09:00:05	4	Idle
+31002	2026-11-05 09:00:01	0			2026-11-05 09:00:06	0	Wait for connection

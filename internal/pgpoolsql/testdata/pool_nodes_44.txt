@@ -1,0 +1,4 @@
+# SYNTHETIC — built from pgpool-II 4.4 docs (sql-show-pool-nodes.html)
+node_id	hostname	port	status	pg_status	lb_weight	role	pg_role	select_cnt	load_balance_node	replication_delay	replication_state	replication_sync_state	last_status_change
+0	db1	5432	up	up	0.500000	primary	primary	1042	true	0			2026-11-05 10:00:11
+1	db2	5432	up	up	0.500000	standby	standby	981	false	128	streaming	async	2026-11-05 10:00:11

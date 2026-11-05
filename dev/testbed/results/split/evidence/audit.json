@@ -1,0 +1,84 @@
+{
+  "rows": [
+    {
+      "event_id": "ca2b61e7daa65d65",
+      "ts": "2026-11-05T05:29:13.903Z",
+      "operator": "tester",
+      "command": "recover 0",
+      "target": "",
+      "ticket": "TB-1",
+      "outcome": "success",
+      "duration_ms": 1106
+    },
+    {
+      "event_id": "3a1c8c186ecb171b",
+      "ts": "2026-11-05T05:29:18.217Z",
+      "operator": "tester",
+      "command": "promote 0",
+      "target": "",
+      "ticket": "TB-1",
+      "outcome": "success",
+      "duration_ms": 3235
+    },
+    {
+      "event_id": "ec31c45b32e6c9d2",
+      "ts": "2026-11-05T05:29:22.458Z",
+      "operator": "tester",
+      "command": "promote 1",
+      "target": "",
+      "ticket": "TB-1",
+      "outcome": "success",
+      "duration_ms": 2629
+    },
+    {
+      "event_id": "f5c49b48aed14642",
+      "ts": "2026-11-05T05:29:24.337Z",
+      "operator": "tester",
+      "command": "detach 0",
+      "target": "",
+      "ticket": "TB-1",
+      "outcome": "success",
+      "duration_ms": 1097
+    },
+    {
+      "event_id": "22c655ab64f4ddd3",
+      "ts": "2026-11-05T05:29:26.111Z",
+      "operator": "tester",
+      "command": "attach 0",
+      "target": "",
+      "ticket": "TB-1",
+      "outcome": "success",
+      "duration_ms": 1109
+    },
+    {
+      "event_id": "d7b3918068261a24",
+      "ts": "2026-11-05T05:29:42.281Z",
+      "operator": "tester",
+      "command": "config apply",
+      "target": "",
+      "ticket": "TB-1",
+      "outcome": "success",
+      "duration_ms": 467
+    },
+    {
+      "event_id": "cda74780a28430b0",
+      "ts": "2026-11-05T05:29:43.31Z",
+      "operator": "tester",
+      "command": "config rollback 20261105T052942",
+      "target": "",
+      "ticket": "TB-1",
+      "outcome": "success",
+      "duration_ms": 69
+    },
+    {
+      "event_id": "598a2bce3c0d6dc2",
+      "ts": "2026-11-05T05:29:44.613Z",
+      "operator": "tester",
+      "command": "sql primary select pg_is_in_recovery()",
+      "target": "pg2",
+      "ticket": "",
+      "outcome": "success",
+      "duration_ms": 40
+    }
+  ]
+}

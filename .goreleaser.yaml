@@ -1,0 +1,46 @@
+version: 2
+project_name: poolwarden
+builds:
+  - id: poolwarden
+    main: ./cmd/poolwarden
+    binary: poolwarden
+    env: [CGO_ENABLED=0]
+    goos: [linux]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    ldflags:
+      - -s -w -X github.com/smarsh/poolwarden/internal/cli.version={{.Version}} -X github.com/smarsh/poolwarden/internal/cli.commit={{.Commit}} -X github.com/smarsh/poolwarden/internal/cli.date={{.Date}}
+archives:
+  - format: tar.gz
+    name_template: "poolwarden_{{.Version}}_{{.Os}}_{{.Arch}}"
+nfpms:
+  - id: poolwarden
+    package_name: poolwarden
+    vendor: Smarsh
+    maintainer: Smarsh
+    description: terminal command center for a pgpool-II cluster
+    license: proprietary
+    section: admin
+    formats: [deb, rpm]
+    recommends:
+      - pgpool-II
+    rpm:
+      depends: [iproute]
+      recommends: [pgpool-II]
+    deb:
+      depends: [iproute2]
+      recommends: [pgpool2]
+    contents:
+      - src: poolwarden
+        dst: /usr/bin/poolwarden
+        file_info: {mode: 0755}
+      - src: man/
+        dst: /usr/share/man/man1/
+        type: tree
+      - src: packaging/logrotate.conf
+        dst: /etc/logrotate.d/poolwarden
+      - dst: /var/lib/poolwarden
+        type: dir
+        file_info: {mode: 0700, owner: root, group: root}
+    scripts:
+      postinstall: packaging/postinstall.sh

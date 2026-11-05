@@ -1,0 +1,4 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+SLOT   TYPE      ACTIVE  WAL-STATUS  RETAINED  ETA-DISK-FULL
+slot1  physical  yes     reserved    1.0MB     -

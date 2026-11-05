@@ -1,0 +1,4 @@
+in_recovery=false
+current_tl=4
+replication_row: client=172.31.10.11/32 app=db1 state=streaming sync=async sent=0/5002228 replay=0/5002228
+replay_lsn=0/50020E8

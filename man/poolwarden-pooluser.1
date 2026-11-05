@@ -1,0 +1,70 @@
+.nh
+.TH "POOLWARDEN-POOLUSER" "1" "Nov 2026" "" ""
+
+.SH NAME
+poolwarden-pooluser - manage pool_passwd users
+
+
+.SH SYNOPSIS
+\fBpoolwarden pooluser [flags]\fP
+
+
+.SH DESCRIPTION
+Manage pool_passwd entries. Passwords are written via pg_md5 -m -p
+(md5 hashing) or pg_enc -m -k  -p (AES) with the password fed on
+stdin — never on argv. pg_enc is chosen when existing pool_passwd entries
+are AES-prefixed; otherwise pg_md5 is used.
+
+
+.SH OPTIONS
+\fB-h\fP, \fB--help\fP[=false]
+	help for pooluser
+
+
+.SH OPTIONS INHERITED FROM PARENT COMMANDS
+\fB-c\fP, \fB--config\fP="/etc/poolwarden.yaml"
+	poolwarden config file
+
+.PP
+\fB--confirm\fP=""
+	typed confirmation token for non-TTY use
+
+.PP
+\fB--force\fP[=false]
+	override pre-flight WARN/NO-GO blocks
+
+.PP
+\fB--nagios\fP[=false]
+	Nagios-style single-line output and exit codes
+
+.PP
+\fB--no-color\fP[=false]
+	disable coloured output
+
+.PP
+\fB--operator\fP=""
+	operator name (recorded in the audit log)
+
+.PP
+\fB-o\fP, \fB--output\fP="table"
+	output format: table|wide|json
+
+.PP
+\fB-q\fP, \fB--quiet\fP[=false]
+	suppress non-essential output
+
+.PP
+\fB--read-only\fP[=false]
+	disable all control commands
+
+.PP
+\fB--ticket\fP=""
+	change ticket id (audited when given)
+
+.PP
+\fB--yes\fP[=false]
+	skip the plain yes/no prompt (never a typed confirmation)
+
+
+.SH SEE ALSO
+\fBpoolwarden(1)\fP, \fBpoolwarden-pooluser-add(1)\fP, \fBpoolwarden-pooluser-list(1)\fP, \fBpoolwarden-pooluser-passwd(1)\fP, \fBpoolwarden-pooluser-remove(1)\fP

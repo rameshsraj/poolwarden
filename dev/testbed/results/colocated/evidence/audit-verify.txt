@@ -1,0 +1,3 @@
+cluster  · pgpool  · collected 00:00:00 (0s)
+
+OK: 16 entries

@@ -1,0 +1,81 @@
+name: pw-split
+services:
+  pg1:
+    container_name: pg1
+    build:
+      context: ../..
+      dockerfile: dev/testbed/Dockerfile
+    hostname: pg1
+    environment:
+      ROLE: "pg"
+      NODE_ID: "0"
+      PRIMARY_HOST: pg1
+      PEERS: "pgpool1 pgpool2"
+      PG_HOSTS: "pg1 pg2"
+      VIP: 172.31.20.100
+      CLUSTER: testbed-split
+      SUBNET: 172.31.20.0/24
+      INVENTORY: "pg1:172.31.20.21:pg;pg2:172.31.20.22:pg;pgpool1:172.31.20.31:pgpool;pgpool2:172.31.20.32:pgpool"
+    networks:
+      pw: {ipv4_address: 172.31.20.21}
+  pg2:
+    container_name: pg2
+    build:
+      context: ../..
+      dockerfile: dev/testbed/Dockerfile
+    hostname: pg2
+    environment:
+      ROLE: "pg"
+      NODE_ID: "1"
+      PRIMARY_HOST: pg1
+      PEERS: "pgpool1 pgpool2"
+      PG_HOSTS: "pg1 pg2"
+      VIP: 172.31.20.100
+      CLUSTER: testbed-split
+      SUBNET: 172.31.20.0/24
+      INVENTORY: "pg1:172.31.20.21:pg;pg2:172.31.20.22:pg;pgpool1:172.31.20.31:pgpool;pgpool2:172.31.20.32:pgpool"
+    networks:
+      pw: {ipv4_address: 172.31.20.22}
+  pgpool1:
+    container_name: pgpool1
+    build:
+      context: ../..
+      dockerfile: dev/testbed/Dockerfile
+    hostname: pgpool1
+    cap_add: [NET_ADMIN]
+    environment:
+      ROLE: "pgpool"
+      NODE_ID: "0"
+      PRIMARY_HOST: pg1
+      PEERS: "pgpool1 pgpool2"
+      PG_HOSTS: "pg1 pg2"
+      VIP: 172.31.20.100
+      CLUSTER: testbed-split
+      SUBNET: 172.31.20.0/24
+      INVENTORY: "pg1:172.31.20.21:pg;pg2:172.31.20.22:pg;pgpool1:172.31.20.31:pgpool;pgpool2:172.31.20.32:pgpool"
+    networks:
+      pw: {ipv4_address: 172.31.20.31}
+  pgpool2:
+    container_name: pgpool2
+    build:
+      context: ../..
+      dockerfile: dev/testbed/Dockerfile
+    hostname: pgpool2
+    cap_add: [NET_ADMIN]
+    environment:
+      ROLE: "pgpool"
+      NODE_ID: "1"
+      PRIMARY_HOST: pg1
+      PEERS: "pgpool1 pgpool2"
+      PG_HOSTS: "pg1 pg2"
+      VIP: 172.31.20.100
+      CLUSTER: testbed-split
+      SUBNET: 172.31.20.0/24
+      INVENTORY: "pg1:172.31.20.21:pg;pg2:172.31.20.22:pg;pgpool1:172.31.20.31:pgpool;pgpool2:172.31.20.32:pgpool"
+    networks:
+      pw: {ipv4_address: 172.31.20.32}
+networks:
+  pw:
+    ipam:
+      config:
+        - subnet: 172.31.20.0/24

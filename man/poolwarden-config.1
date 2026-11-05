@@ -1,0 +1,67 @@
+.nh
+.TH "POOLWARDEN-CONFIG" "1" "Nov 2026" "" ""
+
+.SH NAME
+poolwarden-config - manage pgpool configuration without editing files
+
+
+.SH SYNOPSIS
+\fBpoolwarden config [flags]\fP
+
+
+.SH DESCRIPTION
+manage pgpool configuration without editing files
+
+
+.SH OPTIONS
+\fB-h\fP, \fB--help\fP[=false]
+	help for config
+
+
+.SH OPTIONS INHERITED FROM PARENT COMMANDS
+\fB-c\fP, \fB--config\fP="/etc/poolwarden.yaml"
+	poolwarden config file
+
+.PP
+\fB--confirm\fP=""
+	typed confirmation token for non-TTY use
+
+.PP
+\fB--force\fP[=false]
+	override pre-flight WARN/NO-GO blocks
+
+.PP
+\fB--nagios\fP[=false]
+	Nagios-style single-line output and exit codes
+
+.PP
+\fB--no-color\fP[=false]
+	disable coloured output
+
+.PP
+\fB--operator\fP=""
+	operator name (recorded in the audit log)
+
+.PP
+\fB-o\fP, \fB--output\fP="table"
+	output format: table|wide|json
+
+.PP
+\fB-q\fP, \fB--quiet\fP[=false]
+	suppress non-essential output
+
+.PP
+\fB--read-only\fP[=false]
+	disable all control commands
+
+.PP
+\fB--ticket\fP=""
+	change ticket id (audited when given)
+
+.PP
+\fB--yes\fP[=false]
+	skip the plain yes/no prompt (never a typed confirmation)
+
+
+.SH SEE ALSO
+\fBpoolwarden(1)\fP, \fBpoolwarden-config-apply(1)\fP, \fBpoolwarden-config-describe(1)\fP, \fBpoolwarden-config-diff(1)\fP, \fBpoolwarden-config-discard(1)\fP, \fBpoolwarden-config-export(1)\fP, \fBpoolwarden-config-get(1)\fP, \fBpoolwarden-config-history(1)\fP, \fBpoolwarden-config-list(1)\fP, \fBpoolwarden-config-load(1)\fP, \fBpoolwarden-config-rollback(1)\fP, \fBpoolwarden-config-self-check(1)\fP, \fBpoolwarden-config-set(1)\fP, \fBpoolwarden-config-unset(1)\fP, \fBpoolwarden-config-validate(1)\fP

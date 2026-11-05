@@ -1,0 +1,6 @@
+cluster prod-a · pgpool 4.5.1 · VIP on db1 · collected 14:03:01 (410ms)
+
+WHERE   DATABASE  USER  APPLICATION  CONNS  LIMIT
+db1     postgres  app   web          40     500
+db2     postgres  app   web          20     500
+pgpool  postgres  app   -            2      400

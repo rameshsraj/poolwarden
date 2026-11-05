@@ -1,0 +1,7 @@
+== $ bash -c docker exec db1 poolwarden --operator tester attach 0 --yes --confirm 0 --ticket TB-1
+STEP             START     END       DURATION  RESULT
+preflight        05:28:35  05:28:35  0.2s      ok
+pcp_attach_node  05:28:35  05:28:35  0.0s      ok
+verify           05:28:35  05:28:37  2s        ok
+outcome: success  event: 8a504aeb938043e1
+== exit: 0
