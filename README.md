@@ -47,4 +47,4 @@ move and configuration transactions; see `docs/poolwarden-test-report.html`.
     poolwarden                 # interactive shell: pgpool[cluster@host]>
 
 Operator guide: `docs/05-operator-guide.md`. Command reference: `docs/commands/`.
-Architecture write-up: `docs/poolwarden-blog.html`. Test report: `docs/poolwarden-test-report.html`.
+Architecture write-up: `docs/poolwarden.html`. Test report: `docs/poolwarden-test-report.html`.
