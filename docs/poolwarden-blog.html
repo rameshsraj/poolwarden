@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>poolwarden — a command center for pgpool-II</title>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true, theme:'neutral', sequence:{mirrorActors:false}});
+</script>
+<style>
+:root{--ink:#1b2430;--mut:#5b6672;--line:#dfe4ea;--bg:#fafbfc;--ok:#1a7f37;--warn:#b54708;--crit:#b42318;--info:#175cd3;--accent:#0f766e}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);margin:0;line-height:1.65;font-size:17px;background:#fff}
+article{max-width:860px;margin:0 auto;padding:40px 24px 100px}
+header.hero{border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:28px}
+header.hero h1{font-size:38px;line-height:1.15;margin:0 0 10px}
+header.hero .sub{font-size:20px;color:var(--mut);margin:0 0 14px}
+.meta{color:var(--mut);font-size:14px}
+.meta a{color:var(--info)}
+h2{font-size:26px;margin-top:52px;border-bottom:1px solid var(--line);padding-bottom:6px}
+h3{font-size:20px;margin-top:32px}
+p{margin:14px 0}
+a{color:var(--info)}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:15px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f0f2f5}tr:nth-child(even) td{background:var(--bg)}
+pre{background:#0d1117;color:#d7e0ea;padding:14px 16px;border-radius:8px;overflow-x:auto;font-size:13.5px;line-height:1.45}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:0.92em}
+p code,li code,td code{background:#f3f4f6;padding:1px 5px;border-radius:4px}
+.mermaid{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;margin:18px 0}
+.cap{font-size:13.5px;color:var(--mut);text-align:center;margin:-10px 0 22px}
+.callout{background:#f0fdfa;border-left:4px solid var(--accent);padding:12px 18px;border-radius:0 8px 8px 0;margin:20px 0}
+.callout.warn{background:#fff8e6;border-color:#d99a1c}
+.chip{display:inline-block;padding:1px 9px;border-radius:10px;font-size:12.5px;font-weight:600;color:#fff;vertical-align:middle}
+.c-crit{background:var(--crit)}.c-warn{background:var(--warn)}.c-info{background:var(--info)}.c-ok{background:var(--ok)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:700px){.cols{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:8px;padding:14px 18px;background:var(--bg)}
+.card h4{margin:0 0 6px;font-size:16px}
+.card p{margin:6px 0;font-size:15px}
+.repo{display:inline-block;background:var(--ink);color:#fff;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:600;margin:6px 0}
+.repo:hover{background:#2d3a4a}
+footer{margin-top:60px;border-top:1px solid var(--line);padding-top:16px;color:var(--mut);font-size:14px}
+@media print{pre{white-space:pre-wrap}.mermaid{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<article>
+
+<header class="hero">
+  <h1>poolwarden: a command center for pgpool-II</h1>
+  <p class="sub">One binary, one terminal, one pgpool cluster — see it, understand it, change it safely, and prove who did what.</p>
+  <p class="meta">Go · pgpool-II 4.4/4.5 · PostgreSQL 14+ · Source: <a href="https://github.com/rameshsraj/poolwarden">github.com/rameshsraj/poolwarden</a></p>
+</header>
+
+<p>If you run PostgreSQL behind <strong>pgpool-II</strong> with streaming replication, you know the drill when something looks off. You open four terminals: one for <code>psql -p 9999</code> and <code>SHOW POOL_NODES</code>, one for <code>pcp_watchdog_info</code>, one to log into each backend and run <code>pg_is_in_recovery()</code> and <code>pg_stat_replication</code>, and one to <code>tail</code> logs on whichever host you suspect. Then you reconcile the four views in your head, decide whether to run <code>pcp_promote_node</code>, and hope you typed the right node id.</p>
+
+<p><strong>poolwarden</strong> is the tool I wanted in that moment. It is a single static Go binary that a DBA runs over SSH on a pgpool host. It is not a proxy, not an agent and not a daemon — it is a thin, careful layer over the interfaces pgpool and PostgreSQL already expose, with the judgment, guard-rails and record-keeping that those interfaces lack.</p>
+
+<p style="text-align:center"><a class="repo" href="https://github.com/rameshsraj/poolwarden">View the project on GitHub →</a></p>
+
+<h2 id="why">Why another tool?</h2>
+
+<p>pgpool-II is excellent at what it does: pooling, load balancing, health checks, automatic failover and watchdog-managed virtual IPs. What it leaves to the operator is <em>operating</em> it, and that part has four recurring pain points.</p>
+
+<div class="cols">
+  <div class="card"><h4>Four sources of truth that disagree</h4><p>pgpool's <code>SHOW POOL_NODES</code> says what pgpool <em>believes</em>. Each PostgreSQL node knows what it actually <em>is</em>. The watchdog knows who holds the VIP. These drift apart precisely when things go wrong, and nothing correlates them for you.</p></div>
+  <div class="card"><h4>Powerful commands with no seat belt</h4><p><code>pcp_promote_node</code>, <code>pcp_detach_node</code> and <code>pcp_recovery_node</code> execute immediately. No pre-flight checks (is this standby even caught up?), no confirmation, no verification afterwards, no record of who ran it.</p></div>
+  <div class="card"><h4>Configuration by hand on N hosts</h4><p><code>pgpool.conf</code>, <code>pool_hba.conf</code>, <code>pcp.conf</code> and <code>pool_passwd</code> must be identical on every pgpool host. Editing them by hand means drift, and discovering the drift during the next failover.</p></div>
+  <div class="card"><h4>A shared account and scattered logs</h4><p>Everyone logs in as <code>postgres</code>, so "who restarted pgpool at 02:14?" has no answer. pgpool and PostgreSQL logs live on different hosts in different formats.</p></div>
+</div>
+
+<p>poolwarden addresses each of these directly: cross-checked views, guarded control, transactional configuration and an identity-resolving audit log.</p>
+
+<h2 id="where">Where it sits</h2>
+
+<p>The most important design decision is what poolwarden is <em>not</em>. It is not in the client traffic path, it never talks to application clients, and it never bypasses pgpool to control PostgreSQL. Delete the binary and the cluster keeps running exactly as before.</p>
+
+<div class="mermaid">
+flowchart LR
+  subgraph clients["Application tier"]
+    app["Clients"]
+  end
+  subgraph cluster["pgpool-II cluster (unchanged)"]
+    vip(["VIP :9999"])
+    pp1["pgpool-II<br/>host A"]
+    pp2["pgpool-II<br/>host B"]
+    pg1[("PostgreSQL<br/>primary")]
+    pg2[("PostgreSQL<br/>standby")]
+    vip --> pp1
+    pp1 --> pg1
+    pp1 -. read balance .-> pg2
+    pp2 --> pg1
+    pg1 == streaming replication ==> pg2
+  end
+  app --> vip
+  dba["DBA over SSH"] --> pw["poolwarden<br/>(root, one static binary)"]
+  pw -- "SQL :9999<br/>SHOW POOL_*, PGPOOL SHOW" --> pp1
+  pw -- "pcp_* binaries<br/>(os/exec, no shell)" --> pp1
+  pw -- "SQL :5432<br/>pg_is_in_recovery, pg_stat_replication" --> pg1
+  pw -- "SQL :5432" --> pg2
+  pw -- "ssh: files, logs,<br/>ip addr, systemctl" --> pp2
+  style pw fill:#0f766e,color:#fff,stroke:#0f766e
+  style clients fill:#f8fafc,stroke:#dfe4ea
+</div>
+<p class="cap">poolwarden reads through pgpool's SQL and PCP interfaces, directly from each backend, and over SSH for files on peer hosts. Clients never see it.</p>
+
+<p>Six interfaces, all of them things a DBA would use by hand:</p>
+<table>
+<tr><th>Interface</th><th>Used for</th></tr>
+<tr><td>SQL to pgpool (<code>:9999</code>)</td><td><code>SHOW POOL_NODES / POOL_PROCESSES / POOL_POOLS / POOL_HEALTH_CHECK_STATS / POOL_BACKEND_STATS</code>, <code>PGPOOL SHOW &lt;param&gt;</code> for live values</td></tr>
+<tr><td><code>pcp_*</code> binaries, locally</td><td><code>pcp_node_info</code>, <code>pcp_watchdog_info -v</code>, <code>pcp_attach/detach/promote/recovery_node</code>, <code>pcp_reload_config</code>. Always <code>os/exec</code> with argv, never a shell.</td></tr>
+<tr><td>SQL to each PostgreSQL (<code>:5432</code>)</td><td><code>pg_is_in_recovery()</code>, <code>pg_stat_replication</code>, <code>pg_stat_wal_receiver</code>, replication slots, replay LSN/timeline, <code>pg_stat_activity</code> for xmin hold-back</td></tr>
+<tr><td>Files on disk</td><td><code>pgpool.conf</code>, <code>pool_hba.conf</code>, <code>pcp.conf</code>, <code>pool_passwd</code>, pgpool and PostgreSQL log files</td></tr>
+<tr><td>SSH to peer hosts</td><td>The same files and logs on the other hosts, <code>ip -o addr show</code> to find the VIP, pushing config, running <code>systemctl</code></td></tr>
+<tr><td><code>systemctl</code></td><td>Restarting pgpool-II, only for restart-class config changes, only in the order you confirmed</td></tr>
+</table>
+
+<div class="callout">
+<strong>Promotion only through pgpool.</strong> poolwarden never calls <code>pg_promote()</code> or <code>pg_ctl promote</code> itself. A switchover is <code>pcp_promote_node -s</code>; pgpool runs your <code>failover_command</code> and <code>follow_primary_command</code> exactly as it would in an automatic failover. The tool adds the checklist before and the verification after — the action itself is pgpool's.
+</div>
+
+<h2 id="arch">Architecture</h2>
+
+<p>Internally poolwarden is a layered pipeline. Everything the user sees — a table, a finding, a plan — is derived from a single immutable <code>Snapshot</code> that one component builds and every other component reads.</p>
+
+<div class="mermaid">
+flowchart TB
+  subgraph ui["Surface"]
+    cli["internal/cli<br/>cobra command tree, flags,<br/>confirmation prompts"]
+    shell["internal/shell<br/>REPL · completion from the same tree ·<br/>per-operator history · Ctrl-C semantics"]
+    render["internal/render<br/>table · wide · json · nagios ·<br/>full-screen watch"]
+  end
+  subgraph brain["Reasoning"]
+    diag["internal/diagnose<br/>29 pure rules → Findings"]
+    fc["internal/forecast<br/>regression · ETA · health score"]
+    pre["internal/preflight<br/>GO / WARN / NO-GO checklists"]
+    errv["internal/errevents<br/>unified error events"]
+  end
+  subgraph core["Core"]
+    svc["internal/service<br/>use-cases: views, control flows,<br/>config transactions"]
+    coll["internal/collector<br/>parallel fetch, per-source timeouts,<br/>degraded mode → Snapshot"]
+    hist["internal/history<br/>24h on-disk sample ring"]
+    model["internal/model<br/>Snapshot · Backend · Finding · Plan"]
+  end
+  subgraph adapters["Adapters"]
+    pps["pgpoolsql"]
+    bes["backendsql"]
+    pcp["pcp"]
+    remote["remote<br/>SSH · known_hosts ·<br/>cluster lock"]
+    logsrc["logsrc<br/>log_line_prefix parser"]
+    pgconf["pgconf<br/>round-trip parsers ·<br/>param catalogue"]
+  end
+  subgraph cross["Cross-cutting"]
+    audit["internal/audit<br/>identity · hash chain · syslog"]
+    cfg["internal/config"]
+    exit["internal/exitcode"]
+    clock["clock · fs<br/>(fakes for tests)"]
+  end
+  cli --> svc
+  shell --> cli
+  svc --> render
+  svc --> coll
+  svc --> diag
+  svc --> fc
+  svc --> pre
+  svc --> errv
+  svc --> audit
+  coll --> pps & bes & pcp & remote & logsrc & pgconf
+  coll --> model
+  coll --> hist
+  diag --> model
+  fc --> hist
+  style svc fill:#0f766e,color:#fff,stroke:#0f766e
+  style model fill:#e0f2f1,stroke:#0f766e
+</div>
+<p class="cap">24 packages. Adapters talk to the world; the collector turns their answers into one Snapshot; rules, forecasts and pre-flights are pure functions over it.</p>
+
+<h3>The collector and the Snapshot</h3>
+
+<p>Every command starts the same way: the collector fans out to all sources in parallel, each with its own deadline (default 3 s), and assembles whatever came back into a <code>Snapshot</code>. A source that times out is recorded as <strong>UNREACHABLE</strong> and never blocks the others — a dead backend costs you three seconds, not a hung terminal. The snapshot also carries the <em>provenance</em> of each fact, so a view can show "pgpool says up, direct connection says refused" rather than silently picking one.</p>
+
+<div class="mermaid">
+flowchart LR
+  subgraph sources["Sources (parallel, each with a deadline)"]
+    s1["pgpool SQL<br/>SHOW POOL_*"]
+    s2["pcp_node_info<br/>pcp_watchdog_info"]
+    s3["backend 0 SQL"]
+    s4["backend N SQL"]
+    s5["ssh: ip addr<br/>on each pgpool host"]
+    s6["pgpool.conf files<br/>on each pgpool host"]
+  end
+  s1 & s2 & s3 & s4 & s5 & s6 --> C{"collector"}
+  C -->|"pgpool SQL failed or hung?"| D["DEGRADED mode:<br/>node state from PCP,<br/>backend state direct"]
+  C --> S[("Snapshot<br/>+ provenance<br/>+ UNREACHABLE marks")]
+  D --> S
+  S --> H["history ring<br/>(24h, downsampled)"]
+  S --> R["29 diagnosis rules"]
+  S --> V["views"]
+  H --> F["forecast"]
+  R --> Fd["Findings<br/>CRIT / WARN / INFO"]
+  F --> Fd
+  Fd --> V
+  V --> O["table · wide · json · nagios"]
+  style C fill:#0f766e,color:#fff,stroke:#0f766e
+  style S fill:#e0f2f1,stroke:#0f766e
+</div>
+<p class="cap">One collection, many consumers. Degraded mode kicks in when pgpool itself cannot answer SQL — the very moment you most need to see the cluster.</p>
+
+<p><strong>Degraded mode</strong> deserves a note. The classic pgpool outage is "all children busy": pgpool is alive but your <code>psql -p 9999</code> hangs forever. poolwarden detects the hang, switches node state to <code>pcp_node_info</code> and backend state to direct connections, and marks the output <code>DEGRADED</code>. You still get a picture of the cluster, plus a finding telling you why it is partial.</p>
+
+<h3>Views: pgpool's opinion versus reality</h3>
+
+<p>The monitoring commands are deliberately boring — they show what you would have collected by hand, but side by side and already reconciled.</p>
+
+<pre>$ poolwarden status
+cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (STANDBY) · VIP on db2 · collected 05:28:04 (193ms)
+
+NODES   0 db1:5432 primary  up   score 100
+        1 db2:5432 standby  up   delay 1m24s   score 100
+WATCHDOG quorum: QUORUM EXIST · leader db2 · 2/2 alive · half-votes ON (2-node split risk: see WD_HALF_VOTES_2NODE)
+POOLS   children 1/20 busy · clients 4
+FINDINGS 0 CRIT · 2 WARN · 2 INFO        → poolwarden diagnose</pre>
+
+<table>
+<tr><th>Command</th><th>Shows</th></tr>
+<tr><td><code>status</code></td><td>One screen: nodes with real role and health score, watchdog, pool utilisation, finding counts</td></tr>
+<tr><td><code>nodes</code></td><td>Per backend: pgpool's role/status vs. what the backend reports, LSN, timeline, replication state</td></tr>
+<tr><td><code>lag</code></td><td>Per standby: write/flush/replay lag in bytes and time, sent vs. replayed LSN, trend arrow from history</td></tr>
+<tr><td><code>watchdog</code></td><td>Leader, quorum state, per-node watchdog status, which host actually holds the VIP (from <code>ip addr</code>, not from pgpool's belief)</td></tr>
+<tr><td><code>slots</code>, <code>pools</code>, <code>conns</code>, <code>procs</code>, <code>health</code></td><td>Replication slots and retained WAL, pool usage by db/user, client connections, child processes, health-check statistics</td></tr>
+<tr><td><code>topology</code></td><td>Host inventory and roles; <code>topology discover</code> compares the YAML with the live cluster and offers to update it</td></tr>
+<tr><td><code>watch &lt;view&gt;</code>, <code>top</code></td><td>Full-screen refresh of any view, or a combined live overview</td></tr>
+</table>
+
+<p>Every view takes <code>-o table|wide|json</code>, and <code>--nagios</code> turns any of them into a one-line check with standard exit codes — so the same binary feeds your monitoring system.</p>
+
+<h3>Diagnosis: findings with evidence and a next step</h3>
+
+<p>The diagnosis engine is a catalogue of 29 rules. Each is a pure function <code>func(Snapshot, History, Config) []Finding</code> — no I/O, trivially table-tested — and each finding carries a severity, the subject it applies to, the evidence that fired it, the likely cause, and the <em>exact next command</em> to run.</p>
+
+<pre>$ poolwarden diagnose
+SEV   ID                           SUBJECT  SUMMARY
+WARN  WD_ESCALATION_UNSET:cluster  cluster  delegate_ip=172.31.10.100 but wd_escalation_command/wd_de_escalation_command ...
+WARN  WD_HALF_VOTES_2NODE:cluster  cluster  enable_consensus_with_half_votes=on, 2 watchdog nodes (D14/V4: accepted split...
+INFO  COLOCATED_HOST:db1           db1      roles: pgpool,pg (config)
+INFO  COLOCATED_HOST:db2           db2      roles: pgpool,pg (config)
+→ poolwarden explain WD_ESCALATION_UNSET:cluster</pre>
+
+<p>The rules fall into a few families:</p>
+<table>
+<tr><th>Family</th><th>Rules</th></tr>
+<tr><td><span class="chip c-crit">CRIT</span> Role consistency</td><td><code>SPLIT_BRAIN</code> (two nodes claim primary), <code>ROLE_MISMATCH</code> (pgpool's role ≠ backend's real role), <code>NODE_DOWN</code>, <code>STATUS_DISAGREE</code></td></tr>
+<tr><td><span class="chip c-warn">WARN</span> Replication</td><td><code>REPL_LAG</code>, <code>REPL_LAG_GROWING</code> (slope + ETA), <code>WAL_RECEIVER_MISSING</code>, <code>REPLAY_PAUSED</code>, <code>STANDBY_NOT_STREAMING</code>, <code>SLOT_INACTIVE</code>, <code>WAL_DISK_ETA</code>, <code>XMIN_HOLDBACK</code>, <code>REPL_CONFLICTS</code></td></tr>
+<tr><td><span class="chip c-warn">WARN</span> Capacity</td><td><code>CHILD_EXHAUSTION</code>, <code>CONN_BUDGET</code> (<code>num_init_children × max_pool</code> vs. backend <code>max_connections</code>), <code>HEALTHCHECK_FAILING</code></td></tr>
+<tr><td><span class="chip c-crit">CRIT</span> Watchdog and VIP</td><td><code>WD_QUORUM</code>, <code>VIP_DUPLICATE</code>, <code>VIP_MISSING</code>, <code>WD_HALF_VOTES_2NODE</code>, <code>WD_ESCALATION_UNSET</code>, <code>WD_PEER_CONFIG_DRIFT</code></td></tr>
+<tr><td><span class="chip c-info">INFO</span> Configuration hygiene</td><td><code>FAILOVER_CMD_UNSET</code>, <code>RECOVERY_CMD_UNSET</code>, <code>CONFIG_DRIFT</code> (file ≠ live, or host ≠ host), <code>SELF_CHECK</code>, <code>DEGRADED</code>, <code>COLOCATED_HOST</code></td></tr>
+</table>
+
+<p><code>explain &lt;FINDING_ID&gt;</code> expands a finding into evidence, cause and fix. <code>errors</code> merges pgpool log errors, PostgreSQL log errors, connection failures and health-check failures from every host into one time-ordered stream, and <code>logs</code> tails all of them with each line classified (<code>FAILOVER</code>, <code>WATCHDOG</code>, <code>HEALTHCHECK</code>, …).</p>
+
+<h3>Forecasting</h3>
+
+<p>The collector writes every snapshot to a 24-hour on-disk ring. <code>forecast</code> runs a linear regression over the last five minutes of lag, retained WAL and busy children, and reports slope, R² and an ETA to the critical threshold — but only when R² ≥ 0.6; a noisy series is reported as <em>unstable</em> rather than given a fake ETA. Those same trends feed the rising-lag rule and the per-node health score shown in <code>status</code>.</p>
+
+<h2 id="control">Guarded node control</h2>
+
+<p>This is where the tool earns its name. Every control command — <code>promote</code>, <code>detach</code>, <code>attach</code>, <code>recover</code>, <code>reload</code> — runs the same five-phase flow, and every phase is timed and audited.</p>
+
+<div class="mermaid">
+flowchart LR
+  A["1 · Pre-flight<br/>checklist over a fresh Snapshot"] --> V{"verdict"}
+  V -->|GO| P["2 · Plan<br/>what will run, on which host,<br/>what it will change"]
+  V -->|WARN| P
+  V -->|NO-GO| R["Refused<br/>plan + failing checks shown<br/>exit 3 · audited as refused"]
+  R -.->|"--force + typed node id"| P
+  P --> C["3 · Confirm<br/>typed token, e.g. the node id<br/>(--confirm for scripts)"]
+  C -->|abort| X["Aborted · audited"]
+  C --> E["4 · Execute<br/>pcp_* via os/exec<br/>own time budget, SIGTERM on timeout"]
+  E --> Vf["5 · Verify<br/>poll until the cluster reaches the<br/>expected state, then verify rejoin"]
+  Vf --> O["Timeline + outcome<br/>+ audit event id"]
+  style A fill:#e0f2f1,stroke:#0f766e
+  style R fill:#fde8e8,stroke:#b42318
+  style E fill:#0f766e,color:#fff,stroke:#0f766e
+</div>
+<p class="cap">Pre-flight → plan → confirm → execute → verify. Refusals and aborts are recorded just like successes.</p>
+
+<p>The pre-flight checklists are specific to each action. For a switchover, poolwarden checks that the target is a standby and up, that its replay delay is under the warning threshold, that it holds the <em>most advanced LSN of all standbys</em>, that watchdog quorum exists, that <code>failover_command</code> and <code>follow_primary_command</code> are set, that there is no split-brain and no failover already in flight. <code>detach</code> warns you when the target is the primary (because that <em>triggers</em> a failover) and tells you how much load-balancing capacity you are about to lose. <code>attach</code> refuses a node that is on a different timeline from the primary — the classic way to attach a stale node and corrupt your read traffic.</p>
+
+<p>The output is a timeline, not a spinner:</p>
+
+<pre>$ poolwarden promote 0 --ticket TB-1
+STEP                         START     END       DURATION  RESULT
+preflight                    05:28:25  05:28:25  0.1s      ok
+pcp_promote_node             05:28:25  05:28:25  0.0s      ok
+verify                       05:28:25  05:28:27  2s        ok
+verify (old primary rejoin)  05:28:27  05:28:28  0.1s
+outcome: success  event: d3c47530ebb20ec0</pre>
+
+<p>Note the second verify step. A switchover is not finished when the new primary accepts writes; it is finished when the <em>old</em> primary has been re-pointed by <code>follow_primary_command</code> and is streaming again. poolwarden waits for that too, and if the old primary does not come back it tells you which recovery path applies (<code>attach</code> if it is merely detached, <code>recover</code> if it needs a rebuild).</p>
+
+<div class="callout">
+<strong>Scriptable without losing the guard-rails.</strong> <code>--yes</code> only skips the plain yes/no prompt. A typed confirmation can only be supplied explicitly with <code>--confirm &lt;token&gt;</code>, and a NO-GO can only be overridden with <code>--force</code> <em>plus</em> the token. <code>--read-only</code> disables every control command for the session, and <code>--ticket</code> ties the change to your change-management record in the audit log.
+</div>
+
+<h2 id="config">Configuration as a transaction</h2>
+
+<p>pgpool configuration spans four files that must be identical on every pgpool host, and parameters differ in whether they take effect on reload or need a restart. poolwarden models a configuration change as a staged transaction across the whole cluster.</p>
+
+<div class="mermaid">
+sequenceDiagram
+  autonumber
+  participant D as DBA
+  participant PW as poolwarden
+  participant A as pgpool host A
+  participant B as pgpool host B
+  D->>PW: config set num_init_children 48
+  PW->>PW: parse pgpool.conf (round-trip, comments kept)<br/>stage in /var/lib/poolwarden/staged.json
+  D->>PW: config diff
+  PW-->>D: file vs staged vs live value, context = restart
+  D->>PW: config validate
+  PW->>PW: type/range/enum checks, CONN_BUDGET, drift check across hosts
+  D->>PW: config apply
+  PW->>A: lock cluster, back up (version 17), write atomically
+  PW->>B: back up (version 17), write atomically
+  PW->>B: systemctl restart pgpool-II (standby first)
+  PW->>B: verify live: PGPOOL SHOW num_init_children = 48
+  PW->>A: systemctl restart pgpool-II (leader last)
+  PW->>A: verify live value
+  PW-->>D: per-host table, outcome success, audit event
+  Note over PW,B: if any host fails: restore version 17 on every host already touched,<br/>exit 5 (rolled back) or exit 6 (manual intervention)
+</div>
+<p class="cap">set → diff → validate → apply. Restart-class changes restart the standby first and the watchdog leader last; failures roll every touched host back.</p>
+
+<p>The pieces that make this work:</p>
+<ul>
+<li><strong>Round-trip parsers.</strong> <code>internal/pgconf</code> parses <code>pgpool.conf</code>, <code>pool_hba.conf</code>, <code>pcp.conf</code> and <code>pool_passwd</code> into structures that write back <em>byte-identical</em> when nothing has changed. Your comments and layout survive; the diff you see is the diff you get.</li>
+<li><strong>A parameter catalogue</strong> for pgpool 4.4 and 4.5: type, allowed values, and whether a change is <em>reload</em> or <em>restart</em> class. Any parameter whose context could not be verified against the docs is flagged <code>Unverified</code> and treated as restart-class, the safe default.</li>
+<li><strong>Validation as a gate.</strong> <code>config apply</code> will not proceed past a failed <code>validate</code>; the connection-budget check (<code>num_init_children × max_pool</code> vs. <code>max_connections</code>) is a warning you must acknowledge.</li>
+<li><strong>Versioned backups and rollback.</strong> Every apply stores the previous files under a version number. <code>config rollback &lt;version&gt;</code> restores them on all hosts and reloads or restarts as the restored values require.</li>
+<li><strong>The same flow for the other files.</strong> <code>hba add/remove</code>, <code>pcpuser add/remove</code>, <code>pooluser add/remove</code> (md5/scram computed in-process — <code>pg_md5</code> needs a TTY) and <code>backend add/remove/set</code> all stage through the same transaction.</li>
+</ul>
+
+<h2 id="audit">An audit log that knows who you are</h2>
+
+<p>On most database hosts everyone is <code>postgres</code> or <code>root</code>, so an audit log that records the OS user records nothing useful. poolwarden resolves identity from every signal available at the moment of the command and stores all of them:</p>
+
+<div class="mermaid">
+flowchart LR
+  subgraph signals["Identity signals (all recorded)"]
+    k["SSH key fingerprint<br/>from the SSH_USER_AUTH file"]
+    l["/proc/self/loginuid<br/>→ user name"]
+    s["SUDO_USER"]
+    c["SSH_CONNECTION<br/>source IP:port"]
+    o["--operator name<br/>(declared once per session)"]
+    t["TTY · PID · hostname"]
+  end
+  k & l & s & c & o & t --> id["identity{}"]
+  k -->|"lookup in operators: map"| m{"matches declared<br/>operator?"}
+  m -->|no| flag["identity_mismatch: true"]
+  id --> e1
+  flag --> e1
+  subgraph chain["/var/lib/poolwarden/audit.jsonl (0600, O_APPEND)"]
+    e0["entry n-1<br/>hash: 9f3a…"] --> e1["entry n<br/>prev_hash: 9f3a…<br/>hash: SHA-256(entry)"] --> e2["entry n+1<br/>prev_hash: …"]
+  end
+  e1 -.->|copy| sys["syslog<br/>authpriv · tag poolwarden"]
+  style id fill:#e0f2f1,stroke:#0f766e
+  style flag fill:#fde8e8,stroke:#b42318
+</div>
+<p class="cap">Every entry is hash-chained to the previous one and mirrored to syslog; <code>audit verify</code> detects an edited, deleted or reordered line.</p>
+
+<p>Each control command produces two entries, <code>requested</code> and <code>finished</code>, with the full pre-flight verdict, the plan, the per-host step timings, the diff for configuration changes, the outcome (<code>success</code>, <code>failed</code>, <code>rolled_back</code>, <code>aborted</code> or <code>refused</code>) and the exit code. Secrets are masked before writing. <code>sql</code> queries, shell session start/end and — optionally — read-only commands are logged too. <code>audit show</code>, <code>audit search</code> and <code>audit verify</code> read it back.</p>
+
+<h2 id="ux">The operator experience</h2>
+
+<p>poolwarden is one cobra command tree used three ways. <code>poolwarden status</code> runs once and exits with a meaningful code. <code>poolwarden</code> alone opens a shell whose prompt tells you where you are — <code>pgpool[prod@db1]&gt;</code>, or <code>pgpool[prod@db1 DEGRADED]&gt;</code> — with tab completion driven from the <em>same</em> command tree (node ids, hosts, parameter names and finding ids complete live), per-operator history, and Ctrl-C that cancels the running command rather than the shell. <code>watch</code> and <code>top</code> give full-screen live views.</p>
+
+<table>
+<tr><th>Exit</th><th>Meaning</th><th>Exit</th><th>Meaning</th></tr>
+<tr><td>0</td><td>ok</td><td>5</td><td>apply failed, rolled back</td></tr>
+<tr><td>1</td><td>usage</td><td>6</td><td>apply and rollback both failed</td></tr>
+<tr><td>2</td><td>connection / auth</td><td>10</td><td>WARN findings present</td></tr>
+<tr><td>3</td><td>pre-flight NO-GO</td><td>11</td><td>CRIT findings present</td></tr>
+<tr><td>4</td><td>validation failed</td><td><code>--nagios</code></td><td>maps to 0/1/2/3 with one summary line</td></tr>
+</table>
+
+<p>Every error is three lines — <code>error:</code>, <code>cause:</code>, <code>next:</code> — and the last line is a command you can paste. An unknown SSH host key gives you the exact <code>ssh-keyscan -H</code> line; an unsafe config permission gives you the <code>chmod</code>.</p>
+
+<p>Setup is <code>poolwarden init</code>: it detects the local pgpool, reads <code>backend_hostnameN</code> and the watchdog peers out of <code>pgpool.conf</code>, probes each host, and writes <code>/etc/poolwarden.yaml</code>. The YAML describes <em>what each host is</em> (roles, addresses, paths), never <em>what state it is in</em> — there is no <code>primary:</code> field, so a failover never requires a config change.</p>
+
+<h2 id="failover">What a failover looks like through it</h2>
+
+<p>The tool was exercised end to end on two Docker clusters (pgpool-II 4.5.13, PostgreSQL 18): a two-host layout with pgpool and PostgreSQL co-located, and a four-host layout with them split. The full scenario suite — failover, online recovery, switchover and failback, detach/attach, watchdog leader loss with VIP move, configuration transactions, audit verification — passed on both. The detailed, capture-by-capture report lives in the repository; here is just the shape of the failover and failback cycle as poolwarden sees it.</p>
+
+<div class="mermaid">
+sequenceDiagram
+  autonumber
+  participant P0 as node 0 (primary)
+  participant PP as pgpool-II
+  participant P1 as node 1 (standby)
+  participant PW as poolwarden
+  Note over P0: primary crashes
+  PP->>P0: health check ×3 fails
+  PP->>PP: watchdog consensus → failover_command
+  PP->>P1: promote (timeline 1 → 2)
+  PP->>P0: follow_primary_command: re-point to node 1
+  PW->>PP: nodes / diagnose
+  PW-->>PW: node 1 primary · node 0 down · NODE_DOWN<br/>FAILOVER lines in logs · nothing to do in the YAML
+  Note over PW,P0: Failback part 1 — rebuild the old primary
+  PW->>PP: recover 0 (pre-flight: recovery script present, node down)
+  PP->>P1: pgpool_recovery → pg_basebackup -R → pgpool_remote_start
+  P0-->>P1: walreceiver streaming on timeline 2
+  PW-->>PW: verify: node 0 standby, up, streaming
+  Note over PW,P1: Failback part 2 — switch the primary back
+  PW->>PP: promote 0 (pre-flight: node 0 most advanced, quorum, no split-brain)
+  PP->>P0: pcp_promote_node -s → promote (timeline 2 → 3)
+  PP->>P1: follow_primary_command: pg_rewind / re-point to node 0
+  PW-->>PW: verify new primary, then verify old primary rejoined and streaming
+</div>
+<p class="cap">Automatic failover is pgpool's job; poolwarden shows you what happened and makes the two-step failback (recover, then switchover) a guarded, verified, audited operation.</p>
+
+<p>Running the tool against a real cluster rather than fixtures also found a batch of bugs that no unit test would have: standby matching when <code>application_name</code> is <code>walreceiver</code>, a global 20-second deadline that cut <code>recover</code> off mid-basebackup, a stale timeline source in the <code>attach</code> pre-flight, and reload verification racing pgpool's asynchronous reload. All are fixed and covered in the repository's test report, which is worth reading if you want the timestamped pgpool and PostgreSQL logs behind each step.</p>
+
+<h2 id="principles">Design principles, in short</h2>
+
+<ul>
+<li><strong>Wrapper, not replacement.</strong> Only pgpool's and PostgreSQL's own interfaces; never a shell, never <code>pg_promote()</code>.</li>
+<li><strong>One snapshot, many consumers.</strong> Views, rules, forecasts and pre-flights are pure functions over the same data, so they cannot disagree with each other.</li>
+<li><strong>Never hang.</strong> Every source has a deadline; partial information is shown as partial, with a finding explaining why.</li>
+<li><strong>Pre-flight, confirm, verify.</strong> No control action runs without a checklist before and a state check after.</li>
+<li><strong>Changes are transactions.</strong> Staged, validated, backed up, applied in a safe order, rolled back as a unit.</li>
+<li><strong>Every action is attributable.</strong> Identity from the SSH key, not the shared OS account; a hash chain you can verify.</li>
+<li><strong>Static binary, no daemon.</strong> <code>CGO_ENABLED=0</code>, linux/amd64 and arm64, man pages, RPM/deb. Footprint: <code>/etc/poolwarden.yaml</code> and <code>/var/lib/poolwarden</code>.</li>
+</ul>
+
+<h2 id="try">Try it</h2>
+
+<pre>git clone https://github.com/rameshsraj/poolwarden
+cd poolwarden &amp;&amp; make build          # bin/poolwarden
+sudo bin/poolwarden init             # detects pgpool, writes /etc/poolwarden.yaml
+poolwarden status                    # one shot
+poolwarden diagnose                  # what, why, and what to run next
+poolwarden                           # interactive shell</pre>
+
+<p>The repository contains the design and functional specifications, the implementation decisions log, an operator guide, a Docker test bed for both layouts, and the full test report with captured logs.</p>
+
+<p style="text-align:center;margin-top:30px"><a class="repo" href="https://github.com/rameshsraj/poolwarden">github.com/rameshsraj/poolwarden</a></p>
+
+<footer>
+poolwarden targets pgpool-II 4.4 and 4.5 with PostgreSQL 14 and later in streaming-replication mode. Diagrams rendered with Mermaid.
+</footer>
+
+</article>
+</body>
+</html>
