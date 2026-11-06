@@ -419,6 +419,10 @@ sequenceDiagram
 </div>
 <p class="cap">Automatic failover is pgpool's job; poolwarden shows you what happened and makes the two-step failback (recover, then switchover) a guarded, verified, audited operation.</p>
 
+<div class="callout warn">
+<strong>Tested in Docker.</strong> Everything above ran in a pure Docker environment — containers for every pgpool and PostgreSQL node, with a <code>svc</code> stand-in for <code>systemctl</code>. The tool uses only standard interfaces (SQL, PCP, SSH, <code>systemctl</code>, <code>ip</code>), so it is expected to work as is on VMs and bare metal, but that has not yet been exercised there. Treat the control and configuration commands with the caution you would give any new tool on a production cluster: start with the read-only side, and use <code>--read-only</code> until you have seen it behave on your own hosts.
+</div>
+
 <p>Running the tool against a real cluster rather than fixtures also found a batch of bugs that no unit test would have: standby matching when <code>application_name</code> is <code>walreceiver</code>, a global 20-second deadline that cut <code>recover</code> off mid-basebackup, a stale timeline source in the <code>attach</code> pre-flight, and reload verification racing pgpool's asynchronous reload. All are fixed and covered in the repository's test report, which is worth reading if you want the timestamped pgpool and PostgreSQL logs behind each step.</p>
 
 <h2 id="principles">Design principles, in short</h2>
@@ -441,6 +445,10 @@ sudo bin/poolwarden init             # detects pgpool, writes /etc/poolwarden.ya
 poolwarden status                    # one shot
 poolwarden diagnose                  # what, why, and what to run next
 poolwarden                           # interactive shell</pre>
+
+<div class="callout">
+<strong>Safe to install and try in production.</strong> poolwarden is a wrapper, not a service: it has no daemon, no proxy and no presence in the client traffic path, and the monitoring and diagnosis commands (<code>status</code>, <code>nodes</code>, <code>lag</code>, <code>watchdog</code>, <code>diagnose</code>, <code>forecast</code>, <code>errors</code>, <code>logs</code>, …) only read — the same <code>SHOW POOL_*</code>, <code>pcp_*_info</code> and <code>pg_stat_*</code> calls you already run by hand. Run it with <code>--read-only</code> and every control and configuration command is disabled, so you can configure it against a live cluster and get the cross-checked views and findings without any possibility of changing state. Enable the control side only once you are comfortable with what it shows you.
+</div>
 
 <p>The repository contains the design and functional specifications, the implementation decisions log, an operator guide, a Docker test bed for both layouts, and the full test report with captured logs.</p>
 
