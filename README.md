@@ -34,10 +34,9 @@ pgpool keeps reading its own files, and nothing sits in the client traffic path.
 
 ## Status
 
-Implemented against the specs in `docs/01` to `docs/03` (decisions in `docs/04`), targeting
-pgpool-II 4.4/4.5 and PostgreSQL 14+. Exercised on two Docker test beds (pgpool-II 4.5.13,
+Targets pgpool-II 4.4/4.5 and PostgreSQL 14+. Exercised on two Docker test beds (pgpool-II 4.5.13,
 PostgreSQL 18) through full failover, online recovery, switchover, detach/attach, VIP
-move and configuration transactions; see `docs/poolwarden-test-report.html`.
+move and configuration transactions.
 
 ## Get started
 
@@ -46,5 +45,4 @@ move and configuration transactions; see `docs/poolwarden-test-report.html`.
     poolwarden status          # one-shot view
     poolwarden                 # interactive shell: pgpool[cluster@host]>
 
-Operator guide: `docs/05-operator-guide.md`. Command reference: `docs/commands/`.
-Architecture write-up: `docs/poolwarden.html`. Test report: `docs/poolwarden-test-report.html`.
+Command reference: `docs/commands/`.
