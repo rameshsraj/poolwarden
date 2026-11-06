@@ -32,7 +32,7 @@ Then `poolwarden config self-check` should show all OK.
 
 `topology discover` diffs the live cluster (watchdog peers + backend_hostnameN)
 against your inventory; `--apply` writes the changes (audited, backup kept).
-`config export <file>` writes the effective config to a path of your choice —
+`config export <file>` writes the effective config to a path of your choice;
 this is the one user-directed write; review permissions afterwards.
 
 ## Daily use
@@ -45,14 +45,14 @@ this is the one user-directed write; review permissions afterwards.
 
 `config set <p> <v>` stages; `config diff` shows the unified diff;
 `config validate` runs catalogue+cross rules; `config apply` (token `apply`
-or `restart` for restart-class params — the plan warns when the VIP moves
+or `restart` for restart-class params; the plan warns when the VIP moves
 last). Failures: exit 5 = rolled back (per-host table), exit 6 = manual
 recovery (`cp <backup> <conf> && systemctl restart pgpool-II` per host).
 `config history` / `config rollback <version>`.
 
 ## Node control
 
-`promote <id>` (real switchover; `--pgpool-only` only changes pgpool's view —
+`promote <id>` (real switchover; `--pgpool-only` only changes pgpool's view;
 **UNVERIFIED T1**), `detach <id>` (primary requires token `detach-primary-N`),
 `attach <id>`, `recover <id>`.
 
@@ -60,7 +60,7 @@ recovery (`cp <backup> <conf> && systemctl restart pgpool-II` per host).
 
 `audit`, `audit show <id>`, `audit verify`, `audit sessions`. Entries also go
 to syslog (authpriv) when `audit.syslog` is on; `retention_days` rotates
-`audit.jsonl` daily — do NOT logrotate it (see /etc/logrotate.d/poolwarden
+`audit.jsonl` daily; do NOT logrotate it (see /etc/logrotate.d/poolwarden
 which only covers tool.log).
 
 ## Troubleshooting
@@ -73,5 +73,5 @@ known_hosts errors give the exact `ssh-keyscan -H` line to run.
 
 - **T1** `promote --pgpool-only` · **T2** `ExposeAuthInfo` availability ·
   **I21** all fixtures are synthetic · **I22** RPM/deb install untested on the
-  build machine · catalogue entries flagged Unverified — list them with
+  build machine · catalogue entries flagged Unverified; list them with
   `poolwarden config catalogue --unverified`.

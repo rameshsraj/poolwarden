@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>poolwarden — pgpool-II failover/failback test report (2026-11-05)</title>
+<title>poolwarden: pgpool-II failover/failback test report (2026-11-05)</title>
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 mermaid.initialize({startOnLoad:true, theme:'neutral'});
@@ -56,20 +56,20 @@ code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 <a href="#s10">10. Appendix / reproduce</a>
 </nav>
 <main>
-<h1>poolwarden — pgpool-II failover/failback test report</h1>
+<h1>poolwarden: pgpool-II failover/failback test report</h1>
 <p class="meta">Date: <strong>2026-11-05</strong> · Server: <strong>root@10.88.11.162</strong> (Rocky Linux 8.10, Docker 26.1.3, Compose v2.27) ·
 pgpool-II <strong>4.5.13</strong> (built from source, codeload <code>V4_5_13</code>) · PostgreSQL <strong>18</strong> (postgres:18) · poolwarden build <code>testbed</code></p>
 <p><span class="chip c-ok">HEADLINE: 55/55 steps PASS on both test beds (bed A colocated, bed B split)</span></p>
 
 <h2 id="s2">2. Executive summary</h2>
 <ul>
-<li>Two Docker test beds ran the full scenario suite end-to-end: unplanned failover (kill the primary), online recovery of the old primary as a standby via <code>pcp_recovery_node</code>, two planned switchovers (<code>pcp_promote_node -s</code>), detach/attach, watchdog leader loss with VIP movement, a full config transaction (set→diff→validate→apply→history→rollback), and audit/SQL checks. Every scripted step passed on both beds — 55 steps each.</li>
+<li>Two Docker test beds ran the full scenario suite end-to-end: unplanned failover (kill the primary), online recovery of the old primary as a standby via <code>pcp_recovery_node</code>, two planned switchovers (<code>pcp_promote_node -s</code>), detach/attach, watchdog leader loss with VIP movement, a full config transaction (set→diff→validate→apply→history→rollback), and audit/SQL checks. Every scripted step passed on both beds, 55 steps each.</li>
 <li>Replication never left a broken end-state: every promotion produced a new timeline (1→2→3→4), every demoted/rejoined node came back as a <em>streaming</em> standby, and <code>audit verify</code> reported the chain intact.</li>
-<li>The exercise surfaced 17 real poolwarden bugs (A–Q), all fixed during the same session — see the table below. The most consequential: a 20s command deadline that could SIGKILL <code>pcp_recovery_node</code> mid-flight (G), refused commands hiding the pre-flight reason (F), and stale-timeline false NO-GOs (Q).</li>
+<li>The exercise surfaced 17 real poolwarden bugs (A to Q), all fixed during the same session; see the table below. The most consequential: a 20s command deadline that could SIGKILL <code>pcp_recovery_node</code> mid-flight (G), refused commands hiding the pre-flight reason (F), and stale-timeline false NO-GOs (Q).</li>
 <li>Findings reported by poolwarden on the beds were all correct and actionable (COLOCATED_HOST, WD_HALF_VOTES_2NODE, CONN_BUDGET, WD_ESCALATION_UNSET).</li>
 </ul>
 
-<h3>Bugs found by this exercise and fixed (A–Q)</h3>
+<h3>Bugs found by this exercise and fixed (A to Q)</h3>
 <table>
 <tr><th>#</th><th>Symptom seen on the bed</th><th>Root cause</th><th>Fix</th></tr>
 <tr><td>A</td><td>STANDBY_NOT_STREAMING CRIT on a healthy cluster</td><td>standby↔pg_stat_replication matched only host/name; the row was <code>walreceiver@172.31.10.12</code> vs host <code>db2</code></td><td><code>Backend.Addresses</code> (host/addr/name/DNS) + one <code>StandbyMatches</code> used everywhere</td></tr>
@@ -92,7 +92,7 @@ pgpool-II <strong>4.5.13</strong> (built from source, codeload <code>V4_5_13</co
 </table>
 
 <h2 id="s3">3. What poolwarden is and where it sits</h2>
-<p>poolwarden is a single-binary operator tool for pgpool-II HA clusters. It never touches PostgreSQL control commands (<code>pg_ctl promote</code>, <code>pg_rewind</code>) itself — every control action goes through pgpool's own interfaces: the <strong>PCP commands</strong> (<code>pcp_promote_node</code>, <code>pcp_detach_node</code>, <code>pcp_attach_node</code>, <code>pcp_recovery_node</code>, <code>pcp_reload_config</code>, <code>pcp_watchdog_info</code>) and pgpool's <strong>SQL protocol commands</strong> (<code>SHOW POOL_NODES</code>, <code>SHOW POOL_HEALTH_CHECK_STATS</code>, etc.). pgpool then runs its configured <code>failover_command</code>/<code>follow_primary_command</code>/<code>recovery_*</code> scripts, which <em>are</em> the ones doing pg_ctl/ssh work. poolwarden adds what pgpool lacks: pre-flight safety checks, confirmations with typed tokens, audit trail with hash-chained entries, a diagnosis engine, config-file transaction (diff/validate/apply/rollback), log classification, and per-host file/ssh orchestration.</p>
+<p>poolwarden is a single-binary operator tool for pgpool-II HA clusters. It never touches PostgreSQL control commands (<code>pg_ctl promote</code>, <code>pg_rewind</code>) itself; every control action goes through pgpool's own interfaces: the <strong>PCP commands</strong> (<code>pcp_promote_node</code>, <code>pcp_detach_node</code>, <code>pcp_attach_node</code>, <code>pcp_recovery_node</code>, <code>pcp_reload_config</code>, <code>pcp_watchdog_info</code>) and pgpool's <strong>SQL protocol commands</strong> (<code>SHOW POOL_NODES</code>, <code>SHOW POOL_HEALTH_CHECK_STATS</code>, etc.). pgpool then runs its configured <code>failover_command</code>/<code>follow_primary_command</code>/<code>recovery_*</code> scripts, which <em>are</em> the ones doing pg_ctl/ssh work. poolwarden adds what pgpool lacks: pre-flight safety checks, confirmations with typed tokens, audit trail with hash-chained entries, a diagnosis engine, config-file transaction (diff/validate/apply/rollback), log classification, and per-host file/ssh orchestration.</p>
 <div class="mermaid">
 flowchart LR
   C["clients"] -->|5432-style SQL| VIP["VIP:9999"]
@@ -112,10 +112,10 @@ flowchart LR
 <p class="src">Architecture per docs/02 §1; control verbs per internal/service/actions.go.</p>
 
 <h2 id="s4">4. Test beds</h2>
-<h3>Bed A — colocated (project <code>pw-colocated</code>, 172.31.10.0/24)</h3>
+<h3>Bed A: colocated (project <code>pw-colocated</code>, 172.31.10.0/24)</h3>
 <div class="mermaid">
 flowchart TB
-  subgraph N["bed A — each node = one container"]
+  subgraph N["bed A: each node = one container"]
     DB1["db1 (172.31.10.11)\npgpool + PG"]
     DB2["db2 (172.31.10.12)\npgpool + PG"]
   end
@@ -124,7 +124,7 @@ flowchart TB
   DB1 -->|PG 5432| CL(("primary/standby\nstreaming"))
   DB2 --> CL
 </div>
-<h3>Bed B — split (project <code>pw-split</code>, 172.31.20.0/24)</h3>
+<h3>Bed B: split (project <code>pw-split</code>, 172.31.20.0/24)</h3>
 <div class="mermaid">
 flowchart TB
   subgraph PGH["data nodes"]
@@ -168,7 +168,7 @@ flowchart TB
 </ul>
 
 <h2 id="s5">5. How replication works in this cluster</h2>
-<p>Streaming replication is PostgreSQL-native: the standby connects <em>to</em> the primary over <code>primary_conninfo</code> (host/port/user, from <code>pg_basebackup -R</code> which also writes <code>standby.signal</code>), a <strong>walreceiver</strong> on the standby streams WAL from a <strong>walsender</strong> on the primary and replays it. The primary sees the standby in <code>pg_stat_replication</code> (one row per walsender: application_name=walreceiver, client_addr, state=streaming); the standby reports itself in <code>pg_stat_wal_receiver</code> (status, received_tli = the timeline it is receiving). The control file's <code>timeline_id</code> on a standby is only the last restartpoint's TL and lags after rewind/failover — the live TL comes from <code>received_tli</code> (this was poolwarden bug Q).</p>
+<p>Streaming replication is PostgreSQL-native: the standby connects <em>to</em> the primary over <code>primary_conninfo</code> (host/port/user, from <code>pg_basebackup -R</code> which also writes <code>standby.signal</code>), a <strong>walreceiver</strong> on the standby streams WAL from a <strong>walsender</strong> on the primary and replays it. The primary sees the standby in <code>pg_stat_replication</code> (one row per walsender: application_name=walreceiver, client_addr, state=streaming); the standby reports itself in <code>pg_stat_wal_receiver</code> (status, received_tli = the timeline it is receiving). The control file's <code>timeline_id</code> on a standby is only the last restartpoint's TL and lags after rewind/failover; the live TL comes from <code>received_tli</code> (this was poolwarden bug Q).</p>
 <pre>-- captured primary_conninfo on a recovered standby (db1-timeline-history.txt)
 primary_conninfo = 'user=repl password=*** channel_binding=prefer host=db2 port=5432
  sslmode=prefer sslcompression=0 ... application_name=db1'</pre>
@@ -184,7 +184,7 @@ primary_conninfo = 'user=repl password=*** channel_binding=prefer host=db2 port=
 05:28:27.250 UTC [741] LOG:  started streaming WAL from primary at 0/5000000 on timeline 3
 05:28:31.438 UTC [1189]LOG:  started streaming WAL from primary at 0/5000000 on timeline 4</pre>
 <p class="src">source: results/colocated/evidence/db1-postgres-events.log, db2-postgres-events.log</p>
-<p><strong>pgpool's own view</strong> is <code>SHOW POOL_NODES</code> (status up/down, role primary/standby — pgpool's belief, checked by <code>sr_check</code> every 5s against PG) and health_check every 10s (3 retries × 5s delay before calling a node dead). Watchdog's view is node state + quorum + which watchdog holds the VIP.</p>
+<p><strong>pgpool's own view</strong> is <code>SHOW POOL_NODES</code> (status up/down, role primary/standby, which is pgpool's belief, checked by <code>sr_check</code> every 5s against PG) and health_check every 10s (3 retries × 5s delay before calling a node dead). Watchdog's view is node state + quorum + which watchdog holds the VIP.</p>
 <div class="mermaid">
 sequenceDiagram
   participant CL as client
@@ -199,7 +199,7 @@ sequenceDiagram
   PR-->>PP: sr_check every 5s (role), health_check every 10s
 </div>
 
-<h3 id="s5b">5.5 Baseline — the cluster before anything fails</h3>
+<h3 id="s5b">5.5 Baseline: the cluster before anything fails</h3>
 <h4>Bed A (colocated)</h4>
 <pre>== $ bash -c docker exec db1 poolwarden --operator tester status
 cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (STANDBY) · VIP on db2 · collected 05:28:04 (193ms)
@@ -987,7 +987,7 @@ TIME      HOST     COMP    SEV      TAG          MESSAGE
 == exit: 0</pre>
 <p class="src">source: results/split/12-01l-logs.txt</p>
 <h2 id="s6">6. Scenario walk-throughs</h2>
-<h3 id="s61">6.1 Unplanned failover — pg_ctl stop -m immediate on node 0 (step 02)</h3>
+<h3 id="s61">6.1 Unplanned failover: pg_ctl stop -m immediate on node 0 (step 02)</h3>
 <div class="mermaid">
 sequenceDiagram
   participant OP as operator
@@ -2169,7 +2169,7 @@ WARN  WD_HALF_VOTES_2NODE:cluster  cluster  enable_consensus_with_half_votes=on,
 
 <h4>How replication is (re)established</h4>
 <p>db1&apos;s PG is killed; pgpool&apos;s health_check (10s period, 3 retries) fails &rarr; a child sends a degenerate-backend request forwarded to the LEADER (db2). Consensus passes (&ldquo;we have got the consensus to perform the failover&rdquo;), pgpool logs &ldquo;Starting degeneration. shutdown host db1(5432)&rdquo; and executes <code>failover.sh 0 db1 5432 &hellip; 1 db2</code>, which ssh&apos;s to db2 and runs <code>pg_ctl promote</code> &mdash; PG logs &ldquo;received promote request&rdquo; &rarr; &ldquo;selected new timeline ID: 2&rdquo;. pgpool logs &ldquo;set new primary node: 1&rdquo;; the VIP stays on db2 (already leader). <code>follow_primary.sh</code> resynchronises db1 as a standby on TL2 (standby.signal + primary_conninfo host=db2, then pcp_attach_node) and the walreceiver logs &ldquo;started streaming WAL from primary at 0/5000000 on timeline 2&rdquo;. Kill&rarr;flip: &asymp;4s (02b 05:28:08 &rarr; 05:28:12).</p>
-<h3 id="s62">6.2 Online recovery — poolwarden recover 0 (03pre, 03a)</h3>
+<h3 id="s62">6.2 Online recovery: poolwarden recover 0 (03pre, 03a)</h3>
 <pre>== $ bash -c 
   docker exec db1 su postgres -c &#x27;pg_ctl -D /var/lib/postgresql/18/main stop -m immediate -w&#x27; || true
   for i in $(seq 1 40); do
@@ -2248,7 +2248,7 @@ ID  HOST:PORT  STATUS  PGPOOL-ROLE  REAL-ROLE  LB-WEIGHT  SELECTS  DELAY  REPL-S
 
 <h4>How replication is (re)established</h4>
 <p><code>pcp_recovery_node 0</code> makes pgpool call <code>pgpool_recovery(&apos;recovery_1st_stage.sh&apos;,&hellip;)</code> on the primary: the script runs <code>pg_basebackup -R</code> which streams a fresh base backup to the dead node and, via <code>-R</code>, writes <code>standby.signal</code> + <code>primary_conninfo</code> (host=current primary). <code>pgpool_remote_start</code> then ssh&apos;s and starts PG; the PG log shows &ldquo;starting backup recovery &hellip; on timeline ID 2&rdquo; &rarr; &ldquo;entering standby mode&rdquo; &rarr; &ldquo;started streaming WAL from primary &hellip; on timeline 2&rdquo;. pgpool attaches the node and poolwarden&apos;s verify confirms backend up + standby + streaming &mdash; 6s inside pcp, 0.1s verify.</p>
-<h3 id="s63">6.3 Switchover back — promote 0 (04a) and promote 1 (05a)</h3>
+<h3 id="s63">6.3 Switchover back: promote 0 (04a) and promote 1 (05a)</h3>
 <pre>== $ bash -c docker exec db1 poolwarden --operator tester promote 0 --yes --confirm 0 --ticket TB-1
 STEP                         START     END       DURATION  RESULT
 preflight                    05:28:25  05:28:25  0.1s      ok
@@ -2334,7 +2334,7 @@ outcome: success  event: ec31c45b32e6c9d2
 
 <h4>How replication is (re)established</h4>
 <p><code>pcp_promote_node -s 0</code> is pgpool&apos;s switchover: failover_command promotes db1 (&ldquo;selected new timeline ID: 3&rdquo;), follow_primary_command converts db2 to a standby on TL3 (pg_rewind when WAL permits, basebackup -R otherwise) and calls pcp_attach_node. poolwarden verifies in two steps: the role flip (&asymp;2s) then the old-primary rejoin. 05a repeats it symmetrically: db2 promoted, &ldquo;selected new timeline ID: 4&rdquo;, db1 streaming on TL4.</p>
-<h3 id="s64">6.4 detach / attach (06a–06d)</h3>
+<h3 id="s64">6.4 detach / attach (06a to 06d)</h3>
 <pre>== $ bash -c docker exec db1 poolwarden --operator tester detach 0 --yes --confirm 0 --ticket TB-1
 STEP             START     END       DURATION  RESULT
 preflight        05:28:32  05:28:32  0.1s      ok
@@ -2389,7 +2389,7 @@ outcome: success  event: 22c655ab64f4ddd3
 <p class="src">source: results/split/34-06c-attach.txt</p>
 
 <p>detach is a pgpool-view operation (pcp_detach_node): routing stops and the node shows down while PG keeps streaming; attach (pcp_attach_node) restores it instantly.</p>
-<h3 id="s65">6.5 Watchdog leader loss + VIP (07a–07d)</h3>
+<h3 id="s65">6.5 Watchdog leader loss + VIP (07a to 07d)</h3>
 <pre>== $ docker exec db1 bash -c pgpool -m fast stop || kill $(pgrep -x watchdog) 2&gt;/dev/null; sleep 8; echo stopped
 2026-11-05 05:28:38.523: main pid 1411: FATAL:  Pgpool node id file /usr/etc/pgpool_node_id does not exist
 2026-11-05 05:28:38.523: main pid 1411: DETAIL:  If watchdog is enable, pgpool_node_id file is required
@@ -2470,7 +2470,7 @@ NODE  HOST     STATUS   PRIORITY  VIP-PRESENT
 <p class="src">source: results/split/39-07d-watchdog.txt</p>
 
 <p>When the leader&apos;s pgpool stops, the peer watchdog wins the election (&ldquo;state changed to LEADER&rdquo;, &ldquo;Starting escalation process&rdquo;) and runs if_up_cmd &mdash; the VIP moves to that host, visible in poolwarden&apos;s watchdog view (VIP-PRESENT yes on db2).</p>
-<h3 id="s66">6.6 Configuration transaction (08a–08h)</h3>
+<h3 id="s66">6.6 Configuration transaction (08a to 08h)</h3>
 <pre>== $ bash -c docker exec db1 poolwarden --operator tester config set health_check_period 7
 staged: health_check_period = 7
 == exit: 0</pre>
@@ -2560,7 +2560,7 @@ outcome: success  event: d7b3918068261a24
 == exit: 0</pre>
 <p class="src">source: results/split/43-08d-apply.txt</p>
 
-<h3 id="s67">6.7 Audit &amp; SQL (09a–09e)</h3>
+<h3 id="s67">6.7 Audit &amp; SQL (09a to 09e)</h3>
 <pre>== $ bash -c docker exec db1 poolwarden --operator tester audit
 cluster  · pgpool  · collected 00:00:00 (0s)
 
@@ -2714,8 +2714,8 @@ primary_conninfo = &#x27;host=pg1 port=5432 user=repl password=*** application_n
 <p class="src">source: results/split/evidence/pg2-timeline-history.txt</p>
 
 <p>Each final-state row: <em>in_recovery</em> (role), <em>current timeline</em> (ends at TL4 &mdash; failover&rarr;TL2, switchback&rarr;TL3, switchover&rarr;TL4), the <em>pg_stat_replication</em> row on the primary (standby streaming), the <em>pg_stat_wal_receiver</em> row on the standby (received_tli=4), and the *.history files recording each promotion with its parent LSN.</p><h2 id="s7">7. Full results matrix</h2>
-<p>Legend: exit <strong>0</strong> = clean success; <strong>10</strong> = findings present (WARN — normal on a 2-node lab cluster with COLOCATED_HOST/WD_HALF_VOTES findings); <strong>11</strong> = CRIT findings (appears while a node is down); <strong>1</strong> = expected usage/validation error (the sql multi-statement rejection). PASS/FAIL is evaluated against the expected outcome per step, not exit==0.</p>
-<h3>Bed A — colocated (55 steps)</h3>
+<p>Legend: exit <strong>0</strong> = clean success; <strong>10</strong> = findings present (WARN; normal on a 2-node lab cluster with COLOCATED_HOST/WD_HALF_VOTES findings); <strong>11</strong> = CRIT findings (appears while a node is down); <strong>1</strong> = expected usage/validation error (the sql multi-statement rejection). PASS/FAIL is evaluated against the expected outcome per step, not exit==0.</p>
+<h3>Bed A: colocated (55 steps)</h3>
 <table>
 <tr><th>step</th><th>command (shortened)</th><th>exit</th><th>result</th></tr>
 <tr><td>00-ready</td><td class="mono">for i in $(seq 1 60); do ups=$(dx db1 "PGPASSWORD=pgpool psql -h 127.0.0.1 -p 99</td><td>0</td><td><span class="pass">PASS</span></td></tr>
@@ -2774,7 +2774,7 @@ primary_conninfo = &#x27;host=pg1 port=5432 user=repl password=*** application_n
 <tr><td>10a-diagnose</td><td class="mono">dx db1 poolwarden --operator tester diagnose</td><td>10</td><td><span class="pass">PASS</span></td></tr>
 <tr><td>10b-status</td><td class="mono">dx db1 poolwarden --operator tester status</td><td>10</td><td><span class="pass">PASS</span></td></tr>
 </table>
-<h3>Bed B — split (55 steps)</h3>
+<h3>Bed B: split (55 steps)</h3>
 <table>
 <tr><th>step</th><th>command (shortened)</th><th>exit</th><th>result</th></tr>
 <tr><td>00-ready</td><td class="mono">for i in $(seq 1 60); do ups=$(dx pgpool1 "PGPASSWORD=pgpool psql -h 127.0.0.1 -</td><td>0</td><td><span class="pass">PASS</span></td></tr>
@@ -2838,24 +2838,24 @@ primary_conninfo = &#x27;host=pg1 port=5432 user=repl password=*** application_n
 <tr><th>finding</th><th>sev</th><th>meaning on the bed</th><th>poolwarden next-commands</th></tr>
 <tr><td>COLOCATED_HOST</td><td><span class="chip c-warn">WARN</span>/<span class="chip c-info">INFO</span></td><td>db1/db2 run pgpool AND PG on one host (bed A). WARN on the host that is watchdog leader AND primary: one failure moves the VIP and triggers failover together. Reminder, not a defect.</td><td>topology show · watchdog · explain</td></tr>
 <tr><td>WD_HALF_VOTES_2NODE</td><td><span class="chip c-warn">WARN</span></td><td>2-node watchdog: half-votes is the only reachable majority; no spare vote. enable_consensus_with_half_votes=on is the intended workaround (D14).</td><td>watchdog · explain</td></tr>
-<tr><td>CONN_BUDGET</td><td><span class="chip c-warn">WARN</span></td><td>num_init_children×max_pool vs min(max_connections)−reserved — capacity advice, not an apply blocker (BUG M).</td><td>config describe · config set</td></tr>
+<tr><td>CONN_BUDGET</td><td><span class="chip c-warn">WARN</span></td><td>num_init_children×max_pool vs min(max_connections)−reserved; capacity advice, not an apply blocker (BUG M).</td><td>config describe · config set</td></tr>
 <tr><td>WD_ESCALATION_UNSET</td><td><span class="chip c-warn">WARN</span></td><td>delegate_ip set but escalation/de-escalation commands empty (the lab uses if_up/if_down instead of wd_escalation_command).</td><td>config describe delegate_ip</td></tr>
-<tr><td>NODE_DOWN / BACKEND_UNREACHABLE</td><td><span class="chip c-crit">CRIT</span></td><td>transient during step 02/03: backend 0 down or unreachable — expected while the node was intentionally killed.</td><td>nodes · recover · logs</td></tr>
+<tr><td>NODE_DOWN / BACKEND_UNREACHABLE</td><td><span class="chip c-crit">CRIT</span></td><td>transient during step 02/03: backend 0 down or unreachable; expected while the node was intentionally killed.</td><td>nodes · recover · logs</td></tr>
 </table>
 
 <h2 id="s9">9. Known limitations / unverified</h2>
 <ul>
-<li><strong>T1</strong>: <code>promote --pgpool-only</code> changes pgpool's role view without the backend role — marked UNVERIFIED in its own plan text.</li>
+<li><strong>T1</strong>: <code>promote --pgpool-only</code> changes pgpool's role view without the backend role; marked UNVERIFIED in its own plan text.</li>
 <li><strong>T2 / I21</strong>: synthetic fixtures cover parsers; real-hardware watchdog/VIP path not exercised outside containers.</li>
 <li><strong>I22</strong>: RPM/deb packages are produced by config but installation was never run on the build machine (no nfpm).</li>
 <li>Catalogue <code>--unverified</code> params exist (<code>config catalogue --unverified</code>): context hints not yet confirmed against a running 4.5.</li>
 <li>pg_rewind was not exercised end-to-end in the WAL-recycled case: the test-bed follow_primary falls back to pg_basebackup -R. The captured logs show basebackup-path rejoins.</li>
 <li>PG log attribution caveat: PGDATA/log is copied by basebackup/rewind, so per-node PG lines may originate on the peer; the pgpool event logs + poolwarden captures are authoritative for the per-node timeline.</li>
 <li>Docker exec stdout/stderr interleave can reorder output in captures (BUG N root cause is external to poolwarden).</li>
-<li>Test-bed shortcuts: pgpool as root, shared throwaway keys, <code>svc</code> systemctl stand-in, md5 'pgpool' passwords — lab only.</li>
+<li>Test-bed shortcuts: pgpool as root, shared throwaway keys, <code>svc</code> systemctl stand-in, md5 'pgpool' passwords; lab only.</li>
 </ul>
 
-<h2 id="s10">10. Appendix — reproduce &amp; capture index</h2>
+<h2 id="s10">10. Appendix: reproduce &amp; capture index</h2>
 <pre># on the build host
 rsync -az --exclude .git --exclude bin --exclude dist \
   -e "ssh -i ~/.ssh/poolwarden_test" ./ root@10.88.11.162:/root/poolwarden/

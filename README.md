@@ -2,7 +2,7 @@
 
 A terminal command center for one **pgpool-II** cluster. One static Go binary that a
 DBA runs over SSH on a pgpool host to see what the cluster is doing, understand what is
-wrong, and change it safely — without hand-chaining `psql`, `pcp_*` and config edits.
+wrong, and change it safely, without hand-chaining `psql`, `pcp_*` and config edits.
 
 ## Why
 
@@ -10,8 +10,8 @@ Operating pgpool-II with streaming-replication PostgreSQL means juggling many se
 tools and files:
 
 - `SHOW POOL_NODES`, `pcp_watchdog_info`, `pg_stat_replication`, `pg_is_in_recovery()` on
-  every backend — and they do not always agree with each other.
-- `pcp_promote_node`, `pcp_detach_node`, `pcp_recovery_node` — powerful commands with no
+  every backend, and they do not always agree with each other.
+- `pcp_promote_node`, `pcp_detach_node`, `pcp_recovery_node`: powerful commands with no
   pre-flight checks, no confirmation and no record of who ran them.
 - `pgpool.conf`, `pool_hba.conf`, `pcp.conf`, `pool_passwd` edited by hand on every pgpool
   host, with drift between hosts discovered the hard way.
@@ -34,10 +34,10 @@ pgpool keeps reading its own files, and nothing sits in the client traffic path.
 
 ## Status
 
-Implemented against the specs in `docs/01`–`03` (decisions in `docs/04`), targeting
+Implemented against the specs in `docs/01` to `docs/03` (decisions in `docs/04`), targeting
 pgpool-II 4.4/4.5 and PostgreSQL 14+. Exercised on two Docker test beds (pgpool-II 4.5.13,
 PostgreSQL 18) through full failover, online recovery, switchover, detach/attach, VIP
-move and configuration transactions — see `docs/poolwarden-test-report.html`.
+move and configuration transactions; see `docs/poolwarden-test-report.html`.
 
 ## Get started
 
