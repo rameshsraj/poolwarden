@@ -1,0 +1,15 @@
+== $ bash -c docker exec db1 poolwarden --operator tester watchdog
+cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (LEADER) · VIP on db1 · collected 18:43:47 (193ms)
+
+quorum: QUORUM IS ON THE EDGE · leader db1 · 1/2 alive
+
+enable_consensus_with_half_votes  on
+failover_when_quorum_exists       on
+failover_require_consensus        on
+use_watchdog                      on
+delegate_ip                       172.31.10.100
+
+NODE  HOST  STATUS    PRIORITY  VIP-PRESENT
+0     db1   LEADER    1         yes
+1     db2   SHUTDOWN  1         no
+== exit: 10

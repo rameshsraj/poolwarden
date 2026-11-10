@@ -38,6 +38,23 @@ services:
       INVENTORY: "db1:172.31.10.11:pgpool,pg;db2:172.31.10.12:pgpool,pg"
     networks:
       pw: {ipv4_address: 172.31.10.12}
+  console:
+    container_name: pw-console
+    build:
+      context: ../..
+      dockerfile: dev/testbed/Dockerfile
+    hostname: pw-console
+    entrypoint: ["/opt/testbed/console-entrypoint.sh"]
+    environment:
+      PGPOOL_EP: db1
+      CLUSTER: testbed-colocated
+      CONSOLE_TOKEN: console-test
+      INVENTORY: "db1:172.31.10.11:pgpool,pg;db2:172.31.10.12:pgpool,pg"
+    depends_on: [db1, db2]
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      pw: {ipv4_address: 172.31.10.20}
 networks:
   pw:
     ipam:

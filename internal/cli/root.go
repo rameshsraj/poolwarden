@@ -85,6 +85,8 @@ type app struct {
 	quiet      bool
 	confirm    string
 	force      bool
+	planOnly   bool
+	progress   bool
 	format     render.Format
 	cancel     context.CancelFunc
 }
@@ -110,6 +112,7 @@ var noConfigLoad = map[string]bool{
 	"help":       true,
 	"completion": true,
 	"init":       true,
+	"install":    true, // config install writes the first config
 }
 
 // NewRoot builds the full command tree for one invocation.
@@ -182,6 +185,8 @@ func buildRoot(a *app) *cobra.Command {
 	pf.BoolVarP(&a.quiet, "quiet", "q", false, "suppress non-essential output")
 	pf.StringVar(&a.confirm, "confirm", "", "typed confirmation token for non-TTY use")
 	pf.BoolVar(&a.force, "force", false, "override pre-flight WARN/NO-GO blocks")
+	pf.BoolVar(&a.planOnly, "plan", false, "control commands: print preflight+plan+token, do not execute")
+	pf.BoolVar(&a.progress, "progress", false, "control commands: emit NDJSON progress events on stderr")
 
 	root.AddGroup(
 		&cobra.Group{ID: "monitoring", Title: "Monitoring"},

@@ -26,6 +26,8 @@ poolwarden audit list [flags]
       --nagios           Nagios-style single-line output and exit codes
       --no-color         disable coloured output
   -o, --output string    output format: table|wide|json (default "table")
+      --plan             control commands: print preflight+plan+token, do not execute
+      --progress         control commands: emit NDJSON progress events on stderr
   -q, --quiet            suppress non-essential output
       --read-only        disable all control commands
       --yes              skip the plain yes/no prompt (never a typed confirmation)

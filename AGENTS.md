@@ -9,6 +9,20 @@ Linux. Specs live in docs/01–04; docs/04 is authoritative on conflicts.
 - `make build-linux` — linux/amd64 + linux/arm64 into dist/
 - `make test` — `go test -race ./...`
 - `make lint` — `go vet` + `gofmt -l` + staticcheck
+- `make web` — build the console SPA (web/ → internal/console/dist, Node required)
+- `make console` — build bin/poolwconsole (Go only; embeds whatever dist/ holds)
+
+## Web console
+
+`poolwconsole` (cmd/poolwconsole + internal/console) is an OPTIONAL gateway:
+it embeds the React SPA (web/) and drives everything through the poolwarden
+CLI — one shared `poolwarden monitor` NDJSON process for live data (SSE to
+browsers), allowlisted argv subprocesses for reads and mutations. It never
+executes SQL/PCP/SSH itself. CLI-only installs need neither Node nor the
+console. Control commands gained `--plan` (preflight+token, no execution)
+and `--progress` (NDJSON step events on stderr). `poolwarden probe` reports
+per-endpoint connectivity; `poolwarden config install <file>` atomically
+installs a complete poolwarden.yaml through the audited control flow.
 
 ## Layering rules
 

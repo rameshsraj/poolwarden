@@ -9,5 +9,5 @@
 +health_check_period = 7
  health_check_user = 'pgpool'
  health_check_password = 'pgpool'
-# staged by tester at 05:28:52
+# staged by tester at 15:35:59
 == exit: 0

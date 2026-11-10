@@ -1,0 +1,7 @@
+.git
+bin
+dist
+web/node_modules
+web/dist
+internal/console/dist/assets
+dev/testbed/results

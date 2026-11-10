@@ -188,4 +188,6 @@ fi
 chmod 600 /etc/poolwarden.yaml
 
 # --- 7. stay alive -------------------------------------------------------------
-if has_role pgpool; then wait $PGPOOL_PID; else exec sleep infinity; fi
+# Keep the container up even when pgpool/PG are stopped via `svc` — service
+# control must be able to restart them in place over SSH.
+exec sleep infinity

@@ -190,6 +190,9 @@ type Backend struct {
 	MaxConns       int
 	Conns          int
 	Clients        []ClientGroup
+	// WAL inventory (pg_ls_waldir over WAL segment files only).
+	WalDirBytes int64 // -1 = unknown
+	WalFiles    int   // -1 = unknown
 }
 
 // WatchdogNode is one node block of pcp_watchdog_info -v.
@@ -298,11 +301,12 @@ func ExitCodeFor(fs []Finding) int {
 	return 0
 }
 
-// ClientGroup counts client connections on one backend by db/user/app.
+// ClientGroup counts client connections on one backend by db/user/app/state.
 type ClientGroup struct {
 	Database    string
 	User        string
 	Application string
+	State       string // pg_stat_activity.state: active|idle|idle in transaction|...
 	Count       int
 }
 

@@ -1,7 +1,7 @@
 == $ bash -c docker exec db1 poolwarden --operator tester nodes
-cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (STANDBY) · VIP on db2 · collected 05:28:35 (165ms)
+cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (LEADER) · VIP on db1 · collected 18:43:26 (232ms)
 
 ID  HOST:PORT  STATUS  PGPOOL-ROLE  REAL-ROLE  LB-WEIGHT  SELECTS  DELAY  REPL-STATE  SYNC   LAST-CHANGE  SCORE  NOTE
-0   db1:5432   down    standby      standby    0.50       0        -      streaming   async  05:28:33     40     pgpool down / direct up
-1   db2:5432   up      primary      primary    0.50       0        -      -           -      05:28:34     90     
+0   db1:5432   down    standby      standby    0.50       0        -      streaming   async  18:43:25     40     pgpool down / direct up
+1   db2:5432   up      primary      primary    0.50       0        -      -           -      18:43:20     100    
 == exit: 10

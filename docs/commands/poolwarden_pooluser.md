@@ -4,10 +4,11 @@ manage pool_passwd users
 
 ### Synopsis
 
-Manage pool_passwd entries. Passwords are written via pg_md5 -m -p
-(md5 hashing) or pg_enc -m -k <keyfile> -p (AES) with the password fed on
-stdin — never on argv. pg_enc is chosen when existing pool_passwd entries
-are AES-prefixed; otherwise pg_md5 is used.
+Manage pool_passwd entries. md5 passwords are computed in-process
+(md5 of password+username — pg_md5 -p needs a TTY) and the file is
+rewritten atomically; AES mode calls pg_enc -i <tmpfile> with the
+password in a 0600 scratch file, never on argv or in the audit argv.
+AES is chosen when existing pool_passwd entries are AES-prefixed.
 
 ### Options
 
@@ -25,6 +26,8 @@ are AES-prefixed; otherwise pg_md5 is used.
       --no-color          disable coloured output
       --operator string   operator name (recorded in the audit log)
   -o, --output string     output format: table|wide|json (default "table")
+      --plan              control commands: print preflight+plan+token, do not execute
+      --progress          control commands: emit NDJSON progress events on stderr
   -q, --quiet             suppress non-essential output
       --read-only         disable all control commands
       --ticket string     change ticket id (audited when given)

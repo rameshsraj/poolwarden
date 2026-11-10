@@ -1,10 +1,10 @@
 == $ bash -c docker exec db1 poolwarden --operator tester diagnose
-cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (STANDBY) · VIP on db2 · collected 05:28:28 (166ms)
+cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (LEADER) · VIP on db1 · collected 18:43:18 (227ms)
 
 SEV   ID                           SUBJECT  SUMMARY
+WARN  COLOCATED_HOST:db1           db1      roles: pgpool,pg (config)
 WARN  WD_ESCALATION_UNSET:cluster  cluster  delegate_ip=172.31.10.100 but wd_escalation_command/wd_de_escalation_command ...
 WARN  WD_HALF_VOTES_2NODE:cluster  cluster  enable_consensus_with_half_votes=on, 2 watchdog nodes (D14/V4: accepted split...
-INFO  COLOCATED_HOST:db1           db1      roles: pgpool,pg (config)
 INFO  COLOCATED_HOST:db2           db2      roles: pgpool,pg (config)
-→ poolwarden explain WD_ESCALATION_UNSET:cluster
+→ poolwarden explain COLOCATED_HOST:db1
 == exit: 10

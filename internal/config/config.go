@@ -86,6 +86,7 @@ type PgpoolPaths struct {
 type PGPaths struct {
 	Port           int    `yaml:"port,omitempty"`
 	DataDir        string `yaml:"data_dir,omitempty"`
+	Service        string `yaml:"service,omitempty"` // systemctl unit name
 	LogDir         string `yaml:"log_dir,omitempty"`
 	LogFilename    string `yaml:"log_filename,omitempty"`
 	LogDestination string `yaml:"log_destination,omitempty"`

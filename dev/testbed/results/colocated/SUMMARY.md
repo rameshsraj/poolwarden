@@ -61,6 +61,16 @@
 | 07b-watchdog | `bash -c docker exec db2 poolwarden --operator tester watchdog` | 10 | PASS |
 | 07c-start-wd | `docker exec db1 bash -c pgpool -n >/tmp/pgpool-restart.log 2>&1 & sleep 5; pgrep -x watchdog || pgrep pgpool | head -1` | 0 | PASS |
 | 07d-watchdog | `bash -c docker exec db2 poolwarden --operator tester watchdog` | 10 | PASS |
+| 07e-svc-status | `bash -c docker exec db1 poolwarden --operator tester service status pgpool db2` | 0 | PASS |
+| 07f-svc-restart | `bash -c docker exec db1 poolwarden --operator tester service restart pgpool db2 --yes --confirm restart --ticket TB-1` | 0 | PASS |
+| 07g-watchdog | `bash -c docker exec db1 poolwarden --operator tester watchdog` | 10 | PASS |
+| 07h-svc-pg | `bash -c docker exec db1 poolwarden --operator tester service status postgresql db2` | 0 | PASS |
+| 07i-svc-stop | `bash -c docker exec db1 poolwarden --operator tester service stop postgresql db2 --yes --confirm stop --ticket TB-1` | 0 | PASS |
+| 07j-nodes | `bash -c docker exec db1 poolwarden --operator tester nodes` | 11 | PASS |
+| 07k-svc-start | `bash -c docker exec db1 poolwarden --operator tester service start postgresql db2 --yes --confirm start --ticket TB-1` | 0 | PASS |
+| 07l-svc-attach | `bash -c docker exec db1 poolwarden --operator tester attach 1 --yes --confirm 1 --ticket TB-1` | 3 | FAIL |
+| 07m-nodes | `bash -c docker exec db1 poolwarden --operator tester nodes` | 10 | PASS |
+| 07n-svc-plan | `bash -c docker exec db1 poolwarden --operator tester service restart pgpool db2 --plan` | 0 | PASS |
 | 08a-set | `bash -c docker exec db1 poolwarden --operator tester config set health_check_period 7` | 0 | PASS |
 | 08b-diff | `bash -c docker exec db1 poolwarden --operator tester config diff` | 0 | PASS |
 | 08c-validate | `bash -c docker exec db1 poolwarden --operator tester config validate` | 0 | PASS |

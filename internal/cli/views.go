@@ -293,14 +293,14 @@ func renderProcDetail(r *render.Renderer, res *service.ProcDetailResult) {
 }
 
 func renderConns(r *render.Renderer, res *service.ConnsResult) {
-	t := render.Table{Columns: []string{"WHERE", "DATABASE", "USER", "APPLICATION", "CONNS", "LIMIT"}}
+	t := render.Table{Columns: []string{"WHERE", "DATABASE", "USER", "APPLICATION", "STATE", "CONNS", "LIMIT"}}
 	rows := append([]service.ConnRow{}, res.Conns...)
 	sort.Slice(rows, func(i, j int) bool {
-		return rows[i].Where+rows[i].Database < rows[j].Where+rows[j].Database
+		return rows[i].Where+rows[i].Database+rows[i].State < rows[j].Where+rows[j].Database+rows[j].State
 	})
 	for _, c := range rows {
 		t.Rows = append(t.Rows, []string{c.Where, c.Database, c.User,
-			c.Application, fmt.Sprint(c.Conns), fmt.Sprint(c.Limit)})
+			c.Application, c.State, fmt.Sprint(c.Conns), fmt.Sprint(c.Limit)})
 	}
 	r.WriteTable(t)
 }

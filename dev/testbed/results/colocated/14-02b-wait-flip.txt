@@ -8,7 +8,7 @@
     sleep 3
   done; exit 1
 
-0|db1|5432|up|up|0.500000|standby|standby|0|false|0|streaming|async|2026-11-05 05:28:12
-1|db2|5432|up|up|0.500000|primary|primary|0|true|0|||2026-11-05 05:28:12
+0|db1|5432|up|up|0.500000|standby|standby|0|false|0|streaming|async|2026-11-09 18:43:01
+1|db2|5432|up|up|0.500000|primary|primary|0|true|0|||2026-11-09 18:42:58
 FLIPPED
 == exit: 0

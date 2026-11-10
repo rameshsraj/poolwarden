@@ -46,7 +46,10 @@ type ControlOpts struct {
 	ReadOnly bool
 	TTY      bool
 	Ticket   string
-	Progress func(string)
+	// PlanOnly stops after preflight+plan: no confirmation prompt, no
+	// execution. ControlResult carries Plan, Preflight and Token so a
+	// non-interactive caller can build a confirmation UI.
+	PlanOnly bool
 	Now      time.Time
 }
 
@@ -66,10 +69,15 @@ type StepRecorder struct {
 	steps []Step
 	cur   *Step
 	clock func() time.Time
+	// OnStep, when set, is called with "start" from Begin and "end" from End.
+	OnStep func(phase string, st Step)
 }
 
 func (r *StepRecorder) Begin(name string) {
 	r.cur = &Step{Name: name, Start: r.clock()}
+	if r.OnStep != nil {
+		r.OnStep("start", *r.cur)
+	}
 }
 
 func (r *StepRecorder) End(result string) {
@@ -80,6 +88,9 @@ func (r *StepRecorder) End(result string) {
 	r.cur.Duration = r.cur.End.Sub(r.cur.Start)
 	r.cur.Result = result
 	r.steps = append(r.steps, *r.cur)
+	if r.OnStep != nil {
+		r.OnStep("end", *r.cur)
+	}
 	r.cur = nil
 }
 
@@ -152,6 +163,11 @@ type ControlResult struct {
 	Outcome   string                 `json:"outcome"`
 	Warn      string                 `json:"warn,omitempty"`
 	EventID   string                 `json:"event_id"`
+	// Token, YesNo and Question are set in PlanOnly mode so a
+	// non-interactive caller can present the exact confirmation.
+	Token    string `json:"token,omitempty"`
+	YesNo    bool   `json:"yes_no,omitempty"`
+	Question string `json:"question,omitempty"`
 }
 
 // RunControl implements the 02 §0 C-flow in order.
@@ -201,6 +217,10 @@ func (s *Service) RunControl(ctx context.Context, a *Action, o ControlOpts) (*Co
 	}
 	// (5) preflight
 	sr := &StepRecorder{clock: s.now}
+	sr.OnStep = func(phase string, st Step) {
+		s.progress(ProgressEvent{Op: a.Name, Stage: "step_" + phase, Step: &st})
+	}
+	s.progress(ProgressEvent{Op: a.Name, Stage: "preflight"})
 	var pf *model.PreflightResult
 	if err := sr.Step("preflight", func() (string, error) {
 		var err error
@@ -239,6 +259,15 @@ func (s *Service) RunControl(ctx context.Context, a *Action, o ControlOpts) (*Co
 	if a.YesNo {
 		question = fmt.Sprintf("%s [y/N]:", "Proceed?")
 	}
+	s.progress(ProgressEvent{Op: a.Name, Stage: "plan", Detail: pf.Verdict})
+	if o.PlanOnly {
+		res.Token = token
+		res.YesNo = a.YesNo
+		res.Question = question
+		res.Outcome = "planned"
+		return res, nil
+	}
+	s.progress(ProgressEvent{Op: a.Name, Stage: "confirm"})
 	var confirmAt time.Time
 	switch {
 	case o.TTY && s.Confirmer != nil && !(a.YesNo && o.Yes):
@@ -291,6 +320,7 @@ func (s *Service) RunControl(ctx context.Context, a *Action, o ControlOpts) (*Co
 	pend.Confirmed(confirmAt)
 	// (9) started + execute
 	pend.Started(s.now())
+	s.progress(ProgressEvent{Op: a.Name, Stage: "execute"})
 	execErr := a.Execute(ctx, sr)
 	// (10) verify
 	var vo VerifyOutcome
@@ -344,6 +374,11 @@ func (s *Service) RunControl(ctx context.Context, a *Action, o ControlOpts) (*Co
 		pend.Finish(ctx, outcome, code, ferr, a.Change, a.BackupVersion)
 	}
 	res.Outcome = outcome
+	detail := outcome
+	if ferr != nil {
+		detail = outcome + ": " + ferr.Error()
+	}
+	s.progress(ProgressEvent{Op: a.Name, Stage: "outcome", Detail: detail, Code: code})
 	if ferr != nil {
 		hint := "poolwarden nodes; poolwarden logs --classify --since 10m"
 		msg := ferr.Error()

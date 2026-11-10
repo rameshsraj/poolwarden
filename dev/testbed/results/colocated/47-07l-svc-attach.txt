@@ -1,0 +1,13 @@
+== $ bash -c docker exec db1 poolwarden --operator tester attach 1 --yes --confirm 1 --ticket TB-1
+attach node 1 to pgpool
+
+  NO-GO target — already attached
+
+VERDICT: NO-GO
+
+CHECK   RESULT  DETAIL
+target  NO-GO   already attached
+error: preflight NO-GO (target: NO-GO (already attached))
+cause: target: NO-GO (already attached)
+next:  re-run with --force and type the node id to override, or fix the NO-GO checks
+== exit: 3

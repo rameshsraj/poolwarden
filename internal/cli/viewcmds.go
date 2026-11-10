@@ -683,6 +683,7 @@ func controlOpts(cmd *cobra.Command, a *app) service.ControlOpts {
 	return service.ControlOpts{
 		Yes: yes, Confirm: confirmTok, Force: force,
 		ReadOnly: a.readOnly, TTY: tty, Ticket: ticket,
+		PlanOnly: a.planOnly,
 	}
 }
 
@@ -901,6 +902,48 @@ func topologyDiscoverCmd() *cobra.Command {
 	}
 	c.Flags().Bool("apply", false, "write the discovered changes into the config")
 	c.Flags().Bool("yes", false, "skip the y/N confirmation")
+	c.Flags().String("confirm", "", "confirmation token")
+	c.Flags().String("ticket", "", "change ticket")
+	return c
+}
+
+// serviceCmd runs start|stop|restart|status on pgpool/postgresql per host.
+// start/stop/restart go through the full control flow (preflight + typed
+// confirm + verify + audit); status is a read op over the same remote exec.
+func serviceCmd() *cobra.Command {
+	c := &cobra.Command{
+		Use:         "service <start|stop|restart|status> <pgpool|postgresql|watchdog> <host>",
+		Short:       "start, stop or restart pgpool/PG services on a host",
+		Annotations: map[string]string{"deadline": "2m"},
+		GroupID:     "control",
+		Args:        cobra.ExactArgs(3),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			verb, unit, host := args[0], args[1], args[2]
+			a := appOf(cmd)
+			svc := newService(a)
+			if verb == "status" {
+				out, up, err := svc.ServiceStatus(cmd.Context(), unit, host)
+				if err != nil {
+					return err
+				}
+				if a.format == render.FormatJSON {
+					r := render.New(a.deps.Stdout, a.format, a.noColor)
+					return r.JSON(map[string]any{"host": host, "unit": unit, "active": up, "output": out})
+				}
+				fmt.Fprint(a.deps.Stdout, out)
+				if !strings.HasSuffix(out, "\n") {
+					fmt.Fprintln(a.deps.Stdout)
+				}
+				fmt.Fprintf(a.deps.Stdout, "%s on %s: %s\n", unit, host,
+					orText(map[bool]string{true: "active", false: "inactive"}[up], "inactive"))
+				return done(0)
+			}
+			svc.Confirmer = newConfirmer(a)
+			res, err := svc.ServiceControl(cmd.Context(), verb, unit, host, controlOpts(cmd, a))
+			return finishControl(cmd, res, err)
+		},
+	}
+	c.Flags().Bool("yes", false, "skip the confirmation")
 	c.Flags().String("confirm", "", "confirmation token")
 	c.Flags().String("ticket", "", "change ticket")
 	return c

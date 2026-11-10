@@ -109,12 +109,16 @@ func (s *Service) Nodes(ctx context.Context) (*NodesResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	return s.nodesFrom(ctx, r), nil
+}
+
+func (s *Service) nodesFrom(ctx context.Context, r *result) *NodesResult {
 	res := &NodesResult{Header: r.header, Findings: r.findings}
 	tr := s.trends(ctx, r.snap)
 	for _, n := range r.snap.Pgpool.Nodes {
 		res.Nodes = append(res.Nodes, s.nodeRow(r.snap, r.findings, n, risingHosts(tr, s.Cfg)))
 	}
-	return res, nil
+	return res
 }
 
 func (s *Service) Node(ctx context.Context, id int) (*NodeDetail, error) {
@@ -176,6 +180,10 @@ func (s *Service) Lag(ctx context.Context) (*LagResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	return s.lagFrom(ctx, r)
+}
+
+func (s *Service) lagFrom(ctx context.Context, r *result) (*LagResult, error) {
 	p := s.primaryBackend(r.snap)
 	if p == nil {
 		return nil, exitcode.New(exitcode.Connection, "no reachable primary found").
@@ -279,6 +287,10 @@ func (s *Service) Slots(ctx context.Context) (*SlotsResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	return s.slotsFrom(ctx, r), nil
+}
+
+func (s *Service) slotsFrom(ctx context.Context, r *result) *SlotsResult {
 	res := &SlotsResult{Header: r.header, Findings: r.findings}
 	eta := -1.0
 	if s.History != nil && int64(s.Cfg.WALVolumeBytes) > 0 {
@@ -298,7 +310,7 @@ func (s *Service) Slots(ctx context.Context) (*SlotsResult, error) {
 			})
 		}
 	}
-	return res, nil
+	return res
 }
 
 // PoolGroup is one line of `pools` (02 §2.5).
@@ -314,8 +326,9 @@ type PoolGroup struct {
 type PoolsResult struct {
 	Header       Header          `json:"header"`
 	ChildrenBusy int             `json:"children_busy"`
-	ChildrenMax  int             `json:"children_max"`
-	Clients      int             `json:"clients"`
+	ChildrenMax  int             `json:"children_max"` // num_init_children
+	PoolMax      int             `json:"pool_max"`     // max_pool: backend conns pooled per child
+	Clients      int             `json:"clients"`      // cumulative client conns served (lifetime)
 	Groups       []PoolGroup     `json:"groups"`
 	Findings     []model.Finding `json:"findings"`
 }
@@ -325,6 +338,10 @@ func (s *Service) Pools(ctx context.Context) (*PoolsResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	return s.poolsFrom(r), nil
+}
+
+func (s *Service) poolsFrom(r *result) *PoolsResult {
 	res := &PoolsResult{Header: r.header, Findings: r.findings}
 	busy := 0
 	for _, p := range r.snap.Pgpool.Processes {
@@ -338,6 +355,7 @@ func (s *Service) Pools(ctx context.Context) (*PoolsResult, error) {
 	if res.ChildrenMax == 0 {
 		res.ChildrenMax = len(r.snap.Pgpool.Processes)
 	}
+	res.PoolMax = atoi(r.snap.Settings["max_pool"])
 	groups := map[string]*PoolGroup{}
 	for _, pl := range r.snap.Pgpool.Pools {
 		key := pl.Database + "|" + pl.Username
@@ -361,7 +379,7 @@ func (s *Service) Pools(ctx context.Context) (*PoolsResult, error) {
 	sort.Slice(res.Groups, func(i, j int) bool {
 		return res.Groups[i].Database+res.Groups[i].User < res.Groups[j].Database+res.Groups[j].User
 	})
-	return res, nil
+	return res
 }
 
 func atoi(s string) int {
@@ -440,6 +458,7 @@ type ConnRow struct {
 	Database    string `json:"database"`
 	User        string `json:"user"`
 	Application string `json:"application"`
+	State       string `json:"state"` // pg_stat_activity.state; "-" for pgpool-side rows
 	Conns       int    `json:"conns"`
 	Limit       int    `json:"limit"`
 }
@@ -455,6 +474,10 @@ func (s *Service) Conns(ctx context.Context) (*ConnsResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	return s.connsFrom(r), nil
+}
+
+func (s *Service) connsFrom(r *result) *ConnsResult {
 	res := &ConnsResult{Header: r.header, Findings: r.findings}
 	pgLimit := atoi(r.snap.Settings["num_init_children"]) * atoi(r.snap.Settings["max_pool"])
 	pgGroups := map[string]*ConnRow{}
@@ -466,7 +489,7 @@ func (s *Service) Conns(ctx context.Context) (*ConnsResult, error) {
 		g, ok := pgGroups[key]
 		if !ok {
 			g = &ConnRow{Where: "pgpool", Database: orDash(pl.Database),
-				User: orDash(pl.Username), Application: "-", Limit: pgLimit}
+				User: orDash(pl.Username), Application: "-", State: "-", Limit: pgLimit}
 			pgGroups[key] = g
 		}
 		g.Conns++
@@ -482,11 +505,12 @@ func (s *Service) Conns(ctx context.Context) (*ConnsResult, error) {
 		for _, g := range b.Clients {
 			res.Conns = append(res.Conns, ConnRow{
 				Where: where, Database: orDash(g.Database), User: orDash(g.User),
-				Application: orDash(g.Application), Conns: g.Count, Limit: b.MaxConns,
+				Application: orDash(g.Application), State: orDash(g.State),
+				Conns: g.Count, Limit: b.MaxConns,
 			})
 		}
 	}
-	return res, nil
+	return res
 }
 
 // WatchdogNodeRow is one line of `watchdog`'s node table (02 §2.6).
@@ -521,6 +545,10 @@ func (s *Service) Watchdog(ctx context.Context) (*WatchdogResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	return s.watchdogFrom(r), nil
+}
+
+func (s *Service) watchdogFrom(r *result) *WatchdogResult {
 	w := r.snap.Watchdog
 	res := &WatchdogResult{
 		Header:    r.header,
@@ -554,7 +582,7 @@ func (s *Service) Watchdog(ctx context.Context) (*WatchdogResult, error) {
 	if len(vipHosts) > 1 {
 		res.VIPBanner = fmt.Sprintf("VIP %s is up on %s", vipAddress(r.snap), strings.Join(vipHosts, " and "))
 	}
-	return res, nil
+	return res
 }
 
 func vipAddress(snap *model.Snapshot) string {
@@ -593,6 +621,10 @@ func (s *Service) Health(ctx context.Context) (*HealthResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	return s.healthFrom(r), nil
+}
+
+func (s *Service) healthFrom(r *result) *HealthResult {
 	res := &HealthResult{Header: r.header, Findings: r.findings}
 	prev := s.prevSample(r.snap)
 	for _, h := range r.snap.Pgpool.HealthStats {
@@ -613,7 +645,7 @@ func (s *Service) Health(ctx context.Context) (*HealthResult, error) {
 		}
 		res.Nodes = append(res.Nodes, row)
 	}
-	return res, nil
+	return res
 }
 
 // TopologyRow is one line of `topology show` (02 §2.8).
@@ -638,6 +670,10 @@ func (s *Service) TopologyShow(ctx context.Context) (*TopologyResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	return s.topologyFrom(r), nil
+}
+
+func (s *Service) topologyFrom(r *result) *TopologyResult {
 	res := &TopologyResult{Header: r.header, Findings: r.findings}
 	wdByHost := map[string]string{}
 	for _, n := range r.snap.Watchdog.Nodes {
@@ -667,7 +703,7 @@ func (s *Service) TopologyShow(ctx context.Context) (*TopologyResult, error) {
 		}
 		res.Hosts = append(res.Hosts, row)
 	}
-	return res, nil
+	return res
 }
 
 // StatusResult is the one-screen summary (02 §2.1).
@@ -694,6 +730,10 @@ func (s *Service) Status(ctx context.Context) (*StatusResult, error) {
 	if err != nil {
 		return nil, err
 	}
+	return s.statusFrom(ctx, r), nil
+}
+
+func (s *Service) statusFrom(ctx context.Context, r *result) *StatusResult {
 	res := &StatusResult{Header: r.header, Findings: r.findings}
 	tr := s.trends(ctx, r.snap)
 	rising := risingHosts(tr, s.Cfg)
@@ -707,12 +747,10 @@ func (s *Service) Status(ctx context.Context) (*StatusResult, error) {
 	res.Alive = w.AliveRemote + 1
 	res.Total = w.TotalNodes
 	res.HalfVotes = r.snap.Settings["enable_consensus_with_half_votes"] == "on"
-	pools, err := s.Pools(ctx)
-	if err == nil {
-		res.ChildrenBusy = pools.ChildrenBusy
-		res.ChildrenMax = pools.ChildrenMax
-		res.Clients = pools.Clients
-	}
+	pools := s.poolsFrom(r)
+	res.ChildrenBusy = pools.ChildrenBusy
+	res.ChildrenMax = pools.ChildrenMax
+	res.Clients = pools.Clients
 	for _, f := range r.findings {
 		switch f.Severity {
 		case model.SevCrit:
@@ -723,7 +761,7 @@ func (s *Service) Status(ctx context.Context) (*StatusResult, error) {
 			res.CountInfo++
 		}
 	}
-	return res, nil
+	return res
 }
 
 // VersionResult is `version`'s best-effort data.

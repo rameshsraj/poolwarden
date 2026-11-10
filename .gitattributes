@@ -1,0 +1,5 @@
+# Files consumed by Docker/Linux must stay LF even on Windows checkouts.
+*.sh            text eol=lf
+dev/testbed/**  text eol=lf
+*.golden        text eol=lf
+Makefile        text eol=lf

@@ -19,7 +19,7 @@ func addCommands(root *cobra.Command) {
 		topologyShowCmd(),
 		topologyDiscoverCmd(),
 	)
-	root.AddCommand(topology, watchCmd())
+	root.AddCommand(topology, watchCmd(), monitorCmd())
 
 	// Understanding issues
 	diagnose := diagnoseCmd()
@@ -37,7 +37,7 @@ func addCommands(root *cobra.Command) {
 	attach := attachCmd()
 	recover := recoverCmd()
 	reload := reloadCmd()
-	root.AddCommand(promote, detach, attach, recover, reload)
+	root.AddCommand(promote, detach, attach, recover, reload, serviceCmd())
 
 	// Configuration
 	cfg := configCmds()
@@ -58,5 +58,5 @@ func addCommands(root *cobra.Command) {
 
 	// Setup
 	init := initCmd()
-	root.AddCommand(init, versionCmd())
+	root.AddCommand(init, probeCmd(), versionCmd())
 }

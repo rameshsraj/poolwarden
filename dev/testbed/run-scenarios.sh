@@ -117,6 +117,21 @@ step 07b-watchdog   "0|10|11" bash -c "docker exec $WDON poolwarden --operator t
 step 07c-start-wd   0 docker exec $WDOFF bash -c 'pgpool -n >/tmp/pgpool-restart.log 2>&1 & sleep 5; pgrep -x watchdog || pgrep pgpool | head -1'
 step 07d-watchdog   "0|10|11" bash -c "docker exec $WDON poolwarden --operator tester watchdog"
 
+# ---- 07e service control (svc on hosts via `poolwarden service`) ----------------
+# exercise the admin verbs on the non-leader pgpool node and on postgresql
+SVCH=${WDON:-${PGPOOLS%% *}}
+step 07e-svc-status   0 bash -c "docker exec $PWNODE poolwarden --operator tester service status pgpool $SVCH"
+step 07f-svc-restart  0 bash -c "docker exec $PWNODE poolwarden --operator tester service restart pgpool $SVCH --yes --confirm restart --ticket TB-1"
+step 07g-watchdog     "0|10|11" bash -c "docker exec $PWNODE poolwarden --operator tester watchdog"
+step 07h-svc-pg       0 bash -c "docker exec $PWNODE poolwarden --operator tester service status postgresql $OTHER"
+step 07i-svc-stop     0 bash -c "docker exec $PWNODE poolwarden --operator tester service stop postgresql $OTHER --yes --confirm stop --ticket TB-1"
+step 07j-nodes        "0|10|11" bash -c "docker exec $PWNODE poolwarden --operator tester nodes"
+step 07k-svc-start    0 bash -c "docker exec $PWNODE poolwarden --operator tester service start postgresql $OTHER --yes --confirm start --ticket TB-1"
+# node may already be re-attached by pgpool health-check (NO-GO=3 is acceptable)
+step 07l-svc-attach   "0|3" bash -c "docker exec $PWNODE poolwarden --operator tester attach 1 --yes --confirm 1 --ticket TB-1"
+step 07m-nodes        "0|10|11" bash -c "docker exec $PWNODE poolwarden --operator tester nodes"
+step 07n-svc-plan     0 bash -c "docker exec $PWNODE poolwarden --operator tester service restart pgpool $SVCH --plan"
+
 # ---- 08 config apply/rollback ---------------------------------------------------
 step 08a-set        0 bash -c "docker exec $PWNODE poolwarden --operator tester config set health_check_period 7"
 step 08b-diff       0 bash -c "docker exec $PWNODE poolwarden --operator tester config diff"

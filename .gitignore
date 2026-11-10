@@ -10,3 +10,11 @@ dist/
 *implementation*
 *operator*
 .DS_Store
+
+# console SPA build output is generated, but the embed placeholder stays
+internal/console/dist/*
+!internal/console/dist/
+!internal/console/dist/.keep
+web/node_modules/
+web/dist/
+!web/*.html

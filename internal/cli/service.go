@@ -23,6 +23,10 @@ import (
 // newService wires the real adapters for one command invocation.
 func newService(a *app) *service.Service {
 	cfg := a.cfg
+	if cfg == nil {
+		d := config.Defaults() // noConfigLoad commands (init, config install)
+		cfg = &d
+	}
 	pr := &pcp.PCP{R: pcp.OSRunner{}, Cfg: cfg.PCP}
 	var source service.SnapshotSource
 	if a.deps.Source != nil {
@@ -116,7 +120,7 @@ func newService(a *app) *service.Service {
 			Clock: a.deps.Clock,
 		}
 	}
-	return &service.Service{
+	svc := &service.Service{
 		Cfg: cfg, Collector: source, Diagnoser: diag, PCPProc: proc,
 		History: hist, ErrSrc: ecoll, ErrorsColl: ecoll, Tool: tool,
 		Recorder: rec, FS: a.deps.FS,
@@ -126,6 +130,8 @@ func newService(a *app) *service.Service {
 		SQLRunner: pgxRunner{},
 		Clock:     a.deps.Clock, BuildVersion: a.deps.Version.Version, Local: local,
 	}
+	progressNDJSON(a, svc)
+	return svc
 }
 
 func orStr(s, d string) string {

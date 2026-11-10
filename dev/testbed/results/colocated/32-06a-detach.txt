@@ -1,7 +1,7 @@
 == $ bash -c docker exec db1 poolwarden --operator tester detach 0 --yes --confirm 0 --ticket TB-1
 STEP             START     END       DURATION  RESULT
-preflight        05:28:32  05:28:32  0.1s      ok
-pcp_detach_node  05:28:32  05:28:32  0.0s      ok
-verify           05:28:32  05:28:34  2s        ok
-outcome: success  event: 2bfb3cb09d23c854
+preflight        18:43:24  18:43:25  0.1s      ok
+pcp_detach_node  18:43:25  18:43:25  0.0s      ok
+verify           18:43:25  18:43:26  1s        ok
+outcome: success  event: afb145ae6b0b43c8
 == exit: 0

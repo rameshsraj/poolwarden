@@ -1,0 +1,7 @@
+== $ bash -c ver=$(docker exec db1 poolwarden --operator tester config history | tail -1 | awk '{print $1}'); docker exec db1 poolwarden --operator tester config rollback $ver --yes --confirm apply --ticket TB-1
+STEP       START     END       DURATION  RESULT
+preflight  18:43:57  18:43:57  0.1s      ok
+restore    18:43:57  18:43:57  0.1s      restored
+reload     18:43:57  18:43:57  0.0s      reloaded
+outcome: success  event: 65e6d2a2ca681f50
+== exit: 0

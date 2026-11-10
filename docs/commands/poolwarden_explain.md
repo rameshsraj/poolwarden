@@ -22,6 +22,8 @@ poolwarden explain <finding-id> [flags]
       --no-color          disable coloured output
       --operator string   operator name (recorded in the audit log)
   -o, --output string     output format: table|wide|json (default "table")
+      --plan              control commands: print preflight+plan+token, do not execute
+      --progress          control commands: emit NDJSON progress events on stderr
   -q, --quiet             suppress non-essential output
       --read-only         disable all control commands
       --ticket string     change ticket id (audited when given)

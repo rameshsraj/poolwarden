@@ -2,6 +2,6 @@
 cluster  · pgpool  · collected 00:00:00 (0s)
 
 TIME      OPERATOR  ACTION     TARGET  TICKET  OUTCOME  DURATION
-05:28:24  tester    recover 0  -       TB-1    success  6s
-05:28:28  tester    promote 0  -       TB-1    success  2s
+18:43:12  tester    recover 0  -       TB-1    success  1s
+18:43:17  tester    promote 0  -       TB-1    success  3s
 == exit: 0

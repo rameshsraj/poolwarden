@@ -48,6 +48,9 @@ func (s *Service) poll(ctx context.Context, every time.Duration, deadline time.D
 	for {
 		snap := s.Collector.Collect(ctx)
 		ok, d := fn(snap)
+		if d != "" && d != last {
+			s.progress(ProgressEvent{Stage: "verify_state", Detail: d})
+		}
 		if d != "" {
 			last = d
 		}

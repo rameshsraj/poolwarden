@@ -1,0 +1,4 @@
+== $ bash -c docker exec db1 poolwarden --operator tester service restart pgpool db2 --plan
+STEP  START  END  DURATION  RESULT
+outcome: planned  event: 
+== exit: 0

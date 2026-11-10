@@ -63,10 +63,13 @@ type Service struct {
 	Lock           *remote.ClusterLock
 	ScriptExists   func(ctx context.Context, host config.Host, path string) (bool, error)
 	Confirmer      Confirmer
-	FS             pwfs.FS
-	Clock          clock.Clock
-	BuildVersion   string // poolwarden build version
-	Local          string // local inventory host name, "" when not matched
+	// Progress, when set, receives real stage/step events during control
+	// actions (cli renders NDJSON for the console gateway).
+	Progress     func(ProgressEvent)
+	FS           pwfs.FS
+	Clock        clock.Clock
+	BuildVersion string // poolwarden build version
+	Local        string // local inventory host name, "" when not matched
 }
 
 // Header is the one-line context every view starts with (02 §0).

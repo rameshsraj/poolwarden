@@ -1,5 +1,5 @@
 == $ bash -c docker exec db1 poolwarden --operator tester diagnose
-cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (STANDBY) · VIP on db2 · collected 05:28:56 (153ms)
+cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (STANDBY) · VIP on db2 · collected 15:36:17 (384ms)
 
 SEV   ID                           SUBJECT  SUMMARY
 WARN  COLOCATED_HOST:db2           db2      roles: pgpool,pg (config)

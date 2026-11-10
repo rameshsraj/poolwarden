@@ -5,10 +5,22 @@ LDFLAGS  = -s -w -X github.com/smarsh/poolwarden/internal/cli.version=$(VERSION)
            -X github.com/smarsh/poolwarden/internal/cli.commit=$(COMMIT) \
            -X github.com/smarsh/poolwarden/internal/cli.date=$(DATE)
 
-.PHONY: build build-linux test vet fmt-check staticcheck lint clean
+.PHONY: build build-linux test vet fmt-check staticcheck lint clean web console
 
 build:
 	CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS)" -o bin/poolwarden ./cmd/poolwarden
+
+# console: optional web UI. `make web` builds the SPA into web/dist and copies
+# it into internal/console/dist for embedding; `make console` builds the
+# gateway binary (embeds whatever dist/ currently holds — .keep only if web
+# was never built). CLI-only builds never need Node.
+web:
+	cd web && npm ci && npm run build
+	mkdir -p internal/console/dist
+	cp -r web/dist/. internal/console/dist/
+
+console:
+	CGO_ENABLED=0 go build -trimpath -ldflags "$(LDFLAGS)" -o bin/poolwconsole ./cmd/poolwconsole
 
 build-linux:
 	mkdir -p dist

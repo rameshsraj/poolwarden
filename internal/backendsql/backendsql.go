@@ -73,10 +73,15 @@ FROM pg_stat_database_conflicts`
        COALESCE(sum(temp_files), 0)
 FROM pg_stat_database`
 	QClients = `SELECT COALESCE(datname, ''), COALESCE(usename, ''),
-       COALESCE(application_name, ''), count(*)
+       COALESCE(application_name, ''), COALESCE(state, ''), count(*)
 FROM pg_stat_activity
 WHERE backend_type = 'client backend'
-GROUP BY 1, 2, 3`
+GROUP BY 1, 2, 3, 4`
+	// WAL segment inventory — pg_ls_waldir lists non-segment files too
+	// (archive_status etc.), so filter to 24-hex-char segment names.
+	QWalDir = `SELECT count(*), COALESCE(sum(size), 0)
+FROM pg_ls_waldir()
+WHERE name ~ '^[0-9A-F]{24}$'`
 )
 
 // PGProber is the real Prober, backed by pgx with the default (extended)
@@ -178,6 +183,14 @@ func (PGProber) Probe(ctx context.Context, a Addr) model.Backend {
 	} else {
 		b.Clients = clients
 	}
+	b.WalDirBytes, b.WalFiles = -1, -1
+	var wn int
+	var wb int64
+	if err := conn.QueryRow(ctx, QWalDir).Scan(&wn, &wb); err != nil {
+		fail("wal dir", err)
+	} else {
+		b.WalDirBytes, b.WalFiles = wb, wn
+	}
 	b.Err = strings.Join(errs, "; ")
 	return b
 }
@@ -267,7 +280,7 @@ func queryClients(ctx context.Context, conn *pgx.Conn) ([]model.ClientGroup, err
 	var out []model.ClientGroup
 	for rows.Next() {
 		var g model.ClientGroup
-		if err := rows.Scan(&g.Database, &g.User, &g.Application, &g.Count); err != nil {
+		if err := rows.Scan(&g.Database, &g.User, &g.Application, &g.State, &g.Count); err != nil {
 			return nil, err
 		}
 		out = append(out, g)

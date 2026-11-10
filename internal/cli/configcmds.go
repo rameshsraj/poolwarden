@@ -3,6 +3,7 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"sort"
 	"strconv"
@@ -269,8 +270,30 @@ func configCmds() *cobra.Command {
 		},
 	}
 
+	install := &cobra.Command{
+		Use: "install <file|->", Args: cobra.ExactArgs(1),
+		Short: "install a complete poolwarden.yaml (backup + atomic write + audit)",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			a := appOf(cmd)
+			var data []byte
+			var err error
+			if args[0] == "-" {
+				data, err = io.ReadAll(a.deps.Stdin)
+			} else {
+				data, err = os.ReadFile(args[0])
+			}
+			if err != nil {
+				return err
+			}
+			svc := newService(a)
+			svc.Confirmer = newConfirmer(a)
+			res, err := svc.InstallConfig(cmd.Context(), data, a.configPath, controlOpts(cmd, a))
+			return finishControl(cmd, res, err)
+		},
+	}
+
 	cfg.AddCommand(get, list, desc, set, unset, diff, validate, apply, discard,
-		history, rollback, load, export, catalogueCmd(),
+		history, rollback, load, export, install, catalogueCmd(),
 		selfCheckCmd())
 	return cfg
 }

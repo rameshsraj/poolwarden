@@ -20,10 +20,11 @@ import (
 
 // fakeRemoteOps serves scripted file content per host.
 type fakeRemoteOps struct {
-	files     map[string][]byte // host:path → bytes
-	writes    []string
-	failWrite map[string]bool
-	execs     []string
+	files        map[string][]byte // host:path → bytes
+	writes       []string
+	failWrite    map[string]bool
+	failExecArgs []string // substrings: Exec fails when all are present in argv
+	execs        []string
 }
 
 func (f *fakeRemoteOps) key(h config.Host, p string) string { return h.Name + ":" + p }
@@ -47,6 +48,18 @@ func (f *fakeRemoteOps) WriteFileAtomic(ctx context.Context, h config.Host, p st
 
 func (f *fakeRemoteOps) Exec(ctx context.Context, h config.Host, args []string, stdin []byte) (remote.ExecResult, error) {
 	f.execs = append(f.execs, h.Name+" "+strings.Join(args, " "))
+	joined := strings.Join(args, " ")
+	all := func() bool {
+		for _, s := range f.failExecArgs {
+			if !strings.Contains(joined, s) {
+				return false
+			}
+		}
+		return len(f.failExecArgs) > 0
+	}
+	if all() {
+		return remote.ExecResult{Exit: 1, Stderr: []byte("svc: inactive")}, fmtError("inactive")
+	}
 	return remote.ExecResult{Exit: 0}, nil
 }
 

@@ -18,6 +18,8 @@ manage pgpool configuration without editing files
       --no-color          disable coloured output
       --operator string   operator name (recorded in the audit log)
   -o, --output string     output format: table|wide|json (default "table")
+      --plan              control commands: print preflight+plan+token, do not execute
+      --progress          control commands: emit NDJSON progress events on stderr
   -q, --quiet             suppress non-essential output
       --read-only         disable all control commands
       --ticket string     change ticket id (audited when given)
@@ -34,6 +36,7 @@ manage pgpool configuration without editing files
 * [poolwarden config export](poolwarden_config_export.md)	 - 
 * [poolwarden config get](poolwarden_config_get.md)	 - 
 * [poolwarden config history](poolwarden_config_history.md)	 - 
+* [poolwarden config install](poolwarden_config_install.md)	 - install a complete poolwarden.yaml (backup + atomic write + audit)
 * [poolwarden config list](poolwarden_config_list.md)	 - 
 * [poolwarden config load](poolwarden_config_load.md)	 - 
 * [poolwarden config rollback](poolwarden_config_rollback.md)	 - 
