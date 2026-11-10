@@ -1,5 +1,6 @@
 bin/
 dist/
+
 *.test
 
 # internal documents, not published
@@ -18,3 +19,6 @@ internal/console/dist/*
 web/node_modules/
 web/dist/
 !web/*.html
+
+# local docker test bed — not published
+dev/testbed/

@@ -1,5 +1,0 @@
-== $ bash -c docker exec pgpool1 poolwarden --operator tester forecast
-cluster testbed-split · pgpool 4.5.13 (hotooriboshi) · local pgpool1 (LEADER) · VIP on pgpool1 · collected 05:29:00 (190ms)
-
-insufficient history (have 2s, need 5m)
-== exit: 10

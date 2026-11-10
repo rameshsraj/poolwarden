@@ -1,8 +1,0 @@
-== $ bash -c docker exec pgpool1 poolwarden --operator tester diagnose
-cluster testbed-split · pgpool 4.5.13 (hotooriboshi) · local pgpool1 (LEADER) · VIP on pgpool1 · collected 05:29:19 (168ms)
-
-SEV   ID                           SUBJECT  SUMMARY
-WARN  WD_ESCALATION_UNSET:cluster  cluster  delegate_ip=172.31.20.100 but wd_escalation_command/wd_de_escalation_command ...
-WARN  WD_HALF_VOTES_2NODE:cluster  cluster  enable_consensus_with_half_votes=on, 2 watchdog nodes (D14/V4: accepted split...
-→ poolwarden explain WD_ESCALATION_UNSET:cluster
-== exit: 10

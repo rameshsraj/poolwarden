@@ -1,9 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester status
-cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (LEADER) · VIP on db1 · collected 18:42:50 (189ms)
-
-NODES   0 db1:5432 primary  up   score 90
-        1 db2:5432 standby  up   score 100
-WATCHDOG quorum: QUORUM EXIST · leader db1 · 2/2 alive · half-votes ON (2-node split risk: see WD_HALF_VOTES_2NODE)
-POOLS   children 1/20 busy · clients 135
-FINDINGS 0 CRIT · 3 WARN · 1 INFO        → poolwarden diagnose
-== exit: 10

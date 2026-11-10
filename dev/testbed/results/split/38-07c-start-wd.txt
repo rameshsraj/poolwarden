@@ -1,3 +1,0 @@
-== $ docker exec pgpool1 bash -c pgpool -n >/tmp/pgpool-restart.log 2>&1 & sleep 5; pgrep -x watchdog || pgrep pgpool | head -1
-116
-== exit: 0

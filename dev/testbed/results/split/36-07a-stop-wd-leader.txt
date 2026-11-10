@@ -1,5 +1,0 @@
-== $ docker exec pgpool1 bash -c pgpool -m fast stop || kill $(pgrep -x watchdog) 2>/dev/null; sleep 8; echo stopped
-2026-11-05 05:29:26.732: main pid 1005: FATAL:  Pgpool node id file /usr/etc/pgpool_node_id does not exist
-2026-11-05 05:29:26.732: main pid 1005: DETAIL:  If watchdog is enable, pgpool_node_id file is required
-stopped
-== exit: 0

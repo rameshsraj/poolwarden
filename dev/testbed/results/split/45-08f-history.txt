@@ -1,4 +1,0 @@
-== $ bash -c docker exec pgpool1 poolwarden --operator tester config history
-VERSION          TIME      OPERATOR  TICKET  HOSTS            SUMMARY
-20261105T052942  05:29:42  tester    -       pgpool1,pgpool2  1 change(s)
-== exit: 0

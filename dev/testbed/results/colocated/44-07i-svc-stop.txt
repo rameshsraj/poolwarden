@@ -1,7 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester service stop postgresql db2 --yes --confirm stop --ticket TB-1
-STEP             START     END       DURATION  RESULT
-preflight        18:43:48  18:43:49  0.4s      ok
-stop postgresql  18:43:49  18:43:49  0.1s      ok
-verify           18:43:49  18:43:49  0.0s      inactive
-outcome: success  event: a85e61435f20924f
-== exit: 0

@@ -1,7 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester service restart pgpool db2 --yes --confirm restart --ticket TB-1
-STEP               START     END       DURATION  RESULT
-preflight          18:43:45  18:43:45  0.1s      ok
-restart pgpool-II  18:43:45  18:43:47  2s        ok
-verify             18:43:47  18:43:47  0.0s      active
-outcome: success  event: 9578b99c23065653
-== exit: 0

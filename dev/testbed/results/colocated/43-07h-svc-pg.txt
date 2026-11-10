@@ -1,5 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester service status postgresql db2
-pg_ctl: server is running (PID: 1579)
-/usr/lib/postgresql/18/bin/postgres "-D" "/var/lib/postgresql/18/main"
-postgresql on db2: active
-== exit: 0

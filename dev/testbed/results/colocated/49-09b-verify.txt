@@ -1,5 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester audit verify
-cluster  · pgpool  · collected 00:00:00 (0s)
-
-OK: 14 entries
-== exit: 0

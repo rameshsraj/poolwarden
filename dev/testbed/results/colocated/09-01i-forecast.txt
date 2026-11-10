@@ -1,8 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester forecast
-cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (LEADER) · VIP on db1 · collected 18:42:55 (212ms)
-
-METRIC         SUBJECT  NOW   SLOPE     R²    ETA  THRESHOLD
-busy_children  pgpool   0.0   -         1.00  -    20
-conns          db1      10.0  +0.2/min  0.34  -    100
-conns          db2      8.0   +0.2/min  0.03  -    100
-== exit: 10

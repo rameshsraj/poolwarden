@@ -1,4 +1,0 @@
-== $ bash -c docker exec -e PGUSER=postgres -e PGDATABASE=postgres pgpool1 poolwarden --operator tester sql primary 'select pg_is_in_recovery()'
-pg_is_in_recovery
-false
-== exit: 0

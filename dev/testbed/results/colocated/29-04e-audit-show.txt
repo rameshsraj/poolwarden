@@ -1,7 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester audit
-cluster  · pgpool  · collected 00:00:00 (0s)
-
-TIME      OPERATOR  ACTION     TARGET  TICKET  OUTCOME  DURATION
-18:43:12  tester    recover 0  -       TB-1    success  1s
-18:43:17  tester    promote 0  -       TB-1    success  3s
-== exit: 0

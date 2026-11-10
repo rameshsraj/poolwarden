@@ -1,7 +1,0 @@
-== $ bash -c docker exec pgpool1 poolwarden --operator tester detach 0 --yes --confirm 0 --ticket TB-1
-STEP             START     END       DURATION  RESULT
-preflight        05:29:23  05:29:23  0.1s      ok
-pcp_detach_node  05:29:23  05:29:23  0.0s      ok
-verify           05:29:23  05:29:24  1s        ok
-outcome: success  event: f5c49b48aed14642
-== exit: 0

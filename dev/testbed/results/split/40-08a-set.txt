@@ -1,3 +1,0 @@
-== $ bash -c docker exec pgpool1 poolwarden --operator tester config set health_check_period 7
-staged: health_check_period = 7
-== exit: 0

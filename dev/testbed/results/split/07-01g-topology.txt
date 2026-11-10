@@ -1,9 +1,0 @@
-== $ bash -c docker exec pgpool1 poolwarden --operator tester topology show
-cluster testbed-split · pgpool 4.5.13 (hotooriboshi) · local pgpool1 (LEADER) · VIP on pgpool1 · collected 05:28:59 (171ms)
-
-HOST     ADDRESS       ROLES   SSH-USER  WATCHDOG  VIP  BACKEND-ROLE
-pg1      172.31.20.21  pg      root      -         no   primary
-pg2      172.31.20.22  pg      root      -         no   standby
-pgpool1  172.31.20.31  pgpool  root      LEADER    yes  -
-pgpool2  172.31.20.32  pgpool  root      STANDBY   no   -
-== exit: 10

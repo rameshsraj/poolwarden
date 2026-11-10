@@ -1,4 +1,0 @@
-in_recovery=true
-current_tl=4
-wal_receiver: status=streaming sender=db2 received_tli=4 latest_end_lsn=0/5002228
-replay_lsn=0/5002228

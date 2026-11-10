@@ -1,7 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester recover 0 --yes --confirm 0 --ticket TB-1
-STEP               START     END       DURATION  RESULT
-preflight          18:43:10  18:43:10  0.3s      ok
-pcp_recovery_node  18:43:10  18:43:11  1s        ok
-verify             18:43:11  18:43:12  0.1s      ok
-outcome: success  event: 73bb87bef1932ca7
-== exit: 0

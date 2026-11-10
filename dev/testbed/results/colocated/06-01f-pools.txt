@@ -1,9 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester pools
-cluster testbed-colocated · pgpool 4.5.13 (hotooriboshi) · local db1 (LEADER) · VIP on db1 · collected 18:42:53 (232ms)
-
-children 1/20 busy · clients 149
-
-DATABASE  USER      BACKENDS  POOLS  CONNECTED  LOAD-BALANCE-NODES
-                    158       158    0          0
-postgres  postgres  2         2      2          1
-== exit: 10

@@ -1,7 +1,0 @@
-== $ bash -c docker exec db1 poolwarden --operator tester nodes
-cluster testbed-colocated · pgpool - · local db1 (LEADER) · VIP on db1 · collected 18:43:49 (270ms) · DEGRADED
-
-ID  HOST:PORT  STATUS  PGPOOL-ROLE  REAL-ROLE    LB-WEIGHT  SELECTS  DELAY  REPL-STATE  SYNC   LAST-CHANGE  SCORE  NOTE
-0   db1:5432   up      standby      standby      0.50       0        -      streaming   async  18:43:28     70     
-1   db2:5432   down    primary      UNREACHABLE  0.50       0        -      none        none   18:43:49     20     UNREACHABLE
-== exit: 11
