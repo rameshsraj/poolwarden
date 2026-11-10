@@ -5,6 +5,10 @@ All notable changes to poolwarden are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.0] — 2026-11-10
+
+First public release: the CLI command center plus the optional web console.
+
 ### Added
 
 - **Web console** (`poolwconsole`): optional second binary serving an embedded React SPA
