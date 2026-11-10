@@ -9,7 +9,7 @@ export default function TopologyPage() {
   return (
     <div className="space-y-4">
       <Card title="cluster topology & data flow">
-        <MiniTopology height={480} />
+        <MiniTopology height={720} />
         <div className="mt-2 flex flex-wrap gap-4 text-[10px] text-mut">
           <span><span className="text-info">━▶</span> client traffic: VIP → pgpool (then routed to the PG primary)</span>
           <span><span className="text-ok">━▶</span> WAL replication: PG primary → standby (observed)</span>
@@ -40,7 +40,7 @@ export default function TopologyPage() {
               <div className="font-mono text-lg">{b.wal.slot_retained >= 0 ? fmtBytes(b.wal.slot_retained) : "-"}</div>
             </div>
           </div>
-          {b.lag && b.lag.standbys.length > 0 && (
+          {b.lag && b.lag.standbys && b.lag.standbys.length > 0 && (
             <Table
               cols={["STANDBY", "STATE", "REPLAY RATE", "LAG BACKLOG", "DELAY"]}
               rows={b.lag.standbys.map((s) => [
@@ -92,7 +92,7 @@ export default function TopologyPage() {
             </div>
             <Table
               cols={["NODE", "HOST", "STATUS", "PRIORITY", "VIP"]}
-              rows={b.watchdog.nodes.map((n) => [
+              rows={(b.watchdog.nodes ?? []).map((n) => [
                 n.node, <span className="font-mono">{n.host}</span>, n.status, n.priority,
                 n.vip_present ? <Badge text="yes" sev="WARN" /> : "no",
               ])}

@@ -33,8 +33,8 @@ export default function Operations() {
         <Table
           cols={["HOST", "SERVICE", "OBSERVED", "", "", ""]}
           rows={(live.snapshot?.topology.hosts ?? []).flatMap((h) => {
-            const wd = live.snapshot?.watchdog.nodes.find((n) => n.host === h.host);
-            const pool = live.snapshot?.status.nodes.find((n) => n.host_port.split(":")[0] === h.host);
+            const wd = live.snapshot?.watchdog.nodes?.find((n) => n.host === h.host);
+            const pool = live.snapshot?.status.nodes?.find((n) => n.host_port.split(":")[0] === h.host);
             const rows: any[][] = [];
             const svcRow = (unit: string, observed: string, sevv: string | undefined) => [
               <span className="font-mono font-bold">{h.host}</span>,

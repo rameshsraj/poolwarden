@@ -12,7 +12,7 @@ export default function Replication() {
   const lag = b?.lag;
 
   const chartOpt = useMemo<EChartsOption | null>(() => {
-    if (!lag || lag.standbys.length === 0) return null;
+    if (!lag || !lag.standbys || lag.standbys.length === 0) return null;
     return {
       ...chartTheme,
       tooltip: { trigger: "axis", textStyle: { fontSize: 10 } },
@@ -102,7 +102,7 @@ export default function Replication() {
           dense
           cols={["NODE", "HOST", "PGPOOL", "PG ROLE", "PG REPL", "TOTAL", "FAIL", "SKIP", "RETRY", "AVG ms", "MAX ms", "LAST-FAIL", "ΔFAIL"]}
           rows={(b.health?.nodes ?? []).map((h) => {
-            const pg = b.status.nodes.find((n) => n.id === h.node);
+            const pg = (b.status.nodes ?? []).find((n) => n.id === h.node);
             return [
               h.node, <span className="font-mono">{h.host}</span>,
               <Badge text={h.status} sev={h.status === "up" ? "OK" : "CRIT"} />,

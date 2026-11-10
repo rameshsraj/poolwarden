@@ -69,7 +69,7 @@ export default function Overview() {
 
       <div className="grid gap-4 xl:grid-cols-3">
         <Card title="topology & data flow" className="xl:col-span-2">
-          <MiniTopology height={300} />
+          <MiniTopology height={560} />
           <div className="mt-2 flex gap-4 text-[10px] text-mut">
             <span><span className="text-info">—</span> client traffic: VIP → pgpool</span>
             <span><span className="text-ok">⇢</span> WAL: PG primary → standby</span>
@@ -81,7 +81,7 @@ export default function Overview() {
           <Card title="active findings" right={<Link to="/logs" className="text-[10px] text-info">all →</Link>}>
             <div className="max-h-56 space-y-1.5 overflow-auto">
               {b.findings.length === 0 && <div className="text-xs text-ok">cluster healthy — no findings</div>}
-              {b.findings.map((f) => (
+              {(b.findings ?? []).map((f) => (
                 <div key={f.ID} className="flex items-start gap-2 text-xs">
                   <Badge text={f.Severity} sev={f.Severity} className="mt-0.5 w-11 shrink-0 text-center" />
                   <div className="min-w-0">

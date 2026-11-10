@@ -101,7 +101,7 @@ func (s *Service) collect(ctx context.Context) (*result, error) {
 			s.Tool.Warn("history append failed", "err", err)
 		}
 	}
-	findings := []model.Finding(nil)
+	findings := []model.Finding{}
 	if s.Diagnoser != nil {
 		findings = s.Diagnoser.Run(ctx, s.buildInput(ctx, snap))
 	}

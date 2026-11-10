@@ -9,7 +9,7 @@ export default function Nodes() {
   const [sel, setSel] = useState<number | null>(null);
 
   if (!b) return <div className="text-mut">waiting for snapshot…</div>;
-  const nodes = b.nodes.nodes;
+  const nodes = b.nodes.nodes ?? [];
   const detail = sel != null ? nodes.find((n) => n.id === sel) : undefined;
 
   const act = (action: string, id: number, title: string, extra: Record<string, any> = {}) =>

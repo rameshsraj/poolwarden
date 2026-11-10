@@ -30,7 +30,7 @@ export default function PoolsPage() {
           <div className="text-xs text-mut">lifetime (cumulative)</div>
         </Card>
         <Card title="pool groups">
-          <div className="text-lg font-bold">{pools.groups.length}</div>
+          <div className="text-lg font-bold">{(pools.groups ?? []).length}</div>
           <div className="text-xs text-mut">database+user</div>
         </Card>
       </div>
@@ -40,7 +40,7 @@ export default function PoolsPage() {
           <Table
             dense
             cols={["DATABASE", "USER", "BACKENDS", "POOLS", "CONNECTED", "LB-NODES"]}
-            rows={pools.groups.map((g) => [
+            rows={(pools.groups ?? []).map((g) => [
               <span className="font-mono">{g.database}</span>,
               <span className="font-mono">{g.user}</span>,
               g.backends, g.pools, g.connected, g.load_balance_nodes,
